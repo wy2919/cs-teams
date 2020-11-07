@@ -1,0 +1,184 @@
+.user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1em;
+}
+
+.container {
+    display: flex;
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+}
+
+.description p {
+    width: 25vw;
+    margin-top: 3em;
+}
+
+.description button {
+    height: 4vh;
+    align-self: center;
+    width: 8em;
+}
+
+.main h2 {
+    font-size: 2em;
+    margin: auto;
+}
+
+.user-info p:first-child{
+    font-size: 1.7em;
+    font-weight: bold;
+    margin-bottom: .2em;
+}
+
+.user-info p {
+    margin: .3em;
+}
+
+.user-info img {
+    width: 15em;
+    height: 15em;
+    margin-right: 1.5em;
+    object-fit: cover;
+    background: transparent url('img/Rectangle 1468.png') 0% 0% no-repeat padding-box;
+    box-shadow: 1px 4px 6px #00000099;
+    border: 1px solid #000000;
+    border-radius: 1.5em
+}
+
+
+.rate-user{
+    display: flex;
+    justify-content: center;
+}
+
+.rate {
+    margin: 2em;
+    font-weight: 700;
+    font-size: 1.2em;
+}
+
+.rate span {
+    font-size: 2em;
+    color: royalblue;
+}
+
+.rate-button {
+    position: relative;
+    width: 8em;
+    height: 4vh;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1em;
+    border: 2px solid #BCE0FD;
+    border-radius: 4px;
+    color: #2699FB;
+    background-color: white;
+}
+
+@media only screen and (max-device-width: 1200px){
+
+    body {
+        font-size: 1.2em;
+    }
+
+    .description>p {
+        width: 40vw;
+        margin-top: 3em;
+    }
+}
+
+
+@media only screen and (max-device-width: 900px){
+
+    body {
+        font-size: 1.4em;
+    }
+
+    .rate {
+        margin: 1em;
+    }
+
+    .rate-button {
+        top: 3%;
+    }
+
+
+}
+
+
+@media only screen and (max-device-width: 750px){
+
+    body {
+        font-size: 1.5em;
+    }
+
+    .main h2 {
+        position: absolute;
+        top: 4%;
+    }
+
+    .description>p {
+        width: 40vw;
+        margin-top: 3em;
+    }
+
+    .container {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 1em;
+    }
+    
+    .rate {
+        margin: .9em;
+    }
+
+    .description p {
+        width: 80vw;
+        font-size: 1.2em;
+        margin-top: .5em;
+    }
+
+}
+
+
+@media only screen and (max-device-width: 600px){
+    
+    body {
+        font-size: 1.9em;
+    }
+
+    .user-info img {
+        width: 10em;
+        height: 10em;
+    }
+    
+    .rate-user {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .rate {
+        margin: 0;
+    }
+
+    .rate p {
+        margin-bottom: 0;
+    }
+
+    .rate span {
+        margin-top: 0;
+    }
+}
+
+
+@media only screen and (max-device-width: 450px){
+    body {
+        font-size: 2.2em;
+    }
+}
