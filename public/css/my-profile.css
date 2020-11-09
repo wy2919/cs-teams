@@ -1,0 +1,107 @@
+.edit-panel {
+    display: grid;
+    margin: auto;
+    width: 40%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em 0;
+}
+
+.edit-panel button {
+    width: 60%;
+    height: 2.2em;
+    font-size: 1em;
+    border: 1px solid #707070;
+    border-radius: 1em;
+}
+
+.switch {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4vh;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #95989A;
+    border-radius: 6px;
+}
+
+.switch span {
+    margin-left: 2%;
+    font-size: 1em;
+}
+
+.switch input {
+    margin-right: 4%;
+}
+
+.edit-panel select {
+    grid-column: 2;
+    height: 4vh;
+    font-size: 1em;
+    background: #E3E3E3 0% 0% no-repeat padding-box;
+    border: 1px solid #000000;
+    border-radius: 4px;
+}
+
+
+@media only screen and (max-device-width: 1200px) {
+    .edit-panel {
+        width: 60%;
+    }
+}
+
+
+@media only screen and (max-device-width: 900px) {
+
+    .edit-panel {
+        width: 70%;
+        margin-top: 1em;
+    }
+
+    .edit-panel button {
+        font-size: 1em;
+    }
+
+    input[type=checkbox] {
+        transform: scale(1.5);
+    }
+}
+
+@media only screen and (max-device-width: 750px) {
+
+    .edit-panel {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 2em;
+    }
+
+    .switch {
+        grid-row: 2;
+        width: 70vw;
+    }
+
+    .edit-panel select {
+        grid-row: 1;
+        grid-column: 1;
+    }
+
+    .edit-panel button {
+        grid-row: 3;
+        justify-self: center;
+        width: 35vw;
+    }
+
+    input[type=checkbox] {
+        transform: scale(2);
+    }
+}
+
+
+@media only screen and (max-device-width: 600px) {
+    input[type=checkbox] {
+        transform: scale(3);
+    }
+
+    .description p {
+        font-size: 1.1em;
+    }
+}
