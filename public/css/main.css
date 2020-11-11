@@ -1,5 +1,6 @@
 html{
-    overflow: hidden;
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 body {
@@ -26,6 +27,7 @@ body {
 
 .navigation {
     display: flex;
+    position: fixed;
     align-items: center;
     justify-content: flex-start;
     height: 8%;
