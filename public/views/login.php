@@ -11,12 +11,22 @@
             <img src="public/img/logo.svg" alt="logo">
         </div>
 
-        <form class="login">
+<!--                               html request  /login typu post-->
+        <form class="login" action="login" method="post">
             <p>Log in</p>
+            <div class="message">
+                <?php
+                    if(isset($messages)){
+                        foreach ($messages as $message) {
+                            echo $message;
+                        }
+                    }
+                    ?>
+            </div>
             <input name="email" type="text" placeholder="email">
             <input name="password" type="password" placeholder="password">
 
-            <button>Login</button>
+            <button type="submit" >Login</button>
             <button>Register</button>
         </form>
 

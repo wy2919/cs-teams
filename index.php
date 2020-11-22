@@ -2,13 +2,15 @@
 // pierwszy plik uruchamiany na serverze
 
 
-require 'Routing.php';
+require 'Router.php';
 
 $path = trim($_SERVER['REQUEST_URI'], '/'); // usuwamy pierwszego slasha - ścieżka z przeglądarki
 $path = parse_url($path, PHP_URL_PATH);
    
 
-Routing::get('index', 'DefaultController');  // 'index' to url localhost:8080/index i nazwa funkcji
-Routing::get('users', 'DefaultController');
+Router::get('index', 'DefaultController');  // 'index' to url localhost:8080/index i nazwa funkcji
+Router::get('users', 'DefaultController');
 
-Routing::run($path);
+Router::post('login', 'SecurityController');
+
+Router::run($path);
