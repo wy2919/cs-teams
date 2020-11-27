@@ -18,6 +18,16 @@ body {
     border-radius: 1.5em;
 }
 
+.search-field {
+    width: 16vw;
+    height: 2.8em;
+    margin: 1em;
+    background: #E3E3E3 0% 0% no-repeat padding-box;
+    box-shadow: 1px 3px 6px #0000007A;
+    border: 1px solid black;
+    border-radius: 2em;
+}
+
 .base-container {
     display: flex;
     flex-direction: column;
@@ -27,7 +37,7 @@ body {
 
 .navigation {
     display: flex;
-    position: fixed;
+    position: sticky;
     align-items: center;
     justify-content: flex-start;
     height: 8%;

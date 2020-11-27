@@ -1,0 +1,256 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 1em;
+}
+
+.header {
+    font-size: 2em;
+    font-weight: bold;
+    margin: .1em;
+}
+
+.communicator-container {
+    display: flex;
+    height: 80%;
+    width: 60%;
+    margin: auto;
+}
+
+.friend-list {
+    display: flex;
+    overflow-y: scroll;
+    flex-direction: column;
+    height: 100%;
+    min-width: 30%;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 5px 6px #00000080;
+    border-radius: 20px 0px 0px 20px;
+}
+
+.single {
+    display: flex;
+    margin: 0 0 0 2em;
+}
+
+.single:first-child {
+    margin-top: 2em;
+}
+
+.single img {
+    width: 3.3em;
+    height: 3.3em;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.single p {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.solid {
+    width: 80%;
+    padding: 0;
+    border-top: 1px solid black;
+}
+
+.friend {
+    flex-grow: 1;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 5px 6px #00000080;
+    border-radius: 0px 20px 20px 0px;
+}
+
+.inside-friend {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    width: 85%;
+    height: 93%;
+}
+
+.friend-details {
+    display: flex;
+    height: 18%;
+    width: 70%;
+    align-items: center;
+}
+
+.friend-img {
+    width: 5em;
+    height: 5em;
+    margin-right: 1.5em;
+    object-fit: cover;
+    background: transparent url('img/Rectangle 1468.png') 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000099;
+    border: 1px solid #000000;
+    border-radius: 1.5em
+}
+
+.friend-name {
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.profile-btn {
+    margin-left: 20%;
+}
+
+.message-box {
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    flex-grow: 1;
+    background-color: orange;
+}
+
+.messages {
+    width: 100%;
+    height: 85%;
+    overflow-y: scroll;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 3px 0px 10px #00000080;
+}
+
+.msg-container {
+    display: flex;
+    margin: 1em;
+}
+
+.self-msg,
+.friend-msg {
+    width: 80%;
+    padding: 0 .7em;
+    margin: auto;
+    border: 1px solid #707070;
+    padding: .7em;
+    color: white;
+}
+
+.self-msg {
+    background: #150B55 0% 0% no-repeat padding-box;
+    border-radius: 15px 15px 0px 15px;
+}
+
+.friend-msg {
+    background: #3C3B5D 0% 0% no-repeat padding-box;
+    border-radius: 15px 15px 15px 0px;
+}
+
+.self-msg p,
+.friend-msg p {
+    margin: 0;
+}
+
+.small-img {
+    align-self: flex-end;
+    object-fit: cover;
+    width: 2.5em;
+    height: 2.5em;
+    border-radius: 100%;
+}
+
+.message {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    background: #D5D5D5 0% 0% no-repeat padding-box;
+    box-shadow: 3px -3px 10px #00000080;
+}
+
+.msg-input {
+    height: 60%;
+    width: 70%;
+    margin-left: auto;
+}
+
+.btn {
+    padding: .5em 2em;
+    margin: auto;
+}
+
+
+
+@media only screen and (max-device-width: 1600px) {
+    .communicator-container {
+        width: 80%;
+    }
+
+    .friend-list {
+        font-size: .9em;
+    }
+}
+
+
+@media only screen and (max-device-width: 1200px) {
+
+    body {
+        font-size: .9em;
+    }
+
+    .communicator-container {
+        width: 90%;
+    }
+
+    .inside-friend {
+        width: 100%;
+    }
+
+    .friend-list {
+        font-size: .9em;
+    }
+}
+
+@media only screen and (max-device-width: 950px) {
+    body {
+        font-size: 1.05em;
+    }
+
+    .friend-list {
+        font-size: .8em;
+    }
+}
+
+@media only screen and (max-device-width: 900px) {
+    
+    body {
+        font-size: 1.4em;
+    }
+    
+    .header {
+        position: absolute;
+        top: 1em;
+    }
+
+    .friend-list {
+        display: none;
+    }
+
+    .communicator-container {
+        width: 100%;
+    }
+
+    .friend {
+        width: 100%;
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+        box-shadow: none;
+        border-radius: 0px 20px 20px 0px;
+    }
+
+    .inside-friend {
+        min-width: 100%;
+        height: 100%;
+    }
+
+    .friend-details {
+        min-height: 30%;
+    }
+
+    .message-box {
+        height: 50%;
+    }
+}
