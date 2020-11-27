@@ -41,7 +41,7 @@
 
                     <div class="user-info">
                         <p>John Doe</p>
-                        <img src="public/img/panda-2859555_640.jpg" alt="user avatar">
+                        <img src="public/uploads/<?= $image ?>" alt="user avatar">
                         <p><strong>Elo: </strong>95%</p>
                         <p><strong>Rank: </strong>Global Elite</p>
                     </div>
