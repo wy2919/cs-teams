@@ -28,6 +28,7 @@ class Router {
         // call controller method
         $controller = self::$routes[$action];   // zwraca nazwę controllera
         $object = new $controller; // tworzymy nowy controller po jego nazwie
+        $action = $action ?: 'login';
 
         $object->$action();
     }

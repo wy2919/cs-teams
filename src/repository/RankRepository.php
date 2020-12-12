@@ -40,7 +40,7 @@ class RankRepository extends Repository
 
         $ranks = array();
         foreach($result as $rank){
-           $ranks = new Rank(
+           $ranks[] = new Rank(
                 $rank['id'],
                 $rank['rank'],
                 $rank['img'],

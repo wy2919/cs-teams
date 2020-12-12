@@ -5,9 +5,9 @@ class Rank
 {
     private int $id;
     private string $rank;
-    private string $img;
+    private ?string $img;
 
-    public function __construct(int $id, string $rank, string $img)
+    public function __construct(int $id, string $rank, ?string $img)
     {
         $this->id = $id;
         $this->rank = $rank;
@@ -24,7 +24,7 @@ class Rank
         $this->id = $id;
     }
 
-    public function getRank(): string
+    public function getRank(): ?string
     {
         return $this->rank;
     }

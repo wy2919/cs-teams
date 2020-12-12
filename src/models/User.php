@@ -3,20 +3,37 @@
 
 class User
 {
-    private $email;
-    private $password;
-    private $name;
-    private $surname;
-    private $image;
+    private ?int $id;
+    private string $email;
+    private string $username;
+    private string $password;
+    private ?string $image;
+    private bool $enable;
+    private ?DateTime $createdAt;
+    private int $idRank;
+    private ?int $idUserDetails;
 
-
-    public function __construct(string $email, string $password, string $name, string $surname, string $image)
+    public function __construct(?int $id, string $email, string $username, string $password, ?string $image, bool $enable, ?string $createdAt, int $idRank, ?int $idUserDetails)
     {
+        $this->id = $id;
         $this->email = $email;
+        $this->username = $username;
         $this->password = $password;
-        $this->name = $name;
-        $this->surname = $surname;
         $this->image = $image;
+        $this->enable = $enable;
+        $this->createdAt = $createdAt ? new DateTime($createdAt) : null;
+        $this->idRank = $idRank;
+        $this->idUserDetails = $idUserDetails;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getEmail(): string
@@ -24,9 +41,19 @@ class User
         return $this->email;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(string $email): void
     {
         $this->email = $email;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
     }
 
     public function getPassword(): string
@@ -34,41 +61,61 @@ class User
         return $this->password;
     }
 
-    public function setPassword(string $password)
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name)
-    {
-        $this->name = $name;
-    }
-
-    public function getSurname(): string
-    {
-        return $this->surname;
-    }
-
-    public function setSurname(string $surname)
-    {
-        $this->surname = $surname;
-    }
-
-
-    public function getImage(): string
+    public function getImage(): ?string
     {
         return $this->image;
     }
 
-
-    public function setImage(string $image)
+    public function setImage($image): void
     {
         $this->image = $image;
     }
+
+    public function isEnable(): bool
+    {
+        return $this->enable;
+    }
+
+    public function setEnable(bool $enable): void
+    {
+        $this->enable = $enable;
+    }
+
+    public function getCreatedAt(): ?DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getIdRank(): int
+    {
+        return $this->idRank;
+    }
+
+    public function setIdRank(int $idRank): void
+    {
+        $this->idRank = $idRank;
+    }
+
+    public function getIdUserDetails(): ?int
+    {
+        return $this->idUserDetails;
+    }
+
+    public function setIdUserDetails(int $idUserDetails): void
+    {
+        $this->idUserDetails = $idUserDetails;
+    }
+
+
 
 }
