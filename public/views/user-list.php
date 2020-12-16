@@ -56,19 +56,21 @@
                 <input class="search-field" type="search" results="0">
 
                 <section class="users">
-                    <div class="user">
-                        <img src="public/img/panda-2859555_640.jpg" alt="user avatar">
-                        <div class="user-details">
-                            <p>PterrodaktylPL</p>
-                            <p><strong>Private: </strong>no</p>
-                            <p><strong>Rank: </strong>Global Elite</p>
-                            <p><strong>Elo: </strong> 87%</p>
+                    <?php foreach($users as $user){ ?>
+                        <div class="user">
+                            <img src="public/uploads/<?php echo $user->getImage() ?>" alt="user avatar">
+                            <div class="user-details">
+                                <p><?php echo $user->getUsername() ?></p>
+                                <p><strong>Rank: </strong><?php echo $rankRepository->getRank($user->getIdRank())->getRank() ?></p>
+                                <p><strong>Elo: </strong> 87%</p>
+                            </div>
+                            <div class="user-buttons">
+                                <button>Invite</button>
+                                <button>Profile</button>
+                            </div>
                         </div>
-                        <div class="user-buttons">
-                            <button>Invite</button>
-                            <button>Profile</button>
-                        </div>
-                    </div>
+                    <?php } ?>
+
                     <div class="user">
                         <img src="public/img/panda-2859555_640.jpg" alt="user avatar">
                         <div class="user-details">

@@ -6,14 +6,14 @@ class User
     private ?int $id;
     private string $email;
     private string $username;
-    private string $password;
+    private ?string $password;
     private ?string $image;
     private bool $enable;
     private ?DateTime $createdAt;
     private int $idRank;
     private ?int $idUserDetails;
 
-    public function __construct(?int $id, string $email, string $username, string $password, ?string $image, bool $enable, ?string $createdAt, int $idRank, ?int $idUserDetails)
+    public function __construct(?int $id, string $email, string $username, ?string $password, ?string $image, bool $enable, ?string $createdAt, int $idRank, ?int $idUserDetails)
     {
         $this->id = $id;
         $this->email = $email;
@@ -56,7 +56,7 @@ class User
         $this->username = $username;
     }
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }

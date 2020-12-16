@@ -74,4 +74,34 @@ class UserRepository extends Repository
             $user->getIdRank(),
         ]);
     }
+
+    public function getUsers()
+    {
+        $statement = $this->database->connect()->prepare('
+            SELECT * FROM public.users
+        ');
+        $statement->execute();
+
+        $records = $statement->fetchAll(PDO::FETCH_ASSOC);    // association array
+
+        if($records == false){
+            return null;    // we should throw exception instead of return null and handle it in place where we run this fun
+        }
+
+        $users = array();
+        foreach($records as $user){
+            $users[] = new User(
+                $user['id'],
+                $user['email'],
+                $user['username'],
+                null,
+                $user['image'],
+                $user['enable'],
+                $user['created_at'],
+                $user['id_rank'],
+                $user['id_user_details']
+            );
+        }
+        return $users;
+    }
 }

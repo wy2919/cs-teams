@@ -3,18 +3,21 @@
 require_once 'AppController.php';
 require_once __DIR__.'/../repository/UserRepository.php';
 require_once __DIR__.'/../repository/RankRepository.php';
+require_once __DIR__.'/../controllers/UserController.php';
 require_once __DIR__ . '/../models/User.php';
 
 class SecurityController extends AppController
 {
     private UserRepository $userRepository;
     private RankRepository $rankRepository;
+    private UserController $userController;
 
     public function __construct()
     {
         parent::__construct();
         $this->rankRepository = new RankRepository();
         $this->userRepository = new UserRepository();
+        $this->userController = new UserController();
     }
 
     public function login()
@@ -81,6 +84,6 @@ class SecurityController extends AppController
                 null
             ));
 
-        return $this->render('user-list', ['ranks'=>$ranks]);
+        $this->userController->users();
     }
 }

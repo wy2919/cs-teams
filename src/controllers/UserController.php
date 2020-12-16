@@ -56,7 +56,10 @@ class UserController extends AppController
     }
 
     public function users() {
-        $this->render('user-list', ['ranks' => $this->rankRepository->getRanks()]);
+
+        $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
+                                                'users' => $this->userRepository->getUsers(),
+                                                'rankRepository' => $this->rankRepository]);
     }
 
     public function profile() {
