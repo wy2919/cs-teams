@@ -3,6 +3,7 @@
 require_once 'AppController.php';
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
+require_once __DIR__ . '/../repository/RankRepository.php';
 
 class UserController extends AppController
 {
@@ -13,11 +14,13 @@ class UserController extends AppController
 
     private array $messages = [];
     private UserRepository $userRepository;
+    private RankRepository $rankRepository;
 
     public function __construct()
     {
         parent::__construct();
         $this->userRepository = new UserRepository();
+        $this->rankRepository = new RankRepository();
     }
 
 
@@ -50,6 +53,10 @@ class UserController extends AppController
         }
 
         return true;
+    }
+
+    public function users() {
+        $this->render('user-list', ['ranks' => $this->rankRepository->getRanks()]);
     }
 
     public function profile() {

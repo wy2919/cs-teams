@@ -58,8 +58,6 @@ class SecurityController extends AppController
         $password = $_POST['password1'];
         $rank   = $_POST['rank'];
 
-        var_dump($rank);
-
         $user = $this->userRepository->getUserByEmail($email);
         if ($user){
             return $this->render('register', ['messages' => ['User with this email exist!'], 'ranks'=>$ranks]);
@@ -82,5 +80,7 @@ class SecurityController extends AppController
                 $rank,
                 null
             ));
+
+        return $this->render('user-list', ['ranks'=>$ranks]);
     }
 }

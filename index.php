@@ -10,7 +10,7 @@ $path = parse_url($path, PHP_URL_PATH);
 Router::get('', 'SecurityController');
 Router::get('login', 'SecurityController');  // 'login' to url localhost:8080/index i nazwa funkcji
 Router::get('register', 'SecurityController');
-Router::get('users', 'DefaultController');
+Router::get('users', 'UserController');
 Router::get('profile', 'UserController');
 
 

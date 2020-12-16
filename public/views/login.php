@@ -3,6 +3,7 @@
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/main.css">
     <title>Login page</title>
+
 </head>
 <body>
     <div class="container">
@@ -27,7 +28,7 @@
             <input name="password" type="password" placeholder="password">
 
             <button type="submit" >Login</button>
-            <button>Register</button>
+            <button id="register-btn">Register</button>
         </form>
 
     </div>

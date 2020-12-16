@@ -44,8 +44,11 @@
                         <input type="range">
                     </div>
 
-                    <select>
-                        <option value="">Global Elite</option>
+                    <select name="rank">
+                        <option value="0">All ranks</option>
+                        <?php foreach($ranks as $rank){ ?>
+                            <option value="<?php echo $rank->getId() ?>"><?php echo $rank->getRank() ?></option>
+                        <?php } ?>
                     </select>
 
                 </div>
