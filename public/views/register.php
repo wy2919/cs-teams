@@ -2,6 +2,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/main.css">
+    <script type="text/javascript" src="./public/js/script.js" defer></script>
     <title>Register page</title>
 </head>
 <body>
@@ -24,8 +25,8 @@
             </div>
             <input name="email" type="text" placeholder="email">
             <input name="username" type="text" placeholder="login">
-            <input name="password1" type="password" placeholder="password">
-            <input name="password2" type="password" placeholder="password">
+            <input name="password" type="password" placeholder="password">
+            <input name="passwordConfirm" type="password" placeholder="password">
             <select name="rank">
                 <?php foreach($ranks as $rank){ ?>
                 <option value="<?php echo $rank->getId() ?>"><?php echo $rank->getRank() ?></option>

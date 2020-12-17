@@ -52,13 +52,13 @@ class SecurityController extends AppController
             var_dump($ranks[0]->getRank());
             return $this->render('register', ['ranks'=>$ranks]);
         }
-        if($_POST['password1'] != $_POST['password2']) {
+        if($_POST['password'] != $_POST['passwordConfirm']) {
             return $this->render('register', ['messages'=>['password does not match'],'ranks'=>$ranks]);
         }
 
         $email = $_POST['email'];
         $username = $_POST['username'];
-        $password = $_POST['password1'];
+        $password = $_POST['password'];
         $rank   = $_POST['rank'];
 
         $user = $this->userRepository->getUserByEmail($email);
