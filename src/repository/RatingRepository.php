@@ -22,4 +22,28 @@ class RatingRepository extends Repository
             $rating->getCommunication()
         ]);
     }
+
+    public function  getUserElo(int $id) {
+        $statement = $this->database->connect()->prepare(
+            'SELECT skills, friendliness, communication FROM public.ratings WHERE id_user = :id_user'
+        );
+        $statement->bindParam(':id_user', $id, PDO::PARAM_STR);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+
+        if (count($rows) == 0) {
+            return 'Unknown';
+        }
+
+        $skills = 0;
+        $friendliness = 0;
+        $communication = 0;
+
+        foreach ($rows as $row){
+            $skills += $row['skills'];
+            $friendliness += $row['friendliness'];
+            $communication += $row['communication'];
+        }
+        return (0.33 * $skills + 0.37 * $friendliness + 0.3 * $communication)/count($rows);
+    }
 }

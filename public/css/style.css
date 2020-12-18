@@ -84,6 +84,15 @@ body {
     font-size: 1em;
 }
 
+.invalid {
+    color: #1A0E68;
+    background-color: red;
+    border: 2px solid red;
+    border-radius: 1em;
+    box-shadow: 0 0 0.2em red;
+    outline: none;
+}
+
 @media only screen and (max-device-width: 900px){
 
     body {

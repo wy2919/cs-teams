@@ -49,16 +49,15 @@ class SecurityController extends AppController
     public function register() {
         $ranks = $this->rankRepository->getRanks();
         if($this->isGet()){
-            var_dump($ranks[0]->getRank());
             return $this->render('register', ['ranks'=>$ranks]);
         }
-        if($_POST['password1'] != $_POST['password2']) {
+        if($_POST['password'] != $_POST['passwordConfirm']) {
             return $this->render('register', ['messages'=>['password does not match'],'ranks'=>$ranks]);
         }
 
         $email = $_POST['email'];
         $username = $_POST['username'];
-        $password = $_POST['password1'];
+        $password = $_POST['password'];
         $rank   = $_POST['rank'];
 
         $user = $this->userRepository->getUserByEmail($email);
@@ -84,6 +83,6 @@ class SecurityController extends AppController
                 null
             ));
 
-        $this->userController->users();
+        $this->userController->users(); // TODO
     }
 }

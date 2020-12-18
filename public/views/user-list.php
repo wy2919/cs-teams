@@ -62,7 +62,7 @@
                             <div class="user-details">
                                 <p><?php echo $user->getUsername() ?></p>
                                 <p><strong>Rank: </strong><?php echo $rankRepository->getRank($user->getIdRank())->getRank() ?></p>
-                                <p><strong>Elo: </strong> 87%</p>
+                                <p><strong>Elo: </strong><?php echo $ratingRepository->getUserElo($user->getId()) ?></p>
                             </div>
                             <div class="user-buttons">
                                 <button>Invite</button>
