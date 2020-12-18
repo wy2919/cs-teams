@@ -116,8 +116,7 @@ a {
 
     .hamburger {
         font-size: 3em;
-        margin: .8em;
-        margin-top: 1.5em;
+        margin: 1.5em .8em .8em;
         /* margin-right: auto; */
         color: black;
     }

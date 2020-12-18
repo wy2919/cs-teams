@@ -12,6 +12,7 @@ Router::get('login', 'SecurityController');  // 'login' to url localhost:8080/in
 Router::get('register', 'SecurityController');
 Router::get('users', 'UserController');
 Router::get('profile', 'UserController');
+Router::get('editProfile', 'UserController');
 
 
 Router::post('login', 'SecurityController');

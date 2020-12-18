@@ -13,4 +13,5 @@ class RatingController extends AppController
         $this->ratingRepository = new RatingRepository();
     }
 
+
 }
