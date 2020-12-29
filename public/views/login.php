@@ -2,6 +2,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/main.css">
+    <script type="text/javascript" src="./public/js/redirect.js" defer></script>
     <title>Login page</title>
 
 </head>
@@ -27,8 +28,8 @@
             <input name="email" type="text" placeholder="email">
             <input name="password" type="password" placeholder="password">
 
-            <button type="submit" >Login</button>
-            <button id="register-btn">Register</button>
+            <button type="submit" class="btn">Login</button>
+            <button type="reset" class="btn" id="register-btn">Register</button>
         </form>
 
     </div>

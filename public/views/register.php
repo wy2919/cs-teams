@@ -32,7 +32,7 @@
                 <option value="<?php echo $rank->getId() ?>"><?php echo $rank->getRank() ?></option>
                 <?php } ?>
               </select>
-            <button>Sign up</button>
+            <button class="btn">Sign up</button>
         </form>
 
     </div>

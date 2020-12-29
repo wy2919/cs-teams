@@ -10,20 +10,27 @@ body {
     height: 100vh;
 }
 
+a {
+    cursor: pointer;
+}
+
 input {
     outline: none;
 }
 
-.button {
+.btn {
     font-size: 1em;
     color: white;
-    background: transparent linear-gradient(180deg, #190D66 0%, #0D0733 100%) 0 0 no-repeat padding-box;
     border: 1px solid gray;
     border-radius: 1.5em;
+    outline: none;
+    cursor: pointer;
+    background: transparent linear-gradient(180deg, #190D66 0%, #0D0733 100%);
+    transition: background-position .5s;
 }
 
-button {
-    outline: none;
+.btn:hover {
+    background-position: 0 -2em;
 }
 
 input {

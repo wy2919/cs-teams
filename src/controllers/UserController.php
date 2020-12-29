@@ -66,11 +66,17 @@ class UserController extends AppController
                                                 'ratingRepository' => $this->ratingRepository]);
     }
 
-    public function editProfile() {
+    // session user profile
+    public function myDetails() {
         return $this->render('my-profile',  ['messages' => $this->messages]);
     }
 
+    // specific user profile
     public function profile() {
         return $this->render('user-details',  ['messages' => $this->messages]);
+    }
+
+    public function friends() {
+        return $this->render('friends');
     }
 }

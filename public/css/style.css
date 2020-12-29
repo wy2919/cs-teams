@@ -55,12 +55,7 @@ body {
     margin: 0.1em;
     width: 60%;
     height: 2em;
-    font-size: 1em;
-    background: transparent linear-gradient(180deg, #1C1071 0%, #0A001C 100%) 0 0 no-repeat padding-box;
-    color: white;
     box-shadow: 0 5px 6px #00000029;
-    border: 1px solid #707070;
-    border-radius: 21px;
 }
 
 .login button:first-of-type{

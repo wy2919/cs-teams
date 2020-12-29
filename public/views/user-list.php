@@ -2,6 +2,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="public/css/user-list.css">
     <link rel="stylesheet" type="text/css" href="public/css/main.css">
+    <script type="text/javascript" src="./public/js/redirect.js" defer></script>
 
     <script src="https://kit.fontawesome.com/3010d94d2f.js" crossorigin="anonymous"></script>
     <title>User list</title>
@@ -13,19 +14,16 @@
             <img src="public/img/logo.svg" alt="logo">
             <ul>
                 <li>
-                    <a href="#">User List</a>
+                    <a id="users-ref">User List</a>
                 </li>
                 <li>
-                    <a href="#">Friends</a>
+                    <a id="friends-ref">Friends</a>
                 </li>
                 <li>
-                    <a href="#">Messages</a>
+                    <a id="profile-ref">My Profile</a>
                 </li>
                 <li>
-                    <a href="#">My Profile</a>
-                </li>
-                <li>
-                    <a href="#">Log out</a>
+                    <a id="login-ref">Log out</a>
                 </li>
             </ul>
             <i class="hamburger fas fa-bars"></i>
@@ -65,8 +63,8 @@
                                 <p><strong>Elo: </strong><?php echo $ratingRepository->getUserElo($user->getId()) ?></p>
                             </div>
                             <div class="user-buttons">
-                                <button>Invite</button>
-                                <button>Profile</button>
+                                <button class="btn">Invite</button>
+                                <button class="btn">Profile</button>
                             </div>
                         </div>
                     <?php } ?>
@@ -80,8 +78,8 @@
                             <p><strong>Elo: </strong> 87%</p>
                         </div>
                         <div class="user-buttons">
-                            <button>Invite</button>
-                            <button>Profile</button>
+                            <button class="btn">Invite</button>
+                            <button class="btn">Profile</button>
                         </div>
                     </div>
                     <div class="user">
@@ -93,8 +91,8 @@
                             <p><strong>Elo: </strong> 87%</p>
                         </div>
                         <div class="user-buttons">
-                            <button>Invite</button>
-                            <button>Profile</button>
+                            <button class="btn">Invite</button>
+                            <button class="btn">Profile</button>
                         </div>
                     </div>
                     <div class="user">
@@ -106,8 +104,8 @@
                             <p><strong>Elo: </strong> 87%</p>
                         </div>
                         <div class="user-buttons">
-                            <button>Invite</button>
-                            <button>Profile</button>
+                            <button class="btn">Invite</button>
+                            <button class="btn">Profile</button>
                         </div>
                     </div>
                     <div class="user">
@@ -119,8 +117,8 @@
                             <p><strong>Elo: </strong> 87%</p>
                         </div>
                         <div class="user-buttons">
-                            <button>Invite</button>
-                            <button>Profile</button>
+                            <button class="btn">Invite</button>
+                            <button class="btn">Profile</button>
                         </div>
                     </div>
                     <div class="user">
@@ -132,8 +130,8 @@
                             <p><strong>Elo: </strong> 87%</p>
                         </div>
                         <div class="user-buttons">
-                            <button>Invite</button>
-                            <button>Profile</button>
+                            <button class="btn">Invite</button>
+                            <button class="btn">Profile</button>
                         </div>
                     </div>
                     <div class="user">
@@ -145,8 +143,8 @@
                             <p><strong>Elo: </strong> 87%</p>
                         </div>
                         <div class="user-buttons">
-                            <button>Invite</button>
-                            <button>Profile</button>
+                            <button class="btn">Invite</button>
+                            <button class="btn">Profile</button>
                         </div>
                     </div>
                     
