@@ -10,18 +10,18 @@ class SecurityController extends AppController
 {
     private UserRepository $userRepository;
     private RankRepository $rankRepository;
-    private UserController $userController;
 
     public function __construct()
     {
         parent::__construct();
         $this->rankRepository = new RankRepository();
         $this->userRepository = new UserRepository();
-        $this->userController = new UserController();
     }
 
     public function login()
     {
+        session_start();
+
         if($this->isGet()){
             return $this->render('login');
         }
@@ -39,9 +39,12 @@ class SecurityController extends AppController
             return $this->render('login', ['messages'=>['Incorrect password']]);
         }
 
-//        return $this->render('user-list');
+        $_SESSION['id'] = $user->getId();
+        $_SESSION['email'] = $user->getEmail();
+        $_SESSION['username'] = $user->getUsername();
 
-        $url = "http://$_SERVER[HTTP_HOST]";    // odczytujemy adres serwera
+
+        $url = "http://$_SERVER[HTTP_HOST]";    // server address
         header("Location: {$url}/users");
     }
 
@@ -49,15 +52,16 @@ class SecurityController extends AppController
     public function register() {
         $ranks = $this->rankRepository->getRanks();
         if($this->isGet()){
+            var_dump($ranks[0]->getRank());
             return $this->render('register', ['ranks'=>$ranks]);
         }
-        if($_POST['password'] != $_POST['passwordConfirm']) {
+        if($_POST['password1'] != $_POST['password2']) {
             return $this->render('register', ['messages'=>['password does not match'],'ranks'=>$ranks]);
         }
 
         $email = $_POST['email'];
         $username = $_POST['username'];
-        $password = $_POST['password'];
+        $password = $_POST['password1'];
         $rank   = $_POST['rank'];
 
         $user = $this->userRepository->getUserByEmail($email);
@@ -83,6 +87,11 @@ class SecurityController extends AppController
                 null
             ));
 
-        $this->userController->users(); // TODO
+        $_SESSION['id'] = $user->getId();
+        $_SESSION['email'] = $user->getEmail();
+        $_SESSION['username'] = $user->getUsername();
+
+        $url = "http://$_SERVER[HTTP_HOST]";    // server address
+        header("Location: {$url}/users");
     }
 }

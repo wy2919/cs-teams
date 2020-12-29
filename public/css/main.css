@@ -22,6 +22,14 @@ input {
     border-radius: 1.5em;
 }
 
+button {
+    outline: none;
+}
+
+input {
+    outline: none;
+}
+
 .search-field {
     width: 16vw;
     height: 2.8em;
