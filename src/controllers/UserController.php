@@ -2,9 +2,11 @@
 
 require_once 'AppController.php';
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../models/UserDto.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
 require_once __DIR__ . '/../repository/RankRepository.php';
 require_once __DIR__ . '/../repository/RatingRepository.php';
+require_once __DIR__ . '/../util/RouteGuard.php';
 
 class UserController extends AppController
 {
@@ -29,6 +31,7 @@ class UserController extends AppController
 
     public function editAvatar() 
     {
+        RouteGuard::checkAuthentication();
         if($this->isPost() && is_uploaded_file($_FILES['file']['tmp_name']) && $this->validateAvatar($_FILES['file'])) {          // 'file' to nazwa name="" ustawiona w html, a tmp_name to tak już jest..
 
             move_uploaded_file(
@@ -45,6 +48,7 @@ class UserController extends AppController
 
 
     private function validateAvatar(array $file): bool{
+        RouteGuard::checkAuthentication();
         if( $file['size'] > self::MAX_FILE_SIZE) {
             $this->messages[] = 'File is too large for destination system.';
             return false;
@@ -59,7 +63,7 @@ class UserController extends AppController
     }
 
     public function users() {
-
+        RouteGuard::checkAuthentication();
         $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
                                                 'users' => $this->userRepository->getUsers(),
                                                 'rankRepository' => $this->rankRepository,
@@ -68,15 +72,19 @@ class UserController extends AppController
 
     // session user profile
     public function myDetails() {
-        return $this->render('my-profile',  ['messages' => $this->messages]);
+        RouteGuard::checkAuthentication();
+        return $this->render('my-profile',  ['user' => $this->userRepository->getUserDtoById($_SESSION['id'])]);
+
     }
 
     // specific user profile
     public function profile() {
+        RouteGuard::checkAuthentication();
         return $this->render('user-details',  ['messages' => $this->messages]);
     }
 
     public function friends() {
+        RouteGuard::checkAuthentication();
         return $this->render('friends');
     }
 }

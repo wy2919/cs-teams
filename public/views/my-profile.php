@@ -38,13 +38,13 @@
                 <div class="container">
 
                     <div class="user-info">
-                        <p>John Doe</p>
-                        <img src="public/uploads/<?= $image ?>" alt="user avatar">
-                        <p><strong>Elo: </strong>95%</p>
-                        <p><strong>Rank: </strong>Global Elite</p>
+                        <p><?= $user->getUsername() ?></p>
+                        <img src="public/uploads/<?= $user->getImage() ?>" alt="user avatar">
+                        <p><strong>Elo: </strong><?=$user->getElo()?></p>
+                        <p><strong>Rank: </strong><?=$user->getRank()?></p>
                     </div>
                     <div class="description">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente placeat deserunt nulla, laborum distinctio repellat itaque! Mollitia dolorem veritatis, praesentium sunt odio obcaecati eveniet dolore eos natus adipisci? Aliquam, ab.Suscipit perferendis quos, voluptatem omnis non tenetur exercitationem molestiae laudantium cum ex eius maxime voluptatum accusamus esse voluptatibus perspiciatis temporibus aspernatur eveniet doloremque obcaecati corporis qui! Soluta architecto magnam qui.</p>
+                        <p><?= $user->getDescription()?></p>
                         <button class="btn">Edit</button>
                     </div>
 
@@ -52,10 +52,6 @@
             </div>
             <div class="edit-panel">
                 <button>change password</button>
-                <div class="switch">
-                    <span>private account: </span>
-                    <input type="checkbox"/>
-                </div>
                 <select>
                     <option value="">Global Elite</option>
                 </select>

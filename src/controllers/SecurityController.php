@@ -5,6 +5,7 @@ require_once __DIR__.'/../repository/UserRepository.php';
 require_once __DIR__.'/../repository/RankRepository.php';
 require_once __DIR__.'/../controllers/UserController.php';
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../util/RouteGuard.php';
 
 class SecurityController extends AppController
 {
@@ -20,8 +21,7 @@ class SecurityController extends AppController
 
     public function login()
     {
-        session_start();
-
+        RouteGuard::clearSession();
         if($this->isGet()){
             return $this->render('login');
         }
@@ -49,19 +49,22 @@ class SecurityController extends AppController
     }
 
 
-    public function register() {
+    public function register()
+    {
+        RouteGuard::clearSession();
+
         $ranks = $this->rankRepository->getRanks();
         if($this->isGet()){
             var_dump($ranks[0]->getRank());
             return $this->render('register', ['ranks'=>$ranks]);
         }
-        if($_POST['password1'] != $_POST['password2']) {
+        if($_POST['password'] != $_POST['passwordConfirm']) {
             return $this->render('register', ['messages'=>['password does not match'],'ranks'=>$ranks]);
         }
 
         $email = $_POST['email'];
         $username = $_POST['username'];
-        $password = $_POST['password1'];
+        $password = $_POST['password'];
         $rank   = $_POST['rank'];
 
         $user = $this->userRepository->getUserByEmail($email);
@@ -80,13 +83,14 @@ class SecurityController extends AppController
                 $email,
                 $username,
                 $password,
-                null,
+                'placeholder.png',
                 false,
                 null,
                 $rank,
                 null
             ));
 
+        $user = $this->userRepository->getUserByEmail($email);
         $_SESSION['id'] = $user->getId();
         $_SESSION['email'] = $user->getEmail();
         $_SESSION['username'] = $user->getUsername();
