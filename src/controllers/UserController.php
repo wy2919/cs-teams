@@ -4,6 +4,7 @@ require_once 'AppController.php';
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/UserDto.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
+require_once __DIR__ . '/../repository/ConversationRepository.php';
 require_once __DIR__ . '/../repository/RankRepository.php';
 require_once __DIR__ . '/../repository/RatingRepository.php';
 require_once __DIR__ . '/../util/RouteGuard.php';
@@ -17,6 +18,7 @@ class UserController extends AppController
 
     private array $messages = [];
     private UserRepository $userRepository;
+    private ConversationRepository $conversationRepository;
     private RankRepository $rankRepository;
     private RatingRepository $ratingRepository;
 
@@ -24,6 +26,7 @@ class UserController extends AppController
     {
         parent::__construct();
         $this->userRepository = new UserRepository();
+        $this->conversationRepository = new ConversationRepository();
         $this->rankRepository = new RankRepository();
         $this->ratingRepository = new RatingRepository();
     }
@@ -62,12 +65,16 @@ class UserController extends AppController
         return true;
     }
 
+    // specific user profile
+    public function profile() {
+        RouteGuard::checkAuthentication();
+        return $this->render('user-details', ['user' => $this->userRepository->getUserDtoById($_POST['userId'])]);
+    }
+
     public function users() {
         RouteGuard::checkAuthentication();
         $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
-                                                'users' => $this->userRepository->getUsers(),
-                                                'rankRepository' => $this->rankRepository,
-                                                'ratingRepository' => $this->ratingRepository]);
+                                                'users' => $this->userRepository->getUsersDto()]);
     }
 
     // session user profile
@@ -77,14 +84,43 @@ class UserController extends AppController
 
     }
 
-    // specific user profile
-    public function profile() {
+    public function conversation() {
         RouteGuard::checkAuthentication();
-        return $this->render('user-details',  ['messages' => $this->messages]);
+
+        $selected = null;
+        $messages = null;
+
+        // just display conversation (no specific user-chat selected)
+        if(!$_POST['userId']) {
+            $conversations = $this->conversationRepository->getUserConversations($_SESSION['id']);
+            if(count($conversations) > 0) {
+                $selected = $conversations[0];
+                $messages = $this->conversationRepository->getConversationMessages($selected->getId());
+            }
+        }
+        else {
+            // creates conversation/return id of existing one if there is
+            $conversationId = $this->conversationRepository->newConversation($_SESSION['id'], $_POST['userId']);
+            $conversations = $this->conversationRepository->getUserConversations($_SESSION['id']);
+
+            $filtered = array_filter($conversations, function ($conv) use ($conversationId) {
+                if($conv->getId() === $conversationId) {
+                    return true;
+                }
+                return false;
+            });
+
+            $selected = reset($filtered);
+            $messages = $selected ? $this->conversationRepository->getConversationMessages($conversationId) : null;
+        }
+
+        return $this->render('conversation', ['user' => $this->userRepository->getUserDtoById($_SESSION['id']),
+                                                    'conversations' => $conversations,
+                                                    'selected' => $selected,
+                                                    'messages' => $messages]);
     }
 
-    public function friends() {
-        RouteGuard::checkAuthentication();
-        return $this->render('friends');
+    public function message() {
+
     }
 }

@@ -1,3 +1,4 @@
+
 .user-list{
     display: flex;
     flex-direction: column;
@@ -23,7 +24,7 @@
     height: 2.5em;
     width: 45%;
     margin-bottom: .4em;
-    background: #E3E3E3 0% 0% no-repeat padding-box;
+    background: #E3E3E3 0 0 no-repeat padding-box;
     border: 1px solid #000000;
 }
 
@@ -39,8 +40,6 @@
 .user-elo input {
     width: 90%;
 }
-
-
 
 .users {
     display: grid;
@@ -61,8 +60,8 @@
     height: 8em;
     margin-right: 1.5em;
     object-fit: cover;
-    background: transparent url('img/Rectangle 1468.png') 0% 0% no-repeat padding-box;
-    box-shadow: 0px 3px 6px #00000099;
+    background: transparent url('img/Rectangle 1468.png') 0 0 no-repeat padding-box;
+    box-shadow: 0 3px 6px #00000099;
     border: 1px solid #000000;
     border-radius: 1.5em
 }
@@ -87,16 +86,12 @@
     align-items: center;
 }
 
-.user-buttons button{
-    width: 8em;
-    margin: 1.5%;
-    height: 25%;
-    font-size: 1em;
-    color: white;
-    background: transparent linear-gradient(180deg, #190D66 0%, #0D0733 100%) 0% 0% no-repeat padding-box;
-    border: 1px solid gray;
-    border-radius: 1.5em;
+.user-btn {
+    height: 2em;
+    width: 7em;
 }
+
+
 
 
 @media only screen and (max-device-width: 1550px) {

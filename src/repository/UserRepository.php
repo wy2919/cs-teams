@@ -31,6 +31,34 @@ class UserRepository extends Repository
         );
     }
 
+    public function getUsersDto()
+    {
+        $statement = $this->database->connect()->prepare('
+            SELECT * FROM public.user_dto
+        ');
+        $statement->execute();
+
+        $records = $statement->fetchAll(PDO::FETCH_ASSOC);    // association array
+
+        if ($records == false) {
+            return null;    // we should throw exception instead of return null and handle it in place where we run this fun
+        }
+
+        $users = array();
+        foreach ($records as $user) {
+            $users[] = new UserDto(
+                $user['id'],
+                $user['email'],
+                $user['username'],
+                $user['image'],
+                $user['description'],
+                $user['rank'],
+                $user['elo']
+            );
+        }
+        return $users;
+    }
+
     public function getUserByEmail(string $email): ?User
     {
         $statement = $this->database->connect()->prepare('
@@ -76,17 +104,6 @@ class UserRepository extends Repository
 
     public function addUserDetails(): int {
 
-        // salt generating TODO
-//        $existStatement = $this->database->connect()->prepare('
-//            SELECT id FROM public.users_details WHERE salt = :salt
-//        ');
-//
-//        // until it generates unique salt
-//        do {
-//            $salt = random_bytes(32);
-//            $existStatement->execute([$salt]);
-//        } while($existStatement->rowCount() > 0);
-//
         $statement = $this->database->connect()->prepare('
             INSERT INTO public.users_details(description) VALUES(?) RETURNING id
         ');

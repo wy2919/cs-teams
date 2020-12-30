@@ -15,7 +15,7 @@ if (usersRefButton != null) {
 
 let friendsRefButton = document.getElementById('friends-ref');
 if (friendsRefButton != null) {
-    friendsRefButton.addEventListener('click', () => document.location.href = 'friends');
+    friendsRefButton.addEventListener('click', () => document.location.href = 'conversation');
 }
 
 let profileRefButton = document.getElementById('profile-ref');

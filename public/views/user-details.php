@@ -36,15 +36,16 @@
                 <div class="container">
 
                     <div class="user-info">
-                        <p>John Doe</p>
-                        <img src="public/img/panda-2859555_640.jpg" alt="user avatar">
-                        <p><strong>Elo: </strong>95%</p>
-                        <p><strong>Rank: </strong>Global Elite</p>
+                        <p><?= $user->getUsername() ?></p>
+                        <img src="public/uploads/<?= $user->getImage() ?>" alt="user avatar">
+                        <p><strong>Elo: </strong><?= $user->getElo() ?></p>
+                        <p><strong>Rank: </strong><?= $user->getRank() ?></p>
                     </div>
-                    <div class="description">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente placeat deserunt nulla, laborum distinctio repellat itaque! Mollitia dolorem veritatis, praesentium sunt odio obcaecati eveniet dolore eos natus adipisci? Aliquam, ab.Suscipit perferendis quos, voluptatem omnis non tenetur exercitationem molestiae laudantium cum ex eius maxime voluptatum accusamus esse voluptatibus perspiciatis temporibus aspernatur eveniet doloremque obcaecati corporis qui! Soluta architecto magnam qui.</p>
-                        <button class="btn">Invite</button>
-                    </div>
+                    <form class="description" action="conversation" method="post">
+                        <input type="hidden" name="userId" value="<?=$user->getId() ?>">
+                        <p><?= $user->getDescription() ?></p>
+                        <button type="submit" class="btn">Message</button>
+                    </form>
 
                 </div>
                 </div>

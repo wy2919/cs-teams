@@ -13,7 +13,7 @@ Router::get('register', 'SecurityController');
 Router::get('users', 'UserController');
 Router::get('profile', 'UserController');
 Router::get('myDetails', 'UserController');
-Router::get('friends', 'UserController');
+Router::post('conversation', 'UserController');
 
 
 Router::post('login', 'SecurityController');

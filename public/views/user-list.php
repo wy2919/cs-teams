@@ -59,94 +59,21 @@
                             <img src="public/uploads/<?php echo $user->getImage() ?>" alt="user avatar">
                             <div class="user-details">
                                 <p><?php echo $user->getUsername() ?></p>
-                                <p><strong>Rank: </strong><?php echo $rankRepository->getRank($user->getIdRank())->getRank() ?></p>
-                                <p><strong>Elo: </strong><?php echo $ratingRepository->getUserElo($user->getId()) ?></p>
+                                <p><strong>Rank: </strong><?php echo $user->getRank() ?></p>
+                                <p><strong>Elo: </strong><?php echo $user->getElo() ?></p>
                             </div>
                             <div class="user-buttons">
-                                <button class="btn">Invite</button>
-                                <button class="btn">Profile</button>
+                                <form action="createConversation" method="post">
+                                    <input type="hidden" name="userId" value="<?= $user->getId()?>">
+                                    <button class="btn user-btn" class="btn">Message</button>
+                                </form>
+                                <form action="profile" method="post">
+                                    <input type="hidden" name="userId" value="<?= $user->getId()?>">
+                                    <button class="btn user-btn" class="btn">Profile</button>
+                                </form>
                             </div>
                         </div>
                     <?php } ?>
-
-                    <div class="user">
-                        <img src="public/img/panda-2859555_640.jpg" alt="user avatar">
-                        <div class="user-details">
-                            <p>PterrodaktylPL</p>
-                            <p><strong>Private: </strong>no</p>
-                            <p><strong>Rank: </strong>Global Elite</p>
-                            <p><strong>Elo: </strong> 87%</p>
-                        </div>
-                        <div class="user-buttons">
-                            <button class="btn">Invite</button>
-                            <button class="btn">Profile</button>
-                        </div>
-                    </div>
-                    <div class="user">
-                        <img src="public/img/panda-2859555_640.jpg" alt="user avatar">
-                        <div class="user-details">
-                            <p>PterrodaktylPL</p>
-                            <p><strong>Private: </strong>no</p>
-                            <p><strong>Rank: </strong>Global Elite</p>
-                            <p><strong>Elo: </strong> 87%</p>
-                        </div>
-                        <div class="user-buttons">
-                            <button class="btn">Invite</button>
-                            <button class="btn">Profile</button>
-                        </div>
-                    </div>
-                    <div class="user">
-                        <img src="public/img/panda-2859555_640.jpg" alt="user avatar">
-                        <div class="user-details">
-                            <p>PterrodaktylPL</p>
-                            <p><strong>Private: </strong>no</p>
-                            <p><strong>Rank: </strong>Global Elite</p>
-                            <p><strong>Elo: </strong> 87%</p>
-                        </div>
-                        <div class="user-buttons">
-                            <button class="btn">Invite</button>
-                            <button class="btn">Profile</button>
-                        </div>
-                    </div>
-                    <div class="user">
-                        <img src="public/img/panda-2859555_640.jpg" alt="user avatar">
-                        <div class="user-details">
-                            <p>PterrodaktylPL</p>
-                            <p><strong>Private: </strong>no</p>
-                            <p><strong>Rank: </strong>Global Elite</p>
-                            <p><strong>Elo: </strong> 87%</p>
-                        </div>
-                        <div class="user-buttons">
-                            <button class="btn">Invite</button>
-                            <button class="btn">Profile</button>
-                        </div>
-                    </div>
-                    <div class="user">
-                        <img src="public/img/panda-2859555_640.jpg" alt="user avatar">
-                        <div class="user-details">
-                            <p>PterrodaktylPL</p>
-                            <p><strong>Private: </strong>no</p>
-                            <p><strong>Rank: </strong>Global Elite</p>
-                            <p><strong>Elo: </strong> 87%</p>
-                        </div>
-                        <div class="user-buttons">
-                            <button class="btn">Invite</button>
-                            <button class="btn">Profile</button>
-                        </div>
-                    </div>
-                    <div class="user">
-                        <img src="public/img/panda-2859555_640.jpg" alt="user avatar">
-                        <div class="user-details">
-                            <p>PterrodaktylPL</p>
-                            <p><strong>Private: </strong>no</p>
-                            <p><strong>Rank: </strong>Global Elite</p>
-                            <p><strong>Elo: </strong> 87%</p>
-                        </div>
-                        <div class="user-buttons">
-                            <button class="btn">Invite</button>
-                            <button class="btn">Profile</button>
-                        </div>
-                    </div>
                     
                 </section>
 

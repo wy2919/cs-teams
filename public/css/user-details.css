@@ -19,8 +19,15 @@
     margin-top: 3em;
 }
 
+.description p {
+    padding: .2em 0 0 .2em;
+    min-height: 68%;
+    background-color: #F0F0F0;
+    border-radius: .35em;
+}
+
 .description button {
-    height: 4vh;
+    height: 2em;
     align-self: center;
     width: 8em;
 }
@@ -45,7 +52,7 @@
     height: 15em;
     margin-right: 1.5em;
     object-fit: cover;
-    background: transparent url('img/Rectangle 1468.png') 0% 0% no-repeat padding-box;
+    background: transparent url('img/Rectangle 1468.png') 0 0 no-repeat padding-box;
     box-shadow: 1px 4px 6px #00000099;
     border: 1px solid #000000;
     border-radius: 1.5em
@@ -174,6 +181,10 @@
     .rate span {
         margin-top: 0;
     }
+
+    .description p {
+            font-size: 1.1em;
+        }
 }
 
 
