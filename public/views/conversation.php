@@ -78,10 +78,12 @@
 
                             </div>
 
-                            <div class="message">
-                                <input class="msg-input" type="text">
-                                <button class="btn">Send</button>
-                            </div>
+                            <form class="message" action="message" method="post">
+                                <input type="hidden" name="conversationId" value="<?=$selected->getId()?>">
+                                <input type="hidden" name="senderId" value="<?=$user->getId()?>">
+                                <input type="text" name="message" class="msg-input">
+                                <button type="submit" class="btn">Send</button>
+                            </form>
                         </div>
                     </div>
 

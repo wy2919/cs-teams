@@ -90,4 +90,11 @@ class ConversationRepository extends Repository
 
         return $conversationId;
     }
+
+    public function newMessage($conversationId, $senderId, $message): bool {
+        $statement = $this->database->connect()->prepare('
+        INSERT INTO public.messages(id_conversation, id_sender, message) VALUES(?, ?, ?)
+        ');
+        return $statement->execute([$conversationId, $senderId, $message]);
+    }
 }

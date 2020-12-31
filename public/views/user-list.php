@@ -63,7 +63,7 @@
                                 <p><strong>Elo: </strong><?php echo $user->getElo() ?></p>
                             </div>
                             <div class="user-buttons">
-                                <form action="createConversation" method="post">
+                                <form action="conversation" method="post">
                                     <input type="hidden" name="userId" value="<?= $user->getId()?>">
                                     <button class="btn user-btn" class="btn">Message</button>
                                 </form>

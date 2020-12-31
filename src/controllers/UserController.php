@@ -121,6 +121,24 @@ class UserController extends AppController
     }
 
     public function message() {
+        RouteGuard::checkAuthentication();
 
+        $this->conversationRepository->newMessage($_POST['conversationId'], $_POST['senderId'], $_POST['message']);
+        $conversations = $this->conversationRepository->getUserConversations($_SESSION['id']);
+
+        $filtered = array_filter($conversations, function ($conv) {
+            if($conv->getId() == $_POST['conversationId']) {
+                return true;
+            }
+            return false;
+        });
+
+        $selected = reset($filtered);
+        $messages = $selected ? $this->conversationRepository->getConversationMessages($_POST['conversationId']) : null;
+
+        return $this->render('conversation', ['user' => $this->userRepository->getUserDtoById($_SESSION['id']),
+                                        'conversations' => $conversations,
+                                        'selected' => $selected,
+                                        'messages' => $messages]);
     }
 }
