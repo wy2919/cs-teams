@@ -1,7 +1,6 @@
 <?php
 // pierwszy plik uruchamiany na serverze
 
-
 require 'Router.php';
 
 $path = trim($_SERVER['REQUEST_URI'], '/'); // usuwamy pierwszego slasha - ścieżka z przeglądarki
@@ -15,6 +14,7 @@ Router::get('profile', 'UserController');
 Router::get('myDetails', 'UserController');
 Router::post('conversation', 'UserController');
 Router::post('message', 'UserController');
+Router::post('rateUser', 'UserController');
 
 
 Router::post('login', 'SecurityController');

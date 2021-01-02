@@ -61,18 +61,45 @@
 
 .rate-user{
     display: flex;
+    align-items: center;
     justify-content: center;
+}
+
+.messages{
+    color: darkred;
 }
 
 .rate {
     margin: 2em;
     font-weight: 700;
     font-size: 1.2em;
+    float: right;
 }
 
-.rate span {
-    font-size: 2em;
-    color: royalblue;
+.stars{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.stars input {
+    color: dimgrey;
+    display: none;
+    transition: .2s;
+}
+
+input:not(:checked) ~ label:hover,
+input:not(:checked) ~ label:hover ~ label{
+    color: #1A0E68;
+}
+
+input:checked ~ label {
+    color: #1A0E68;
+}
+
+.rate label {
+    font-size: 1.2em;
+    color: cornflowerblue;
+    padding: 2px;
 }
 
 .rate-button {

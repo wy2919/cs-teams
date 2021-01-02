@@ -3,14 +3,14 @@
 
 class Rating
 {
-    private int $id;
+    private ?int $id;
     private int $userId;
     private int $userRatingId;
     private float $skills;
     private float $friendliness;
     private float $communication;
 
-    public function __construct(int $id, int $userId, int $userRatingId, float $skills, float $friendliness, float $communication)
+    public function __construct(?int $id, int $userId, int $userRatingId, float $skills, float $friendliness, float $communication)
     {
         $this->id = $id;
         $this->userId = $userId;
@@ -20,12 +20,12 @@ class Rating
         $this->communication = $communication;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(int $id): void
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
