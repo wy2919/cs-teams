@@ -17,7 +17,9 @@ class UserRepository extends Repository
     public function getUserDtoById(int $id): ?UserDto
     {
         $statement = $this->database->connect()->prepare('
-            SELECT * FROM public.user_dto WHERE id = :id
+            SELECT * 
+            FROM public.user_dto 
+            WHERE id = :id
         ');
         $statement->execute([$id]);
         $record = $statement->fetch(PDO::FETCH_ASSOC);    // association array
@@ -28,7 +30,9 @@ class UserRepository extends Repository
     public function getUsersDtoExceptUser($id)
     {
         $statement = $this->database->connect()->prepare('
-            SELECT * FROM public.user_dto WHERE id != :id
+            SELECT * 
+            FROM public.user_dto 
+            WHERE id != :id
         ');
         $statement->execute([(int)$id]);
         $records = $statement->fetchAll(PDO::FETCH_ASSOC);    // association array
@@ -40,8 +44,14 @@ class UserRepository extends Repository
     {
 
         $statement = $this->database->connect()->prepare('
-            SELECT * FROM public.user_dto u LEFT JOIN public.ranks r ON u.rank = r.rank WHERE u.id != :id_user AND r.id = :id_rank AND 
-        u.elo >= :elo');
+            SELECT * 
+            FROM public.user_dto u 
+                LEFT JOIN public.ranks r 
+                    ON u.rank = r.rank 
+            WHERE u.id != :id_user 
+              AND r.id = :id_rank 
+              AND u.elo >= :elo
+              ');
         $statement->execute([(int)$userId, (int)$rankId, (float)$elo]);
         $records = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -52,8 +62,13 @@ class UserRepository extends Repository
     {
 
         $statement = $this->database->connect()->prepare('
-            SELECT * FROM public.user_dto u LEFT JOIN public.ranks r ON u.rank = r.rank WHERE u.id != :id_user AND 
-        u.elo >= :elo');
+            SELECT * 
+            FROM public.user_dto u 
+                LEFT JOIN public.ranks r 
+                    ON u.rank = r.rank 
+            WHERE u.id != :id_user 
+              AND u.elo >= :elo
+        ');
         $statement->execute([(int)$userId, (float)$elo]);
         $records = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -63,7 +78,9 @@ class UserRepository extends Repository
     public function getUserByEmail(string $email): ?User
     {
         $statement = $this->database->connect()->prepare('
-            SELECT * FROM public.users WHERE email = :email
+            SELECT * 
+            FROM public.users 
+            WHERE email = :email
         ');
         $statement->execute([$email]);
 
@@ -75,7 +92,9 @@ class UserRepository extends Repository
     public function getUserByUsername(string $username): ?User
     {
         $statement = $this->database->connect()->prepare('
-            SELECT * FROM public.users WHERE username = :username
+            SELECT * 
+            FROM public.users 
+            WHERE username = :username
         ');
 
         $statement->bindParam(':username', $username, PDO::PARAM_STR);
@@ -89,7 +108,9 @@ class UserRepository extends Repository
     public function addUser(User $user): void
     {
         $statement = $this->database->connect()->prepare('
-            INSERT INTO public.users (email, password, username, id_rank, id_user_details) VALUES(?, ?, ?, ?, ?)
+            INSERT INTO public.users 
+                (email, password, username, id_rank, id_user_details) 
+                VALUES(?, ?, ?, ?, ?)
         ');
 
         $statement->execute([
@@ -101,10 +122,14 @@ class UserRepository extends Repository
         ]);
     }
 
-    public function addUserDetails(): int {
+    public function addUserDetails(): int
+    {
 
         $statement = $this->database->connect()->prepare('
-            INSERT INTO public.users_details(description) VALUES(?) RETURNING id
+            INSERT INTO 
+                public.users_details(description) 
+                VALUES(?) 
+                RETURNING id
         ');
         $statement->execute([null]);
 

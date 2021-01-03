@@ -12,23 +12,22 @@ class ConversationRepository extends Repository
         session_start();
         $conversationsSelect = $this->database->connect()->prepare('
             SELECT c.id,
-                   c.id_user_2 as id_user,
+                   c.id_user_2 AS id_user,
                    u.username,
                    u.image
             FROM public.conversations c
-            LEFT JOIN public.users u on c.id_user_2 = u.id
+                LEFT JOIN public.users u ON c.id_user_2 = u.id
             WHERE c.id_user_1 = :id
             UNION
             SELECT c.id,
-                   c.id_user_1 as id_user,
+                   c.id_user_1 AS id_user,
                    u.username,
                    u.image
             FROM public.conversations c
-                     LEFT JOIN public.users u on c.id_user_1 = u.id
+                 LEFT JOIN public.users u ON c.id_user_1 = u.id
             WHERE c.id_user_2 = :id;
         ');
-        $conversationsSelect->bindParam(':id', $id, PDO::PARAM_INT);
-        $conversationsSelect->execute();
+        $conversationsSelect->execute([$id]);
 
         $fetchedConversations = $conversationsSelect->fetchAll(PDO::FETCH_ASSOC);    // association array
 
@@ -47,7 +46,9 @@ class ConversationRepository extends Repository
     public function getConversationMessages($conversationId)
     {
         $conversationMessagesSelect = $this->database->connect()->prepare('
-            SELECT id_sender, message from public.messages WHERE id_conversation = :id
+            SELECT id_sender, message 
+            FROM public.messages 
+            WHERE id_conversation = :id
             ORDER BY created_at;
         ');
 
@@ -68,20 +69,21 @@ class ConversationRepository extends Repository
         $statement = $this->database->connect()->prepare('
             SELECT c.id
             FROM public.conversations c
-            WHERE
-                        c.id_user_1 = :id_1 AND c.id_user_2 = :id_2
+            WHERE c.id_user_1 = :id_1 AND c.id_user_2 = :id_2
             UNION
             SELECT c.id
             FROM public.conversations c
-            WHERE
-                        c.id_user_1 = :id_2 AND c.id_user_2 = :id_1
+            WHERE c.id_user_1 = :id_2 AND c.id_user_2 = :id_1
         ');
         $statement->execute([$user_1, $user_2]);
         $conversationId = $statement->fetch(PDO::FETCH_ASSOC)['id'];
 
         if($conversationId == null) {
             $statement = $this->database->connect()->prepare('
-                INSERT INTO public.conversations(id_user_1, id_user_2) VALUES (?, ?) RETURNING id;
+                INSERT INTO public.conversations
+                    (id_user_1, id_user_2) 
+                    VALUES (?, ?) 
+                    RETURNING id;
             ');
             $statement->execute([$user_1, $user_2]);
 
@@ -93,7 +95,9 @@ class ConversationRepository extends Repository
 
     public function newMessage($conversationId, $senderId, $message): bool {
         $statement = $this->database->connect()->prepare('
-        INSERT INTO public.messages(id_conversation, id_sender, message) VALUES(?, ?, ?)
+            INSERT INTO public.messages
+                (id_conversation, id_sender, message) 
+                VALUES(?, ?, ?)
         ');
         return $statement->execute([$conversationId, $senderId, $message]);
     }

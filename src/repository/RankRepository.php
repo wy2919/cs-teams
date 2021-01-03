@@ -8,11 +8,11 @@ class RankRepository extends Repository
     public function getRank(int $id): ?Rank
     {
         $statement = $this->database->connect()->prepare('
-            SELECT * FROM public.ranks WHERE id = :id;
+            SELECT * 
+            FROM public.ranks 
+            WHERE id = :id;
         ');
-
-        $statement->bindParam(':id', $id, PDO::PARAM_INT);
-        $statement->execute();
+        $statement->execute([$id]);
 
         $rank = $statement->fetch(PDO::FETCH_ASSOC);    // association array
 
@@ -22,15 +22,15 @@ class RankRepository extends Repository
 
         return new Rank(
             $rank['id'],
-            $rank['rank'],
-            $rank['img'],
+            $rank['rank']
         );
     }
 
     public function getRanks()
     {
-        $statement = $this->database->connect()->prepare(
-            'SELECT * FROM public.ranks'
+        $statement = $this->database->connect()->prepare('
+            SELECT * 
+            FROM public.ranks'
         );
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -42,8 +42,7 @@ class RankRepository extends Repository
         foreach($result as $rank){
            $ranks[] = new Rank(
                 $rank['id'],
-                $rank['rank'],
-                $rank['img'],
+                $rank['rank']
             );
         }
         return $ranks;
