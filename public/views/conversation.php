@@ -35,7 +35,7 @@
             
             <div class="communicator-container">
                 <div class="friend-list">
-                    <?php foreach($conversations as $conv){ ?>
+                    <?php if($conversations != null){ foreach($conversations as $conv){ ?>
                     <form class="single" action="conversation" method="post">
                         <input name="userId" type="hidden" value="<?= $conv->getUserId()?>">
                         <img src="public/uploads/<?= $conv->getImage()?>" alt="user avatar" class="friend-img">
@@ -43,6 +43,7 @@
                         <button class="msg-btn" type="submit" ><i class="far fa-envelope"></i></button>
                     </form>
                     <hr class="solid">
+                    <?php } ?>
                     <?php } ?>
                 </div>
                 <div class="friend">
@@ -59,7 +60,7 @@
                         <div class="message-box">
                             <div class="messages">
 
-                                <?php foreach($messages as $message){ ?>
+                                <?php if($messages != null) { foreach($messages as $message){ ?>
                                 <div class="msg-container">
                                     <?php if(!$message->isSendByFriend()) { ?>
                                     <div class="self-msg">
@@ -74,6 +75,7 @@
                                     <?php } ?>
                                 </div>
 
+                                <?php } ?>
                                 <?php } ?>
 
                             </div>

@@ -2,9 +2,18 @@
 
 require_once 'Repository.php';
 require_once __DIR__.'/../models/Rank.php';
+require_once __DIR__.'/../mappers/RankMapper.php';
 
 class RankRepository extends Repository
 {
+    private RankMapper $rankMapper;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->rankMapper = new RankMapper();
+    }
+
     public function getRank(int $id): ?Rank
     {
         $statement = $this->database->connect()->prepare('
@@ -13,17 +22,9 @@ class RankRepository extends Repository
             WHERE id = :id;
         ');
         $statement->execute([$id]);
+        $record = $statement->fetch(PDO::FETCH_ASSOC);    // association array
 
-        $rank = $statement->fetch(PDO::FETCH_ASSOC);    // association array
-
-        if($rank == false){
-            return null;    // we should throw exception instead of return null and handle it in place where we run this fun
-        }
-
-        return new Rank(
-            $rank['id'],
-            $rank['rank']
-        );
+        return $this->rankMapper->mapAssocToRank($record);
     }
 
     public function getRanks()
@@ -33,18 +34,8 @@ class RankRepository extends Repository
             FROM public.ranks'
         );
         $statement->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        if($result == false){
-            return null;
-        }
+        $records = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        $ranks = array();
-        foreach($result as $rank){
-           $ranks[] = new Rank(
-                $rank['id'],
-                $rank['rank']
-            );
-        }
-        return $ranks;
+        return $this->rankMapper->mapMultipleAssocToRank($records);
     }
 }
