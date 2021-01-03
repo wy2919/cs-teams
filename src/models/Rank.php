@@ -5,13 +5,11 @@ class Rank
 {
     private int $id;
     private string $rank;
-    private ?string $img;
 
-    public function __construct(int $id, string $rank, ?string $img)
+    public function __construct(int $id, string $rank)
     {
         $this->id = $id;
         $this->rank = $rank;
-        $this->img = $img;
     }
 
     public function getId(): int
@@ -33,18 +31,4 @@ class Rank
     {
         $this->rank = $rank;
     }
-
-    public function getImg(): string
-    {
-        return $this->img;
-    }
-
-    public function setImg(string $img): void
-    {
-        $this->img = $img;
-    }
-
-
-
-
 }

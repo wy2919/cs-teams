@@ -2,33 +2,27 @@
 
 require_once 'Repository.php';
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../mappers/UserMapper.php';
 
 class UserRepository extends Repository
 {
+    private UserMapper $userMapper;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->userMapper = new UserMapper();
+    }
+
     public function getUserDtoById(int $id): ?UserDto
     {
         $statement = $this->database->connect()->prepare('
             SELECT * FROM public.user_dto WHERE id = :id
         ');
+        $statement->execute([$id]);
+        $record = $statement->fetch(PDO::FETCH_ASSOC);    // association array
 
-        $statement->bindParam(':id', $id, PDO::PARAM_STR);
-        $statement->execute();
-
-        $userDto = $statement->fetch(PDO::FETCH_ASSOC);    // association array
-
-        if ($userDto == false) {
-            return null;
-        }
-
-        return new UserDto(
-            $userDto['id'],
-            $userDto['email'],
-            $userDto['username'],
-            $userDto['image'],
-            $userDto['description'],
-            $userDto['rank'],
-            $userDto['elo']
-        );
+        return $this->userMapper->mapAssocToDto($record);
     }
 
     public function getUsersDtoExceptUser($id)
@@ -37,26 +31,9 @@ class UserRepository extends Repository
             SELECT * FROM public.user_dto WHERE id != :id
         ');
         $statement->execute([(int)$id]);
-
         $records = $statement->fetchAll(PDO::FETCH_ASSOC);    // association array
 
-        if ($records == false) {
-            return null;    // we should throw exception instead of return null and handle it in place where we run this fun
-        }
-
-        $users = array();
-        foreach ($records as $user) {
-            $users[] = new UserDto(
-                $user['id'],
-                $user['email'],
-                $user['username'],
-                $user['image'],
-                $user['description'],
-                $user['rank'],
-                $user['elo']
-            );
-        }
-        return $users;
+        return $this->userMapper->mapMultipleAssocToDto($records);
     }
 
     public function eloRankFilteredUsersDtoExceptUser(int $userId, float $elo, int $rankId)
@@ -65,28 +42,10 @@ class UserRepository extends Repository
         $statement = $this->database->connect()->prepare('
             SELECT * FROM public.user_dto u LEFT JOIN public.ranks r ON u.rank = r.rank WHERE u.id != :id_user AND r.id = :id_rank AND 
         u.elo >= :elo');
-
         $statement->execute([(int)$userId, (int)$rankId, (float)$elo]);
-
         $records = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        if ($records == false) {
-            return null;    // we should throw exception instead of return null and handle it in place where we run this fun
-        }
-
-        $users = array();
-        foreach ($records as $user) {
-            $users[] = new UserDto(
-                $user['id'],
-                $user['email'],
-                $user['username'],
-                $user['image'],
-                $user['description'],
-                $user['rank'],
-                $user['elo']
-            );
-        }
-        return $users;
+        return $this->userMapper->mapMultipleAssocToDto($records);
     }
 
     public function eloFilteredUsersDtoExceptUser(int $userId, float $elo)
@@ -95,28 +54,10 @@ class UserRepository extends Repository
         $statement = $this->database->connect()->prepare('
             SELECT * FROM public.user_dto u LEFT JOIN public.ranks r ON u.rank = r.rank WHERE u.id != :id_user AND 
         u.elo >= :elo');
-
         $statement->execute([(int)$userId, (float)$elo]);
-
         $records = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        if ($records == false) {
-            return null;    // we should throw exception instead of return null and handle it in place where we run this fun
-        }
-
-        $users = array();
-        foreach ($records as $user) {
-            $users[] = new UserDto(
-                $user['id'],
-                $user['email'],
-                $user['username'],
-                $user['image'],
-                $user['description'],
-                $user['rank'],
-                $user['elo']
-            );
-        }
-        return $users;
+        return $this->userMapper->mapMultipleAssocToDto($records);
     }
 
     public function getUserByEmail(string $email): ?User
@@ -124,13 +65,11 @@ class UserRepository extends Repository
         $statement = $this->database->connect()->prepare('
             SELECT * FROM public.users WHERE email = :email
         ');
-
-        $statement->bindParam(':email', $email, PDO::PARAM_STR);
-        $statement->execute();
+        $statement->execute([$email]);
 
         $user = $statement->fetch(PDO::FETCH_ASSOC);    // association array
 
-        return $this->mapAssocArrayToUser($user);
+        return $this->userMapper->mapAssocArrayToUser($user);
     }
 
     public function getUserByUsername(string $username): ?User
@@ -142,9 +81,9 @@ class UserRepository extends Repository
         $statement->bindParam(':username', $username, PDO::PARAM_STR);
         $statement->execute();
 
-        $user = $statement->fetch(PDO::FETCH_ASSOC);    // association array
+        $record = $statement->fetch(PDO::FETCH_ASSOC);    // association array
 
-        return $this->mapAssocArrayToUser($user);
+        return $this->userMapper->mapAssocArrayToUser($record);
     }
 
     public function addUser(User $user): void
@@ -170,44 +109,5 @@ class UserRepository extends Repository
         $statement->execute([null]);
 
         return $statement->fetch(PDO::FETCH_ASSOC)['id'];
-    }
-
-    public function getUsers()
-    {
-        $statement = $this->database->connect()->prepare('
-            SELECT * FROM public.users
-        ');
-        $statement->execute();
-
-        $records = $statement->fetchAll(PDO::FETCH_ASSOC);    // association array
-
-        if ($records == false) {
-            return null;    // we should throw exception instead of return null and handle it in place where we run this fun
-        }
-
-        $users = array();
-        foreach ($records as $user) {
-            $users[] = $this->mapAssocArrayToUser($user);
-        }
-        return $users;
-    }
-
-    public function mapAssocArrayToUser($record): ?User
-    {
-        if ($record == false) {
-            return null;    // we should throw exception instead of return null and handle it in place where we run this fun
-        }
-
-        return new User(
-            $record['id'],
-            $record['email'],
-            $record['username'],
-            $record['password'],
-            $record['image'],
-            $record['enable'],
-            $record['created_at'],
-            $record['id_rank'],
-            $record['id_user_details']
-        );
     }
 }
