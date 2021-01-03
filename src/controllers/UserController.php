@@ -76,8 +76,20 @@ class UserController extends AppController
     public function users()
     {
         RouteGuard::checkAuthentication();
+        $currentUserId = $_SESSION['id'];
+        $elo = $_POST['elo'];
+        $rank = $_POST['rank'];
+
+        if (!$elo && !$rank){
+            return $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
+                'users' => $this->userRepository->getUsersDtoExceptUser($currentUserId)]);
+        } else if ($rank < 0) {
+            return $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
+                'users' => $this->userRepository->eloFilteredUsersDtoExceptUser($currentUserId, $elo)]);
+        }
+
         $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
-            'users' => $this->userRepository->getUsersDto()]);
+            'users' => $this->userRepository->eloRankFilteredUsersDtoExceptUser($currentUserId, $elo, $rank)]);
     }
 
     // session user profile

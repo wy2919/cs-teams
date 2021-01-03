@@ -1,3 +1,6 @@
+body {
+    font-size: .9em;
+}
 
 .user-list{
     display: flex;
@@ -11,6 +14,16 @@
     font-size: 2em;
     font-weight: bold;
     margin-bottom: 0;
+}
+
+.search-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-btn {
+    margin-top: 1em;
 }
 
 .search-filter {
@@ -91,8 +104,9 @@
     width: 7em;
 }
 
-
-
+.no-users-msg {
+    font-size: 1.4em !important;
+}
 
 @media only screen and (max-device-width: 1550px) {
     body {
@@ -112,10 +126,6 @@
 
     .user-elo p{
         font-size: 1.5em;;
-    }
-
-    .search-field {
-        width: 22vw;
     }
 }
 
@@ -141,7 +151,6 @@
 
     .user-buttons button{
         width: 10em;
-        height: 38%;
     }
 
     .user-buttons button:first-child{
@@ -155,11 +164,6 @@
     .search-filter {
         width: 50vw;
     }
-
-    .search-field {
-        width: 25vw;
-    }
-
 }
 
 
@@ -189,12 +193,6 @@
         margin: 2em 2em 2em 4em;
         font-size: 16px;
     }
-
-    
-    .search-field {
-        width: 40vw;
-        height: 3.5em;
-    }
 }
 
 
@@ -221,11 +219,6 @@
 
     .search-filter{
         width: 100vw;
-    }
-
-    .search-field {
-        width: 60vw;
-        height: 4.5em;
     }
 
     .user {
