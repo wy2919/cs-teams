@@ -1,0 +1,247 @@
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.invalid {
+    color: #1A0E68;
+    background-color: red;
+    border: 2px solid red;
+    box-shadow: 0 0 0.2em red;
+    outline: none;
+}
+
+.message {
+    margin: 1em 0 0 0;
+    color: darkred;
+    font-weight: bold;
+}
+
+.edit-container {
+    width: 40%;
+    margin: .4em 0;
+}
+
+.panel-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: .4em 0;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    width: 40%;
+    border: 0;
+    border-top: 1px solid black;
+    margin: .5em 0;
+    padding: 0;
+}
+
+.column-flex {
+    display: flex;
+    flex-direction: column;
+}
+
+.button {
+    width: 5em;
+    height: 2em;
+    align-self: flex-end;
+}
+
+/* AVATAR stuff */
+
+.avatar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.user-avatar {
+    width: 10em;
+    height: 10em;
+    margin: 0 1em;
+    object-fit: cover;
+    box-shadow: 0 3px 6px #00000099;
+    border: 1px solid #000000;
+    border-radius: 1.5em
+}
+
+.avatar-form {
+    align-self: flex-end;
+}
+
+/* RANK stuff */
+
+.rank-select {
+    height: 2.2em;
+    width: 40%;
+    background: #E3E3E3 0 0 no-repeat padding-box;
+    border: 1px solid #000000;
+    margin: 0 .5em;
+}
+
+.between-form {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* DESCRIPTION stuff */
+
+.description-input {
+    height: 5em;
+    width: 50%;
+    font-size: 1.2em;
+}
+
+/* PASSWORD stuff*/
+
+.password-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    gap: .5em 3em;
+}
+
+.password-header {
+    margin-block: .8em 0;
+    font-weight: bold;
+}
+
+.password-header:first-child {
+    margin-block-start: 0;
+}
+
+.password-input {
+    height: 1.6em;
+    width: 100%;
+    background: #E3E3E3 0 0 no-repeat padding-box;
+    border: 1px solid #000000;
+    margin-top: 0;
+}
+
+
+@media only screen and (max-device-width: 1350px) {
+    main {
+        font-size: 1.1em;
+    }
+
+    .edit-container {
+        width: 60%;
+    }
+
+    hr {
+        width: 60%;
+    }
+
+    .avatar-input {
+        font-size: .8em;
+    }
+}
+
+@media only screen and (max-device-width: 1000px) {
+    main {
+        font-size: 1.25em;
+    }
+
+    .edit-container {
+        width: 70%;
+    }
+
+    hr {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-device-width: 900px) {
+    main {
+        font-size: 1.8em;
+    }
+
+    .edit-container {
+        width: 80%;
+    }
+
+    hr {
+        width: 80%;
+    }
+
+    .avatar-container, .between-form {
+        flex-direction: column;
+    }
+
+    .avatar-form {
+        display: flex;
+        align-self: center;
+        flex-direction: column;
+    }
+
+    .avatar-input {
+        margin: 1em 0 1em 4em;
+    }
+
+    .button {
+        font-size: .8em;
+        align-self: center;
+        margin-top: 1em;
+    }
+
+    .panel-title {
+        text-align: center;
+    }
+
+    .between-form {
+        align-items: center;
+    }
+
+    .rank-select {
+        font-size: .75em;
+    }
+
+    .description-input {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-device-width: 650px) {
+    main {
+        font-size: 2em;
+    }
+
+    .edit-container {
+        width: 90%;
+    }
+
+    hr {
+        width: 90%;
+    }
+
+    .rank-select {
+        width: 50%;
+    }
+
+    .password-input {
+        height: 2.5em;
+    }
+}
+
+@media only screen and (max-device-width: 550px) {
+    main {
+        font-size: 2.3em;
+    }
+
+    .password-input {
+        height: 3em;
+    }
+}
+
+@media only screen and (max-device-width: 470px) {
+    main {
+        font-size: 2.8em;
+    }
+
+    .password-input {
+        height: 3.3em;
+    }
+}

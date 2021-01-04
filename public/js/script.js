@@ -12,9 +12,6 @@ function arePasswordsSame(password, passwordConfirm) {
 }
 
 function markValidation(element, condition) {
-    console.log(element);
-    console.log(condition);
-    console.log(element.value)
     !condition ? element.classList.add('invalid') : element.classList.remove('invalid')
 }
 

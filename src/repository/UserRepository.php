@@ -14,6 +14,20 @@ class UserRepository extends Repository
         $this->userMapper = new UserMapper();
     }
 
+    public function getUserDetailsId(int $userId)
+    {
+        $statement = $this->database->connect()->prepare('
+            SELECT ud.id 
+            FROM public.users_details ud
+                LEFT JOIN public.users u 
+                    ON ud.id = u.id_user_details
+            WHERE u.id = :id
+        ');
+
+        $statement->execute([$userId]);
+        return $statement->fetch(PDO::FETCH_ASSOC)['id'];
+    }
+
     public function getUserDtoById(int $id): ?UserDto
     {
         $statement = $this->database->connect()->prepare('
@@ -134,5 +148,49 @@ class UserRepository extends Repository
         $statement->execute([null]);
 
         return $statement->fetch(PDO::FETCH_ASSOC)['id'];
+    }
+
+    public function setUserRank(int $userId, int $rankId)
+    {
+        $statement = $this->database->connect()->prepare('
+            UPDATE public.users 
+                SET id_rank = :id_rank
+            WHERE id = :id_user
+        ');
+
+        return $statement->execute([$rankId, $userId]);
+    }
+
+    public function setUserDescription($userDetailsId, $description)
+    {
+        $statement = $this->database->connect()->prepare('
+            UPDATE public.users_details 
+                SET description = :description
+            WHERE id = :id
+        ');
+
+        return $statement->execute([$description, $userDetailsId]);
+    }
+
+    public function setUserImage($userId, $image)
+    {
+        $statement = $this->database->connect()->prepare('
+            UPDATE public.users 
+                SET image = :image
+            WHERE id = :id_user
+        ');
+
+        return $statement->execute([$image, $userId]);
+    }
+
+    public function setUserPassword($userId, $newPassword)
+    {
+        $statement = $this->database->connect()->prepare('
+            UPDATE public.users 
+                SET password = :password
+            WHERE id = :id_user
+        ');
+
+        return $statement->execute([$newPassword, $userId]);
     }
 }

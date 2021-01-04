@@ -7,7 +7,7 @@ require_once __DIR__ . '/../repository/UserRepository.php';
 require_once __DIR__ . '/../repository/ConversationRepository.php';
 require_once __DIR__ . '/../repository/RankRepository.php';
 require_once __DIR__ . '/../repository/RatingRepository.php';
-require_once __DIR__ . '/../util/RouteGuard.php';
+require_once __DIR__ . '/../security/RouteGuard.php';
 
 class UserController extends AppController
 {
@@ -16,7 +16,7 @@ class UserController extends AppController
     const SUPPORTED_TYPES = ['image/png', 'image/jpeg'];
     const UPLOAD_DIRECTORY = '/../public/uploads/';
 
-    private array $messages = [];
+    private string $message = '';
     private UserRepository $userRepository;
     private ConversationRepository $conversationRepository;
     private RankRepository $rankRepository;
@@ -31,6 +31,37 @@ class UserController extends AppController
         $this->ratingRepository = new RatingRepository();
     }
 
+    public function editProfile()
+    {
+        RouteGuard::checkAuthentication();
+        return $this->render('edit-profile', [
+            'message' => $this->message,
+            'ranks' => $this->rankRepository->getRanks(),
+            'user' => $this->userRepository->getUserDtoById($_SESSION['id'])]);
+    }
+
+    public function editDetails()
+    {
+        RouteGuard::checkAuthentication();
+        $userId = $_SESSION['id'];
+
+        if(isset($_POST['rank'])){
+            if ($this->userRepository->setUserRank($userId, $_POST['rank'])) {
+                $this->message = 'Rank Changed successfully.';
+            } else {
+                $this->message = 'Could not change rank.';
+            }
+        }
+        else if(isset($_POST['description'])){
+            $userDetailsId = $this->userRepository->getUserDetailsId($userId);
+            if ($this->userRepository->setUserDescription($userDetailsId, $_POST['description'])) {
+                $this->message = 'Description Changed successfully.';
+            } else {
+                $this->message = 'Could not change description.';
+            }
+        }
+        return $this->editProfile();
+    }
 
     public function editAvatar()
     {
@@ -42,11 +73,13 @@ class UserController extends AppController
                 dirname(__DIR__) . self::UPLOAD_DIRECTORY . $_FILES['file']['name']
             );
 
-            // TODO: add this avatar to currently logged user and delete this message image=>$fileAddress
-            $fileAddress = $_FILES['file']['name'];
-            return $this->render('my-profile', ['messages' => $this->messages, 'image' => $fileAddress]);
+            if($this->userRepository->setUserImage($_SESSION['id'], $_FILES['file']['name'])) {
+                $this->message = 'Image Changed successfully.';
+            } else {
+                $this->message = 'Could not change Image.';
+            }
         }
-        return $this->render('avatar', ['messages' => $this->messages]);
+        return $this->editProfile();
     }
 
 
@@ -54,15 +87,14 @@ class UserController extends AppController
     {
         RouteGuard::checkAuthentication();
         if ($file['size'] > self::MAX_FILE_SIZE) {
-            $this->messages[] = 'File is too large for destination system.';
+            $this->message = 'File is too large for destination system.';
             return false;
         }
 
         if (!isset($file['type']) || !in_array($file['type'], self::SUPPORTED_TYPES)) {
-            $this->messages[] = 'File type is not supported';
+            $this->message = 'File type is not supported';
             return false;
         }
-
         return true;
     }
 

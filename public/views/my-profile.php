@@ -45,7 +45,9 @@
                     </div>
                     <div class="description">
                         <p><strong> Description: </strong><?= $user->getDescription()?></p>
-                        <button class="btn">Edit</button>
+                        <form action="editProfile" method="get">
+                            <button type="submit" class="btn">Edit</button>
+                        </form>
                     </div>
                 </div>
             </div>

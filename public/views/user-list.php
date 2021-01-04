@@ -44,7 +44,7 @@
                             <input name="elo" id="search-slider" type="range" min="0" max="100" value="0">
                         </div>
 
-                        <select name="rank">
+                        <select class="rank-select" name="rank">
                             <option value="-1">All ranks</option>
                             <?php foreach ($ranks as $rank) { ?>
                                 <option value="<?php echo $rank->getId() ?>"><?php echo $rank->getRank() ?></option>

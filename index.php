@@ -12,13 +12,15 @@ Router::get('register', 'SecurityController');
 Router::get('users', 'UserController');
 Router::get('profile', 'UserController');
 Router::get('myDetails', 'UserController');
+Router::get('editProfile', 'UserController');
+
 Router::post('conversation', 'UserController');
 Router::post('message', 'UserController');
 Router::post('rateUser', 'UserController');
-
-
 Router::post('login', 'SecurityController');
 Router::post('register', 'SecurityController');
 Router::post('editAvatar', 'UserController');
+Router::post('editDetails', 'UserController');
+Router::post('editPassword', 'SecurityController');
 
 Router::run($path);
