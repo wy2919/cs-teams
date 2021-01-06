@@ -14,6 +14,7 @@ Router::get('profile', 'UserController');
 Router::get('myDetails', 'UserController');
 Router::get('editProfile', 'UserController');
 
+Router::post('filter', 'UserController');
 Router::post('conversation', 'UserController');
 Router::post('message', 'UserController');
 Router::post('rateUser', 'UserController');

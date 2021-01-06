@@ -49,7 +49,7 @@
                 <div class="friend">
 
                     <div class="inside-friend">
-                        
+
                         <form class="friend-details" action="profile" method="post">
                             <input type="hidden" name="userId" value=" <?=$selected->getUserId()?>->">
                             <img src="public/uploads/<?= $selected->getImage() ?>" alt="user avatar" class="friend-img">

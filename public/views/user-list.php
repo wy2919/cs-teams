@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="public/css/main.css">
     <script type="text/javascript" src="./public/js/redirect.js" defer></script>
     <script type="text/javascript" src="./public/js/slider.js" defer></script>
+        <script type="text/javascript" src="./public/js/filter.js" defer></script>
 
     <script src="https://kit.fontawesome.com/3010d94d2f.js" crossorigin="anonymous"></script>
     <title>User list</title>
@@ -37,7 +38,7 @@
             <p>User List</p>
 
             <div>
-                <form class="search-form" action="users" method="post">
+                <div class="search-form">
                     <div class="search-filter">
                         <div class="user-elo">
                             <p id="slide-value"></p>
@@ -51,8 +52,7 @@
                             <?php } ?>
                         </select>
                     </div>
-                    <button class="btn user-btn search-btn" type="submit">Search</button>
-                </form>
+                </div>
             </div>
             <?php
             if($users != null){ ?>
@@ -61,7 +61,7 @@
                     <div class="user">
                         <img src="public/uploads/<?php echo $user->getImage() ?>" alt="user avatar">
                         <div class="user-details">
-                            <p><?php echo $user->getUsername() ?></p>
+                            <p id="username"><?php echo $user->getUsername() ?></p>
                             <p><strong>Rank: </strong><?php echo $user->getRank() ?></p>
                             <p><strong>Elo: </strong><?php echo $user->getElo() ?></p>
                         </div>
@@ -85,3 +85,25 @@
 
 </div>
 </body>
+
+
+<template id="user-template">
+    <div class="user">
+        <img  alt="user avatar">
+        <div class="user-details">
+            <p id="username"></p>
+            <p><strong>Rank: </strong></p>
+            <p><strong>Elo: </strong></p>
+        </div>
+        <div class="user-buttons">
+            <form action="conversation" method="post">
+                <input type="hidden" name="userId">
+                <button class="btn user-btn" class="btn">Message</button>
+            </form>
+            <form action="profile" method="post">
+                <input type="hidden" name="userId">
+                <button class="btn user-btn" class="btn">Profile</button>
+            </form>
+        </div>
+    </div>
+</template>

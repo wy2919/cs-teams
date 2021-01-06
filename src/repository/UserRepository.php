@@ -67,9 +67,8 @@ class UserRepository extends Repository
               AND u.elo >= :elo
               ');
         $statement->execute([(int)$userId, (int)$rankId, (float)$elo]);
-        $records = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        return $this->userMapper->mapMultipleAssocToDto($records);
+        //json
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function eloFilteredUsersDtoExceptUser(int $userId, float $elo)
@@ -84,9 +83,9 @@ class UserRepository extends Repository
               AND u.elo >= :elo
         ');
         $statement->execute([(int)$userId, (float)$elo]);
-        $records = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        return $this->userMapper->mapMultipleAssocToDto($records);
+        // json
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getUserByEmail(string $email): ?User

@@ -82,22 +82,6 @@ class UserController extends AppController
         return $this->editProfile();
     }
 
-
-    private function validateAvatar(array $file): bool
-    {
-        RouteGuard::checkAuthentication();
-        if ($file['size'] > self::MAX_FILE_SIZE) {
-            $this->message = 'File is too large for destination system.';
-            return false;
-        }
-
-        if (!isset($file['type']) || !in_array($file['type'], self::SUPPORTED_TYPES)) {
-            $this->message = 'File type is not supported';
-            return false;
-        }
-        return true;
-    }
-
     // specific user profile
     public function profile()
     {
@@ -108,20 +92,31 @@ class UserController extends AppController
     public function users()
     {
         RouteGuard::checkAuthentication();
+        return $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
+            'users' => $this->userRepository->getUsersDtoExceptUser($_SESSION['id'])]);
+    }
+
+    public function filter()
+    {
+        RouteGuard::checkAuthentication();
         $currentUserId = $_SESSION['id'];
-        $elo = $_POST['elo'];
-        $rank = $_POST['rank'];
 
-        if (!$elo && !$rank){
-            return $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
-                'users' => $this->userRepository->getUsersDtoExceptUser($currentUserId)]);
-        } else if ($rank < 0) {
-            return $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
-                'users' => $this->userRepository->eloFilteredUsersDtoExceptUser($currentUserId, $elo)]);
+        $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
+        if ($contentType === "application/json") {
+            $content = trim(file_get_contents("php://input"));
+            $decoded = json_decode($content, true);
+            $rank = (int)$decoded['rank'];
+            $elo = (int)$decoded['elo'];
+
+            header('Content-type: application/json');
+            http_response_code(200);
+
+            if($rank < 0) {
+               echo json_encode($this->userRepository->eloFilteredUsersDtoExceptUser($currentUserId, $elo));
+            } else {
+                echo json_encode($this->userRepository->eloRankFilteredUsersDtoExceptUser($currentUserId, $elo, $rank));
+            }
         }
-
-        $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
-            'users' => $this->userRepository->eloRankFilteredUsersDtoExceptUser($currentUserId, $elo, $rank)]);
     }
 
     // session user profile
@@ -210,5 +205,20 @@ class UserController extends AppController
 
         return $this->render('user-details', ['user' => $this->userRepository->getUserDtoById($_POST['userId']),
             'messages' => 'You successfully rated player.']);
+    }
+
+    private function validateAvatar(array $file): bool
+    {
+        RouteGuard::checkAuthentication();
+        if ($file['size'] > self::MAX_FILE_SIZE) {
+            $this->message = 'File is too large for destination system.';
+            return false;
+        }
+
+        if (!isset($file['type']) || !in_array($file['type'], self::SUPPORTED_TYPES)) {
+            $this->message = 'File type is not supported';
+            return false;
+        }
+        return true;
     }
 }
