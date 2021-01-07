@@ -1,8 +1,6 @@
 const rank = document.querySelector('select[name="rank"]');
 const elo = document.querySelector('input[name="elo"]');
 const userContainer = document.querySelector('.users');
-// const messageContainer = document.querySelector('.inside-friend');
-// const currentUserImage = document.querySelector('input[name="userImage"]');
 
 function addEvent(element){
     element.addEventListener('change', () => {
@@ -38,7 +36,7 @@ function createUser(user) {
     const clone = template.content.cloneNode(true )
 
     const image = clone.querySelector("img");
-    image.src= `/public/uploads/${user.image}`
+    image.src= `/public/uploads/${user.image}`;
 
     const username = clone.querySelector('#username');
     username.innerHTML = user.username;

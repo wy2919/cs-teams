@@ -167,23 +167,19 @@ class UserController extends AppController
     {
         RouteGuard::checkAuthentication();
 
-        $this->conversationRepository->newMessage($_POST['conversationId'], $_POST['senderId'], $_POST['message']);
-        $conversations = $this->conversationRepository->getUserConversations($_SESSION['id']);
+        $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
+        if ($contentType === "application/json") {
+            $content = trim(file_get_contents("php://input"));
+            $decoded = json_decode($content, true);
+            $message = $decoded['message'];
+            $conversationId = $decoded['conversationId'];
 
-        $filtered = array_filter($conversations, function ($conv) {
-            if ($conv->getId() == $_POST['conversationId']) {
-                return true;
-            }
-            return false;
-        });
+            header('Content-type: application/json');
+            http_response_code(200);
 
-        $selected = reset($filtered);
-        $messages = $selected ? $this->conversationRepository->getConversationMessages($_POST['conversationId']) : null;
-
-        return $this->render('conversation', ['user' => $this->userRepository->getUserDtoById($_SESSION['id']),
-            'conversations' => $conversations,
-            'selected' => $selected,
-            'messages' => $messages]);
+            $this->conversationRepository->newMessage($conversationId, $_SESSION['id'], $message);
+            echo json_encode($this->conversationRepository->getConversationMessagesAssoc($conversationId));
+        }
     }
 
     public function rateUser()

@@ -32,6 +32,12 @@
     border-radius: 20px 0 0 20px;
 }
 
+.inner-friend-list {
+    display: flex;
+    width: 60%;
+    justify-content: space-between;
+}
+
 .single {
     display: flex;
     margin: 0 0 0 2em;
@@ -102,7 +108,6 @@
     height: 5em;
     margin-right: 1.5em;
     object-fit: cover;
-    background: transparent url('img/Rectangle 1468.png') 0 0 no-repeat padding-box;
     box-shadow: 0 3px 6px #00000099;
     border: 1px solid #000000;
     border-radius: 1.5em

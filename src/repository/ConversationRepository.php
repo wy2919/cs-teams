@@ -58,6 +58,28 @@ class ConversationRepository extends Repository
         return $this->messageMapper->mapMultipleAssocToMessage($records);
     }
 
+    public function getConversationMessagesAssoc($conversationId)
+    {
+        $statement = $this->database->connect()->prepare('
+            SELECT id_sender, message 
+            FROM public.messages 
+            WHERE id_conversation = :id
+            ORDER BY created_at;
+        ');
+        $statement->execute([$conversationId]);
+        $records = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $messages =  $this->messageMapper->mapMultipleAssocToMessage($records);
+
+        $assocArr = array();
+        foreach ($messages as $message){
+            $assocObject['message'] = $message->getMessage();
+            $assocObject['sendByFriend'] = $message->isSendByFriend();
+            $assocArr[] = $assocObject;
+        }
+        return $assocArr;
+    }
+
     public function newConversation($user_1, $user_2): int {
         $statement = $this->database->connect()->prepare('
             SELECT c.id

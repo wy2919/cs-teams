@@ -3,6 +3,7 @@
     <link rel="stylesheet" type="text/css" href="public/css/main.css">
     <link rel="stylesheet" type="text/css" href="public/css/conversation.css">
     <script type="text/javascript" src="./public/js/redirect.js" defer></script>
+    <script type="text/javascript" src="./public/js/messages.js" defer></script>
 
     <script src="https://kit.fontawesome.com/3010d94d2f.js" crossorigin="anonymous"></script>
     <title>User list</title>
@@ -39,8 +40,10 @@
                     <form class="single" action="conversation" method="post">
                         <input name="userId" type="hidden" value="<?= $conv->getUserId()?>">
                         <img src="public/uploads/<?= $conv->getImage()?>" alt="user avatar" class="friend-img">
-                        <p><?= $conv->getUsername()?></p>
-                        <button class="msg-btn" type="submit" ><i class="far fa-envelope"></i></button>
+                        <div class="inner-friend-list">
+                            <p><?= $conv->getUsername()?></p>
+                            <button class="msg-btn" type="submit" ><i class="far fa-envelope"></i></button>
+                        </div>
                     </form>
                     <hr class="solid">
                     <?php } ?>
@@ -80,12 +83,14 @@
 
                             </div>
 
-                            <form class="message" action="message" method="post">
+                            <div class="message">
                                 <input type="hidden" name="conversationId" value="<?=$selected->getId()?>">
-                                <input type="hidden" name="senderId" value="<?=$user->getId()?>">
                                 <input type="text" name="message" class="msg-input">
-                                <button type="submit" class="btn">Send</button>
-                            </form>
+                                <button id="send-btn" class="btn">Send</button>
+                            </div>
+
+                            <input type="hidden" name="userImage" value="<?= $user->getImage() ?>">
+                            <input type="hidden" name="friendImage" value="<?= $selected->getImage() ?>">
                         </div>
                     </div>
 
@@ -95,3 +100,13 @@
 
     </div>
 </body>
+
+
+<template id="msg-template">
+    <div class="msg-container">
+            <div id="who-send" class="self-msg">
+                <p id="message-value"></p>
+            </div>
+            <img alt="user avatar" class="small-img">
+    </div>
+</template>
