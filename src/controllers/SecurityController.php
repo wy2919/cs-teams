@@ -35,7 +35,7 @@ class SecurityController extends AppController
             return $this->render('login', ['messages' => ['User with this email not exist!']]);
         }
 
-        if($user->getPassword() != $password) {
+        if(!password_verify($password, $user->getPassword())) {
             return $this->render('login', ['messages'=>['Incorrect password']]);
         }
 
@@ -67,6 +67,7 @@ class SecurityController extends AppController
         $email = $_POST['email'];
         $username = $_POST['username'];
         $password = $_POST['password'];
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $rank   = $_POST['rank'];
 
         $user = $this->userRepository->getUserByEmail($email);
@@ -84,7 +85,7 @@ class SecurityController extends AppController
                 null,
                 $email,
                 $username,
-                $password,
+                $hashedPassword,
                 'placeholder.png',
                 false,
                 null,
@@ -114,7 +115,7 @@ class SecurityController extends AppController
         else if($_POST['password'] != $this->userRepository->getUserByEmail($_SESSION['email'])->getPassword()) {
                 $message = 'wrong password!';
         } else {
-            if($this->userRepository->setUserPassword($_SESSION['id'], $_POST['newPassword'])){
+            if($this->userRepository->setUserPassword($_SESSION['id'], password_hash($_POST['newPassword'], PASSWORD_DEFAULT))){
                 $message = 'Password Changed successfully.';
             } else {
                 $message = 'Could not change password.';
