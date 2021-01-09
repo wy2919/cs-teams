@@ -47,7 +47,6 @@ class UserMapper
             $record['username'],
             $record['password'],
             $record['image'],
-            $record['enable'],
             $record['created_at'],
             $record['id_rank'],
             $record['id_user_details']
