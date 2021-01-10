@@ -33,17 +33,16 @@ class UserController extends AppController
 
     public function editProfile()
     {
-        RouteGuard::checkAuthentication();
+        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
         return $this->render('edit-profile', [
             'message' => $this->message,
             'ranks' => $this->rankRepository->getRanks(),
-            'user' => $this->userRepository->getUserDtoById($_SESSION['id'])]);
+            'user' => $this->userRepository->getUserDtoById($userId)]);
     }
 
     public function editDetails()
     {
-        RouteGuard::checkAuthentication();
-        $userId = $_SESSION['id'];
+        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
 
         if(isset($_POST['rank'])){
             if ($this->userRepository->setUserRank($userId, $_POST['rank'])) {
@@ -65,7 +64,7 @@ class UserController extends AppController
 
     public function editAvatar()
     {
-        RouteGuard::checkAuthentication();
+        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
         if ($this->isPost() && is_uploaded_file($_FILES['file']['tmp_name']) && $this->validateAvatar($_FILES['file'])) {          // 'file' to nazwa name="" ustawiona w html, a tmp_name to tak już jest..
 
             move_uploaded_file(
@@ -73,7 +72,7 @@ class UserController extends AppController
                 dirname(__DIR__) . self::UPLOAD_DIRECTORY . $_FILES['file']['name']
             );
 
-            if($this->userRepository->setUserImage($_SESSION['id'], $_FILES['file']['name'])) {
+            if($this->userRepository->setUserImage($userId, $_FILES['file']['name'])) {
                 $this->message = 'Image Changed successfully.';
             } else {
                 $this->message = 'Could not change Image.';
@@ -85,21 +84,19 @@ class UserController extends AppController
     // specific user profile
     public function profile()
     {
-        RouteGuard::checkAuthentication();
         return $this->render('user-details', ['user' => $this->userRepository->getUserDtoById($_POST['userId'])]);
     }
 
     public function users()
     {
-        RouteGuard::checkAuthentication();
+        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
         return $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
-            'users' => $this->userRepository->getUsersDtoExceptUser($_SESSION['id'])]);
+            'users' => $this->userRepository->getUsersDtoExceptUser($userId)]);
     }
 
     public function filter()
     {
-        RouteGuard::checkAuthentication();
-        $currentUserId = $_SESSION['id'];
+        $currentUserId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
 
         $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
         if ($contentType === "application/json") {
@@ -122,29 +119,29 @@ class UserController extends AppController
     // session user profile
     public function myDetails()
     {
-        RouteGuard::checkAuthentication();
-        return $this->render('my-profile', ['user' => $this->userRepository->getUserDtoById($_SESSION['id'])]);
+        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
+        return $this->render('my-profile', ['user' => $this->userRepository->getUserDtoById($userId)]);
 
     }
 
     public function conversation()
     {
-        RouteGuard::checkAuthentication();
+        $currentUserId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
 
         $selected = null;
         $messages = null;
 
         // just display conversation (no specific user-chat selected)
         if (!$_POST['userId']) {
-            $conversations = $this->conversationRepository->getUserConversations($_SESSION['id']);
+            $conversations = $this->conversationRepository->getUserConversations($currentUserId);
             if (count($conversations) > 0) {
                 $selected = $conversations[0];
                 $messages = $this->conversationRepository->getConversationMessages($selected->getId());
             }
         } else {
             // creates conversation/return id of existing one if there is
-            $conversationId = $this->conversationRepository->newConversation($_SESSION['id'], $_POST['userId']);
-            $conversations = $this->conversationRepository->getUserConversations($_SESSION['id']);
+            $conversationId = $this->conversationRepository->newConversation($currentUserId, $_POST['userId']);
+            $conversations = $this->conversationRepository->getUserConversations($currentUserId);
 
             $filtered = array_filter($conversations, function ($conv) use ($conversationId) {
                 if ($conv->getId() === $conversationId) {
@@ -157,7 +154,7 @@ class UserController extends AppController
             $messages = $selected ? $this->conversationRepository->getConversationMessages($conversationId) : null;
         }
 
-        return $this->render('conversation', ['user' => $this->userRepository->getUserDtoById($_SESSION['id']),
+        return $this->render('conversation', ['user' => $this->userRepository->getUserDtoById($currentUserId),
             'conversations' => $conversations,
             'selected' => $selected,
             'messages' => $messages]);
@@ -165,7 +162,7 @@ class UserController extends AppController
 
     public function message()
     {
-        RouteGuard::checkAuthentication();
+        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
 
         $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
         if ($contentType === "application/json") {
@@ -177,19 +174,19 @@ class UserController extends AppController
             header('Content-type: application/json');
             http_response_code(200);
 
-            $this->conversationRepository->newMessage($conversationId, $_SESSION['id'], $message);
+            $this->conversationRepository->newMessage($conversationId, $userId, $message);
             echo json_encode($this->conversationRepository->getConversationMessagesAssoc($conversationId));
         }
     }
 
     public function rateUser()
     {
-        // dorobić constraint że można ocenić tylko raz - ew jakaś wiadomość - oceniono/NIE MOŻESZ OCENIC
-        RouteGuard::checkAuthentication();
+        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
+
         $wasNotAlreadyRated = $this->ratingRepository->addRating(new Rating(
             null,
             $_POST['userId'],
-            $_SESSION['id'],
+            $userId,
             $_POST['skills'],
             $_POST['friendliness'],
             $_POST['communication']
@@ -205,7 +202,6 @@ class UserController extends AppController
 
     private function validateAvatar(array $file): bool
     {
-        RouteGuard::checkAuthentication();
         if ($file['size'] > self::MAX_FILE_SIZE) {
             $this->message = 'File is too large for destination system.';
             return false;

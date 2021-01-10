@@ -29,6 +29,10 @@ class Router {
         $object = new $controller; // tworzymy nowy controller po jego nazwie
         $action = $action ?: 'login';
 
+        if($action != 'login' && $action != 'register'){
+            RouteGuard::checkAuthentication();
+        }
+
         $object->$action();
     }
 

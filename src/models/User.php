@@ -19,7 +19,6 @@ class User
         $this->username = $username;
         $this->password = $password;
         $this->image = $image;
-        $this->enable = $enable;
         $this->createdAt = $createdAt ? new DateTime($createdAt) : null;
         $this->idRank = $idRank;
         $this->idUserDetails = $idUserDetails;
@@ -73,16 +72,6 @@ class User
     public function setImage($image): void
     {
         $this->image = $image;
-    }
-
-    public function isEnable(): bool
-    {
-        return $this->enable;
-    }
-
-    public function setEnable(bool $enable): void
-    {
-        $this->enable = $enable;
     }
 
     public function getCreatedAt(): ?DateTime

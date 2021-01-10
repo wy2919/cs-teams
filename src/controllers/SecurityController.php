@@ -39,10 +39,13 @@ class SecurityController extends AppController
             return $this->render('login', ['messages'=>['Incorrect password']]);
         }
 
-        $_SESSION['id'] = $user->getId();
-        $_SESSION['email'] = $user->getEmail();
-        $_SESSION['username'] = $user->getUsername();
+        $user = $this->userRepository->getUserByEmail($email);
+        $cookieName = 'token';
+        $cookieValue = password_hash($user->getEmail().$user->getUsername(), PASSWORD_DEFAULT);
+        $expiration = time() + (86400 * 7);
 
+        setcookie($cookieName, $cookieValue, $expiration);
+        RouteGuard::createSession($user->getId(), $cookieValue, $expiration);
 
         $url = "http://$_SERVER[HTTP_HOST]";    // server address
         header("Location: {$url}/users");
@@ -68,7 +71,7 @@ class SecurityController extends AppController
         $username = $_POST['username'];
         $password = $_POST['password'];
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $rank   = $_POST['rank'];
+        $rank = $_POST['rank'];
 
         $user = $this->userRepository->getUserByEmail($email);
         if ($user){
@@ -87,19 +90,12 @@ class SecurityController extends AppController
                 $username,
                 $hashedPassword,
                 'placeholder.png',
-                false,
                 null,
                 $rank,
                 null
             ));
 
-        $user = $this->userRepository->getUserByEmail($email);
-        $_SESSION['id'] = $user->getId();
-        $_SESSION['email'] = $user->getEmail();
-        $_SESSION['username'] = $user->getUsername();
-
-        $url = "http://$_SERVER[HTTP_HOST]";    // server address
-        header("Location: {$url}/users");
+        $this->render('login', ['messages' => ['Account created!']]);
     }
 
     public function editPassword()
