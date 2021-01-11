@@ -1,3 +1,8 @@
+.main {
+    display: flex;
+    flex-direction: column;
+}
+
 .user-details {
     display: flex;
     flex-direction: column;
@@ -27,9 +32,9 @@
 }
 
 .description button {
-    height: 2em;
+    min-height: 2em;
     align-self: center;
-    width: 8em;
+    width: 6em;
 }
 
 .main h2 {
@@ -115,6 +120,15 @@ input:checked ~ label {
     background-color: white;
 }
 
+.admin-panel {
+    align-self: center;
+    margin-top: 1.5em;
+}
+.admin-panel button {
+    height: 2em;
+    width: 5em;
+}
+
 @media only screen and (max-device-width: 1200px){
 
     body {
@@ -170,6 +184,10 @@ input:checked ~ label {
     
     .rate {
         margin: .9em;
+    }
+
+    .rate-user {
+        margin-top: 2em;
     }
 
     .description p {

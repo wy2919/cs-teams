@@ -81,12 +81,6 @@ class UserController extends AppController
         return $this->editProfile();
     }
 
-    // specific user profile
-    public function profile()
-    {
-        return $this->render('user-details', ['user' => $this->userRepository->getUserDtoById($_POST['userId'])]);
-    }
-
     public function users()
     {
         $userId = RouteGuard::getAuthenticatedUserId();
@@ -179,6 +173,16 @@ class UserController extends AppController
         }
     }
 
+    // specific user profile
+    public function profile()
+    {
+        return $this->render('user-details', [
+            'user' => $this->userRepository->getUserDtoById($_POST['userId']),
+            'message' => $this->message,
+            'isAdmin' => RouteGuard::hasAdminRole()
+        ]);
+    }
+
     public function rateUser()
     {
         $userId = RouteGuard::getAuthenticatedUserId();
@@ -192,12 +196,11 @@ class UserController extends AppController
             $_POST['communication']
         ));
         if (!$wasNotAlreadyRated) {
-            return $this->render('user-details', ['user' => $this->userRepository->getUserDtoById($_POST['userId']),
-                'messages' => 'You already rated this player!']);
+            $this->message = 'You already rated this player!';
+        } else {
+            $this->message = 'You successfully rated player.';
         }
-
-        return $this->render('user-details', ['user' => $this->userRepository->getUserDtoById($_POST['userId']),
-            'messages' => 'You successfully rated player.']);
+        return $this->profile();
     }
 
     private function validateAvatar(array $file): bool

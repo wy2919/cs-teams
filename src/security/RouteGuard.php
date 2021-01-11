@@ -5,8 +5,8 @@ require_once __DIR__ . '/../repository/SessionRepository.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
 class RouteGuard
 {
-    const TOKEN_NAME = 'token';
     const ADMIN_ROLE = 1;
+    const TOKEN_NAME = 'token';
 
     public static function checkAuthentication()
     {

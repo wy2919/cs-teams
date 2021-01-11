@@ -16,7 +16,7 @@
             
             <div class="user-details">
                 <h2>User Details</h2>
-                <p class="messages"><?= $messages?></p>
+                <p class="messages"><?= $message?></p>
                 <div class="container">
 
                     <div class="user-info">
@@ -101,8 +101,13 @@
 
             </div>
                 <button type="submit" class="rate-button">Rate User</button>
-
             </form>
+
+            <?php if($isAdmin) { ?>
+            <form class="admin-panel" action="editUserProfile" method="post">
+                <button type="submit" class="btn">Edit</button>
+            </form>
+            <?php } ?>
 
         </main>
 </body>
