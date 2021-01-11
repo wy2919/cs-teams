@@ -9,15 +9,17 @@ class UserDto
     private string $username;
     private ?string $image;
     private ?string $description;
+    private int $role;
     private string $rank;
     private ?float $elo;
 
-    public function __construct(?int $id, string $email, string $username, ?string $image, ?string $description, string $rank, ?float $elo)
+    public function __construct(?int $id, string $email, string $username, ?string $image, ?string $description, $role, string $rank, ?float $elo)
     {
         $this->id = $id;
         $this->email = $email;
         $this->username = $username;
         $this->description = $description;
+        $this->role = $role;
         $this->image = $image;
         $this->rank = $rank;
         $this->elo = $elo;
@@ -74,6 +76,16 @@ class UserDto
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    public function getRole(): int
+    {
+        return $this->role;
+    }
+
+    public function setRole(int $role): void
+    {
+        $this->role = $role;
     }
 
     public function getRank(): string

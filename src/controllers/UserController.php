@@ -33,7 +33,7 @@ class UserController extends AppController
 
     public function editProfile()
     {
-        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
+        $userId = RouteGuard::getAuthenticatedUserId();
         return $this->render('edit-profile', [
             'message' => $this->message,
             'ranks' => $this->rankRepository->getRanks(),
@@ -42,7 +42,7 @@ class UserController extends AppController
 
     public function editDetails()
     {
-        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
+        $userId = RouteGuard::getAuthenticatedUserId();
 
         if(isset($_POST['rank'])){
             if ($this->userRepository->setUserRank($userId, $_POST['rank'])) {
@@ -64,7 +64,7 @@ class UserController extends AppController
 
     public function editAvatar()
     {
-        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
+        $userId = RouteGuard::getAuthenticatedUserId();
         if ($this->isPost() && is_uploaded_file($_FILES['file']['tmp_name']) && $this->validateAvatar($_FILES['file'])) {          // 'file' to nazwa name="" ustawiona w html, a tmp_name to tak już jest..
 
             move_uploaded_file(
@@ -89,14 +89,14 @@ class UserController extends AppController
 
     public function users()
     {
-        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
+        $userId = RouteGuard::getAuthenticatedUserId();
         return $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
             'users' => $this->userRepository->getUsersDtoExceptUser($userId)]);
     }
 
     public function filter()
     {
-        $currentUserId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
+        $currentUserId = RouteGuard::getAuthenticatedUserId();
 
         $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
         if ($contentType === "application/json") {
@@ -119,14 +119,14 @@ class UserController extends AppController
     // session user profile
     public function myDetails()
     {
-        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
+        $userId = RouteGuard::getAuthenticatedUserId();
         return $this->render('my-profile', ['user' => $this->userRepository->getUserDtoById($userId)]);
 
     }
 
     public function conversation()
     {
-        $currentUserId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
+        $currentUserId = RouteGuard::getAuthenticatedUserId();
 
         $selected = null;
         $messages = null;
@@ -162,7 +162,7 @@ class UserController extends AppController
 
     public function message()
     {
-        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
+        $userId = RouteGuard::getAuthenticatedUserId();
 
         $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
         if ($contentType === "application/json") {
@@ -181,7 +181,7 @@ class UserController extends AppController
 
     public function rateUser()
     {
-        $userId = RouteGuard::getAuthenticatedUserId($_COOKIE['token']);
+        $userId = RouteGuard::getAuthenticatedUserId();
 
         $wasNotAlreadyRated = $this->ratingRepository->addRating(new Rating(
             null,

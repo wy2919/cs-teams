@@ -17,6 +17,7 @@ class UserMapper
             $record['username'],
             $record['image'],
             $record['description'],
+            $record['role'],
             $record['rank'],
             $record['elo']
         );
