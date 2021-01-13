@@ -92,11 +92,15 @@
     transition: .2s;
 }
 
-input:not(:checked) ~ label:hover,
-input:not(:checked) ~ label:hover ~ label{
-    color: #1A0E68;
+.stars label {
+    cursor: pointer;
 }
 
+input:not(:checked) ~ label:hover {
+    color: #1A0E40;
+}
+
+input:not(:checked) ~ label:hover ~ label,
 input:checked ~ label {
     color: #1A0E68;
 }
@@ -124,6 +128,7 @@ input:checked ~ label {
     align-self: center;
     margin-top: 1.5em;
 }
+
 .admin-panel button {
     height: 2em;
     width: 5em;
