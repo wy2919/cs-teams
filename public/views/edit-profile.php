@@ -28,6 +28,7 @@
             </div>
             <form class="avatar-form" action="editAvatar" method="POST" enctype="multipart/form-data">
                 <input class="avatar-input" type="file" name="file">
+                <input type="hidden" name="userId" value="<?= $user->getId()?>">
                 <button class="btn button" type="submit">Change</button>
             </form>
         </div>
@@ -43,6 +44,7 @@
                         <option value="<?php echo $rank->getId() ?>" <?php if($rank->getRank() == $user->getRank()) echo"selected"?>><?php echo $rank->getRank() ?></option>
                     <?php } ?>
                 </select>
+                <input type="hidden" name="userId" value="<?= $user->getId()?>">
                 <button class="btn button" type="submit">Change</button>
             </form>
         </div>
@@ -54,6 +56,7 @@
 
                 <form class="between-form" action="editDetails" method="POST">
                     <textarea name="description" class="description-input" type="text" maxlength="150"><?= $user->getDescription()?></textarea>
+                    <input type="hidden" name="userId" value="<?= $user->getId()?>">
                     <button class="btn button" type="submit">Change</button>
                 </form>
             </div>
@@ -72,6 +75,7 @@
                         <p class="password-header">Confirm new password:</p>
                         <input id="new-password-confirm" name="newPasswordConfirm" class="password-input" type="password">
                     </div>
+                    <input type="hidden" name="userId" value="<?= $user->getId()?>">
                     <button class="btn button" type="submit">Change</button>
                 </form>
             </div>

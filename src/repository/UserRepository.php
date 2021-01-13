@@ -88,6 +88,20 @@ class UserRepository extends Repository
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getUserById($userId)
+    {
+        $statement = $this->database->connect()->prepare('
+            SELECT * 
+            FROM public.users 
+            WHERE id = :id
+        ');
+        $statement->execute([$userId]);
+
+        $user = $statement->fetch(PDO::FETCH_ASSOC);    // association array
+
+        return $this->userMapper->mapAssocArrayToUser($user);
+    }
+
     public function getUserByEmail(string $email): ?User
     {
         $statement = $this->database->connect()->prepare('

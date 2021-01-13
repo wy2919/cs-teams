@@ -104,7 +104,8 @@
             </form>
 
             <?php if($isAdmin) { ?>
-            <form class="admin-panel" action="editUserProfile" method="post">
+            <form class="admin-panel" action="editProfile" method="post">
+                <input type="hidden" name="userId" value="<?= $user->getId()?>">
                 <button type="submit" class="btn">Edit</button>
             </form>
             <?php } ?>

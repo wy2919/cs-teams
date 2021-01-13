@@ -28,7 +28,8 @@
                     </div>
                     <div class="description">
                         <p><strong> Description: </strong><?= $user->getDescription()?></p>
-                        <form action="editProfile" method="get">
+                        <form action="editProfile" method="post">
+                            <input type="hidden" name="userId" value="<?= $user->getId()?>">
                             <button type="submit" class="btn">Edit</button>
                         </form>
                     </div>

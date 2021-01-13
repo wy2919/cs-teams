@@ -33,7 +33,9 @@ class UserController extends AppController
 
     public function editProfile()
     {
-        $userId = RouteGuard::getAuthenticatedUserId();
+        $userId = $_POST['userId'];
+        $this->validateAuthorizationToModifyUser($userId);
+
         return $this->render('edit-profile', [
             'message' => $this->message,
             'ranks' => $this->rankRepository->getRanks(),
@@ -42,7 +44,8 @@ class UserController extends AppController
 
     public function editDetails()
     {
-        $userId = RouteGuard::getAuthenticatedUserId();
+        $userId = $_POST['userId'];
+        $this->validateAuthorizationToModifyUser($userId);
 
         if(isset($_POST['rank'])){
             if ($this->userRepository->setUserRank($userId, $_POST['rank'])) {
@@ -64,7 +67,9 @@ class UserController extends AppController
 
     public function editAvatar()
     {
-        $userId = RouteGuard::getAuthenticatedUserId();
+        $userId = $_POST['userId'];
+        $this->validateAuthorizationToModifyUser($userId);
+
         if ($this->isPost() && is_uploaded_file($_FILES['file']['tmp_name']) && $this->validateAvatar($_FILES['file'])) {          // 'file' to nazwa name="" ustawiona w html, a tmp_name to tak już jest..
 
             move_uploaded_file(
@@ -215,5 +220,12 @@ class UserController extends AppController
             return false;
         }
         return true;
+    }
+
+    private function validateAuthorizationToModifyUser($userId){
+        if($userId != RouteGuard::getAuthenticatedUserId() && !RouteGuard::hasAdminRole()){
+            $url = "http://$_SERVER[HTTP_HOST]";    // server address
+            header("Location: {$url}/login");
+        }
     }
 }

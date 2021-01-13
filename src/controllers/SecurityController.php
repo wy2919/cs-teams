@@ -100,7 +100,10 @@ class SecurityController extends AppController
 
     public function editPassword()
     {
-        RouteGuard::checkAuthentication();
+        $userId = $_POST['userId'];
+        if($userId !== RouteGuard::getAuthenticatedUserId() && !RouteGuard::hasAdminRole()){
+            return $this->render('login');
+        }
 
         if(strlen($_POST['newPassword']) <= 5) {
             $message = 'Password must be longer than 5 characters!';
@@ -108,10 +111,10 @@ class SecurityController extends AppController
         else if($_POST['newPassword'] != $_POST['newPasswordConfirm']) {
             $message = 'new Password and confirmation does not match!';
         }
-        else if($_POST['password'] != $this->userRepository->getUserByEmail($_SESSION['email'])->getPassword()) {
+        else if(!password_verify($_POST['password'], $this->userRepository->getUserById($userId)->getPassword())) {
                 $message = 'wrong password!';
         } else {
-            if($this->userRepository->setUserPassword($_SESSION['id'], password_hash($_POST['newPassword'], PASSWORD_DEFAULT))){
+            if($this->userRepository->setUserPassword($userId, password_hash($_POST['newPassword'], PASSWORD_DEFAULT))){
                 $message = 'Password Changed successfully.';
             } else {
                 $message = 'Could not change password.';
@@ -120,6 +123,6 @@ class SecurityController extends AppController
         return $this->render('edit-profile', [
             'message' => $message,
             'ranks' => $this->rankRepository->getRanks(),
-            'user' => $this->userRepository->getUserDtoById($_SESSION['id'])]);
+            'user' => $this->userRepository->getUserDtoById($userId)]);
     }
 }
