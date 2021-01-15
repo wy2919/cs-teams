@@ -58,7 +58,8 @@ class UserRepository extends Repository
     {
 
         $statement = $this->database->connect()->prepare('
-            SELECT * 
+            SELECT
+                u.id, u.email, u.username, u.image, u.description, u.role, r.rank, u.elo
             FROM public.user_dto u 
                 LEFT JOIN public.ranks r 
                     ON u.rank = r.rank 
@@ -75,13 +76,15 @@ class UserRepository extends Repository
     {
 
         $statement = $this->database->connect()->prepare('
-            SELECT * 
+            SELECT
+                u.id, u.email, u.username, u.image, u.description, u.role, r.rank, u.elo
             FROM public.user_dto u 
                 LEFT JOIN public.ranks r 
                     ON u.rank = r.rank 
             WHERE u.id != :id_user 
               AND u.elo >= :elo
         ');
+
         $statement->execute([(int)$userId, (float)$elo]);
 
         // json
