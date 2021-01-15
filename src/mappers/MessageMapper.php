@@ -11,7 +11,7 @@ class MessageMapper
 
         return new Message(
             $record['message'],
-            $record['id_sender'] !== $_SESSION['id']
+            $record['id_sender'] !== RouteGuard::getAuthenticatedUserId()
         );
     }
 
