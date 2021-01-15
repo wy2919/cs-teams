@@ -1,13 +1,9 @@
-html{
-    overflow: scroll;
+html, body {
+    overflow-y: auto;
     overflow-x: hidden;
-}
-
-body {
     margin: 0;
     padding: 0;
-    width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 a {
@@ -101,6 +97,10 @@ a {
 }
 
 .hamburger {
+    display: none !important;
+}
+
+.hamburger-nav {
     display: none;
 }
 
@@ -111,12 +111,46 @@ a {
     }
 
     .hamburger {
-        display: inline;
+        display: inline !important;
         color: white;
         font-size: 2em;
         margin-left: auto;
         margin-right: 1em;
     }
+
+    .hamburger-nav {
+        position: absolute;
+        flex-direction: column;
+        flex-grow: 1;
+        right: 0;
+        width: 12em;
+        height: 100vh;
+        z-index: 1;
+        background: transparent linear-gradient(180deg, #0D0734 0%, #0D0700 100%) 0 0 no-repeat padding-box;
+        font: normal normal bold 1.4em Arial;
+    }
+
+    /*TODO: transition*/
+    .hamburger-nav-active {
+        display: flex;
+    }
+
+    .hamburger-nav i {
+        margin: 1em 1em 0;
+        font-size: 1.5em;
+    }
+
+    .hamburger-ul {
+        display: flex;
+        flex-direction: column;
+        margin-left: 1.6em;
+        list-style-type: none;
+    }
+
+    .hamburger-ul li {
+        margin: .8em;
+    }
+
 }
 
 @media only screen and (max-device-width: 900px) {
@@ -134,5 +168,13 @@ a {
         margin: 1.5em .8em .8em;
         /* margin-right: auto; */
         color: black;
+    }
+
+    .hamburger-nav .hamburger {
+        color: white;
+    }
+
+    .hamburger-nav {
+        left: 0;
     }
 }
