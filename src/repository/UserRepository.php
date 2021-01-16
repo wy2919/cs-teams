@@ -37,6 +37,7 @@ class UserRepository extends Repository
         ');
         $statement->execute([$id]);
         $record = $statement->fetch(PDO::FETCH_ASSOC);    // association array
+        $records['roles'] = $this->getUserRolesById($id);
 
         return $this->userMapper->mapAssocToDto($record);
     }
@@ -50,6 +51,7 @@ class UserRepository extends Repository
         ');
         $statement->execute([(int)$id]);
         $records = $statement->fetchAll(PDO::FETCH_ASSOC);    // association array
+        $records['roles'] = $this->getUserRolesById($id);
 
         return $this->userMapper->mapMultipleAssocToDto($records);
     }
@@ -59,7 +61,7 @@ class UserRepository extends Repository
 
         $statement = $this->database->connect()->prepare('
             SELECT
-                u.id, u.email, u.username, u.image, u.description, u.role, r.rank, u.elo
+                u.id, u.email, u.username, u.image, u.description, r.rank, u.elo
             FROM public.user_dto u 
                 LEFT JOIN public.ranks r 
                     ON u.rank = r.rank 
@@ -77,7 +79,7 @@ class UserRepository extends Repository
 
         $statement = $this->database->connect()->prepare('
             SELECT
-                u.id, u.email, u.username, u.image, u.description, u.role, r.rank, u.elo
+                u.id, u.email, u.username, u.image, u.description, r.rank, u.elo
             FROM public.user_dto u 
                 LEFT JOIN public.ranks r 
                     ON u.rank = r.rank 
@@ -208,5 +210,18 @@ class UserRepository extends Repository
         ');
 
         return $statement->execute([$newPassword, $userId]);
+    }
+
+    public function getUserRolesById($id) {
+        $statement = $this->database->connect()->prepare('
+            SELECT r.name
+            FROM roles r
+            LEFT JOIN user_roles ur on r.id = ur.id_role
+            LEFT JOIN users u on ur.id_user_details = u.id_user_details
+            WHERE u.id = :id
+        ');
+
+        $statement->execute([(int)$id]);
+        return $statement->fetchAll(PDO::FETCH_COLUMN, 0);
     }
 }

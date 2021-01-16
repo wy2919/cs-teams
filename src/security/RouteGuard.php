@@ -5,7 +5,7 @@ require_once __DIR__ . '/../repository/SessionRepository.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
 class RouteGuard
 {
-    const ADMIN_ROLE = 1;
+    const ADMIN_ROLE = "ADMIN";
     const TOKEN_NAME = 'token';
 
     public static function checkAuthentication()
@@ -32,7 +32,7 @@ class RouteGuard
         $userRepository = new UserRepository();
 
         $userId = $sessionRepository->getSessionUserId($_COOKIE[self::TOKEN_NAME]);
-        return $userRepository->getUserDtoById($userId)->getRole() === self::ADMIN_ROLE;
+        return in_array(self::ADMIN_ROLE, $userRepository->getUserRolesById($userId));
     }
 
 
