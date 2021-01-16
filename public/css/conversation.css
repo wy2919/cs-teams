@@ -198,7 +198,7 @@
 
 
 
-@media only screen and (max-device-width: 1600px) {
+@media only screen and (max-width: 1600px) {
     .communicator-container {
         width: 80%;
     }
@@ -209,7 +209,7 @@
 }
 
 
-@media only screen and (max-device-width: 1200px) {
+@media only screen and (max-width: 1200px) {
 
     body {
         font-size: .9em;
@@ -228,7 +228,7 @@
     }
 }
 
-@media only screen and (max-device-width: 950px) {
+@media only screen and (max-width: 950px) {
     body {
         font-size: 1.05em;
     }
@@ -238,7 +238,7 @@
     }
 }
 
-@media only screen and (max-device-width: 900px) {
+@media only screen and (max-width: 900px) {
     
     body {
         font-size: 1.4em;

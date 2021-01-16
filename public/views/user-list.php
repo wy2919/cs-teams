@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="public/css/user-list.css">
     <link rel="stylesheet" type="text/css" href="public/css/main.css">
     <script type="text/javascript" src="./public/js/redirect.js" defer></script>
