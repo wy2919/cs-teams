@@ -36,22 +36,20 @@ class UserRepository extends Repository
             WHERE id = :id
         ');
         $statement->execute([$id]);
-        $record = $statement->fetch(PDO::FETCH_ASSOC);    // association array
-        $records['roles'] = $this->getUserRolesById($id);
+        $record = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $this->userMapper->mapAssocToDto($record);
     }
 
-    public function getUsersDtoExceptUser($id)
+    public function getUsersDtoExceptUser(int $id)
     {
         $statement = $this->database->connect()->prepare('
             SELECT * 
             FROM public.user_dto 
             WHERE id != :id
         ');
-        $statement->execute([(int)$id]);
-        $records = $statement->fetchAll(PDO::FETCH_ASSOC);    // association array
-        $records['roles'] = $this->getUserRolesById($id);
+        $statement->execute([$id]);
+        $records = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $this->userMapper->mapMultipleAssocToDto($records);
     }
