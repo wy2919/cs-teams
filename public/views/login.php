@@ -30,7 +30,7 @@
             <input name="password" type="password" placeholder="password">
 
             <button type="submit" class="btn">Login</button>
-            <button type="reset" class="btn" id="register-btn">Register</button>
+            <button type="button" class="btn" id="register-btn">Register</button>
         </form>
 
     </div>

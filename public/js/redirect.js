@@ -3,9 +3,9 @@ if (loginRefButton != null) {
     loginRefButton.forEach( i => i.addEventListener('click', () => document.location.href = 'login'));
 }
 
-let registerRefButton = document.querySelectorAll(".register-btn");
+let registerRefButton = document.querySelector("#register-btn");
 if (registerRefButton != null){
-    registerRefButton.forEach( i => i.addEventListener('click', () => document.location.href = 'register'));
+    registerRefButton.addEventListener('click', () => document.location.href = 'register');
 }
 
 let usersRefButton = document.querySelectorAll('.users-ref');

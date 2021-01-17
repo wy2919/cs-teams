@@ -99,7 +99,6 @@ select {
 @media only screen and (max-width: 900px){
 
     body {
-        font-size: 23px;
         background-size: auto 100vh;
         background-position-x: 0;
     }
@@ -114,27 +113,26 @@ select {
     }
 
     select {
-        height: 3em;
+        height: 2.5em;
     }
 
     .login button {
-        width: 40%;
-        height: 3em;
+        width: 50%;
+        height: 2.5em;
     }
 
     .login {
-        width: 80%;
-        height: 80%;
+        width: 50%;
+        height: 70%;
     }
 
     .login button:first-of-type{
-        margin-top: 8%;
+        margin-top: 10%;
     }
 
     .register {
-        width: 55%;
-        height: 40em;
-        font-size: 17px;
+        width: 50%;
+        height: 90%;
     }
 
 }
@@ -143,33 +141,24 @@ select {
 @media only screen and (max-width: 600px){
 
     body {
-        font-size: 32px;
     }
 
     .login {
-        width: 90%;
+        width: 60%;
         height: 65%;
     }
 
     .login input {
         width: 70%;
-        height: 1.4em;
+        height: 1.2em;
     }
 
     .login button {
-        width: 40%;
-        height: 3em;
-        margin: 0.2em;
-    }
-
-    .login button:first-of-type{
-        margin-top: 8%;
+        height: 2.2em;
     }
 
     .register {
-        width: 65%;
-        height: 35em;
-        font-size: 30px;
+        height: 100%;
     }
 
 }
@@ -180,13 +169,12 @@ select {
     }
 
     .login {
-        height: 45%;
+        height: 60%;
     }
 
     .register {
-        width: 80%;
-        height: 30em;
-        font-size: 1.2em;
+        height: 100%;
     }
+
 }
 
