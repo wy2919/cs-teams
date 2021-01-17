@@ -177,4 +177,8 @@ a {
     .hamburger-nav {
         left: 0;
     }
+
+    .title {
+        visibility: hidden;
+    }
 }

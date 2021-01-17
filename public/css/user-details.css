@@ -14,6 +14,10 @@
     display: flex;
 }
 
+.username {
+    text-align: center;
+}
+
 .description {
     display: flex;
     flex-direction: column;
@@ -32,8 +36,8 @@
 }
 
 .description button {
-    min-height: 2em;
     align-self: center;
+    min-height: 2em;
     width: 6em;
 }
 
@@ -57,7 +61,6 @@
     height: 15em;
     margin-right: 1.5em;
     object-fit: cover;
-    background: transparent url('img/Rectangle 1468.png') 0 0 no-repeat padding-box;
     box-shadow: 1px 4px 6px #00000099;
     border: 1px solid #000000;
     border-radius: 1.5em
@@ -114,7 +117,7 @@ input:checked ~ label {
 .rate-button {
     position: relative;
     width: 8em;
-    height: 4vh;
+    height: 1.8em;
     left: 50%;
     transform: translateX(-50%);
     font-size: 1em;
@@ -130,7 +133,7 @@ input:checked ~ label {
 }
 
 .admin-panel button {
-    height: 2em;
+    height: 1.8em;
     width: 5em;
 }
 
@@ -138,6 +141,10 @@ input:checked ~ label {
 
     body {
         font-size: 1.2em;
+    }
+
+    .container {
+        font-size: .8em;
     }
 
     .description>p {
@@ -150,7 +157,11 @@ input:checked ~ label {
 @media only screen and (max-width: 900px){
 
     body {
-        font-size: 1.4em;
+        font-size: 1.3em;
+    }
+
+    .container, .rate-user {
+        font-size: .8em;
     }
 
     .rate {
@@ -186,9 +197,13 @@ input:checked ~ label {
         align-items: center;
         margin-top: 1em;
     }
-    
+
+    .user-info {
+        font-size: .9em;
+    }
+
     .rate {
-        margin: .9em;
+        margin: .7em;
     }
 
     .rate-user {
@@ -197,7 +212,7 @@ input:checked ~ label {
 
     .description p {
         width: 80vw;
-        font-size: 1.2em;
+        font-size: 1.1em;
         margin-top: .5em;
     }
 
@@ -216,12 +231,14 @@ input:checked ~ label {
     }
     
     .rate-user {
+        margin-top: 2.5em;
         flex-direction: column;
         align-items: center;
+        font-size: .65em;
     }
 
     .rate {
-        margin: 0;
+        margin: .5em;
     }
 
     .rate p {
@@ -232,14 +249,29 @@ input:checked ~ label {
         margin-top: 0;
     }
 
+    .rate label {
+        font-size: 1.4em;
+        margin: 0.3em;
+    }
+
+    .rate-button {
+        font-size: .8em;
+        margin-top: .5em;
+        width: 7em;
+        height: 1.5em;
+    }
+
+    .description {
+        min-height: 8em;
+    }
+
     .description p {
-            font-size: 1.1em;
-        }
-}
+            font-size: .85em;
+    }
 
-
-@media only screen and (max-width: 450px){
-    body {
-        font-size: 2.2em;
+    .admin-panel button {
+        height: 1.4em;
+        width: 4em;
+        margin-bottom: 2em;
     }
 }

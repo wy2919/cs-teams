@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="public/css/user-details.css">
-    <link rel="stylesheet" type="text/css" href="public/css/main.css">
-    <script type="text/javascript" src="./public/js/redirect.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/user-details.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/main.css">
+    <script type="text/javascript" src="/public/js/redirect.js" defer></script>
 
     <script src="https://kit.fontawesome.com/3010d94d2f.js" crossorigin="anonymous"></script>
     <title>User list</title>
@@ -16,7 +16,7 @@
         <main class="main">
             
             <div class="user-details">
-                <h2>User Details</h2>
+                <h2 class="title">User Details</h2>
                 <p class="messages"><?= $message?></p>
                 <div class="container">
 

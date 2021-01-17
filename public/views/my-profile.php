@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="public/css/user-details.css">
-    <link rel="stylesheet" type="text/css" href="public/css/main.css">
-    <link rel="stylesheet" type="text/css" href="public/css/my-profile.css">
-    <script type="text/javascript" src="./public/js/redirect.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/user-details.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/main.css">
+    <script type="text/javascript" src="/public/js/redirect.js" defer></script>
 
 
     <script src="https://kit.fontawesome.com/3010d94d2f.js" crossorigin="anonymous"></script>
@@ -18,7 +17,7 @@
         <main class="main">
 
             <div class="user-details">
-                <h2>User Details</h2>
+                <h2 class="title">User Details</h2>
                 <div class="container">
 
                     <div class="user-info">
@@ -27,13 +26,11 @@
                         <p><strong>Elo: </strong><?=$user->getElo()?></p>
                         <p><strong>Rank: </strong><?=$user->getRank()?></p>
                     </div>
-                    <div class="description">
-                        <p><strong> Description: </strong><?= $user->getDescription()?></p>
-                        <form action="editProfile" method="post">
+                    <form class="description" action="editProfile" method="post">
+                            <p><strong> Description: </strong><?= $user->getDescription()?></p>
                             <input type="hidden" name="userId" value="<?= $user->getId()?>">
                             <button type="submit" class="btn">Edit</button>
-                        </form>
-                    </div>
+                    </form>
                 </div>
             </div>
 
