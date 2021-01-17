@@ -23,6 +23,10 @@ main {
     margin: .4em 0;
 }
 
+.edit-container:last-child {
+    margin-bottom: 5em;
+}
+
 .panel-title {
     font-size: 1.5em;
     font-weight: bold;
@@ -106,7 +110,6 @@ hr {
 
 .password-header {
     margin-block: .8em 0;
-    font-weight: bold;
 }
 
 .password-header:first-child {
@@ -146,17 +149,17 @@ hr {
     }
 
     .edit-container {
-        width: 70%;
+        width: 75%;
     }
 
     hr {
-        width: 70%;
+        width: 75%;
     }
 }
 
 @media only screen and (max-width: 900px) {
     main {
-        font-size: 1.8em;
+        font-size: 1.3em;
     }
 
     .edit-container {
@@ -202,11 +205,15 @@ hr {
     .description-input {
         width: 70%;
     }
+
+    .password-input {
+        height: 2em;
+    }
 }
 
 @media only screen and (max-width: 650px) {
     main {
-        font-size: 2em;
+        font-size: 1.2em;
     }
 
     .edit-container {
@@ -220,28 +227,14 @@ hr {
     .rank-select {
         width: 50%;
     }
-
-    .password-input {
-        height: 2.5em;
-    }
 }
 
-@media only screen and (max-width: 550px) {
-    main {
-        font-size: 2.3em;
+@media only screen and (max-width: 450px) {
+    .rank-select {
+        width: 65%;
     }
 
-    .password-input {
-        height: 3em;
-    }
-}
-
-@media only screen and (max-width: 470px) {
-    main {
-        font-size: 2.8em;
-    }
-
-    .password-input {
-        height: 3.3em;
+    .description-input{
+        width: 90%;
     }
 }
