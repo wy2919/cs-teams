@@ -1,6 +1,6 @@
-<script type="text/javascript" src="./public/js/hamburger.js" defer></script>
+<script type="text/javascript" src="/public/js/hamburger.js" defer></script>
 <nav class="navigation">
-    <img src="public/img/logo.svg" alt="logo">
+    <img src="/public/img/logo.svg" alt="logo">
     <ul>
         <li>
             <a class="users-ref">User List</a>
