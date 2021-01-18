@@ -7,7 +7,7 @@
     <script type="text/javascript" src="/public/js/slider.js" defer></script>
         <script type="text/javascript" src="/public/js/filter.js" defer></script>
 
-    <script src="/https://kit.fontawesome.com/3010d94d2f.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/3010d94d2f.js" crossorigin="anonymous"></script>
     <title>User list</title>
 </head>
 <body>
@@ -52,11 +52,11 @@
                         <div class="user-buttons">
                             <form action="conversation" method="post">
                                 <input type="hidden" name="userId" value="<?= $user->getId() ?>">
-                                <button class="btn user-btn" class="btn">Message</button>
+                                <button class="btn user-btn">Message</button>
                             </form>
                             <form action="profile" method="post">
                                 <input type="hidden" name="userId" value="<?= $user->getId() ?>">
-                                <button class="btn user-btn" class="btn">Profile</button>
+                                <button class="btn user-btn">Profile</button>
                             </form>
                         </div>
                     </div>
@@ -82,11 +82,11 @@
         <div class="user-buttons">
             <form action="conversation" method="post">
                 <input type="hidden" name="userId">
-                <button class="btn user-btn" class="btn">Message</button>
+                <button class="btn user-btn">Message</button>
             </form>
             <form action="profile" method="post">
                 <input type="hidden" name="userId">
-                <button class="btn user-btn" class="btn">Profile</button>
+                <button class="btn user-btn">Profile</button>
             </form>
         </div>
     </div>

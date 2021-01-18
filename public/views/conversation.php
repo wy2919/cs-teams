@@ -7,7 +7,7 @@
     <script type="text/javascript" src="/public/js/main.js" defer></script>
     <script type="text/javascript" src="/public/js/messages.js" defer></script>
 
-    <script src="/https://kit.fontawesome.com/3010d94d2f.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/3010d94d2f.js" crossorigin="anonymous"></script>
     <title>User list</title>
 </head>
 <body>
@@ -17,7 +17,7 @@
 
         <main class="main">
             <input type="hidden" value="0">
-            <p class = "header">Conversation</p>
+            <p class="header">Conversation</p>
             
             <div class="communicator-container">
                 <div class="friend-list">
