@@ -37,6 +37,7 @@ function createUser(user) {
 
     const image = clone.querySelector("img");
     image.src= `/public/uploads/${user.image}`;
+    appendOnError([image]);
 
     const username = clone.querySelector('#username');
     username.innerHTML = user.username;

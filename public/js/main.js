@@ -23,8 +23,14 @@ if (profileRefButton != null) {
     profileRefButton.forEach( i => i.addEventListener('click', () => document.location.href = 'myDetails'));
 }
 
-const images = document.querySelectorAll("img");
-images.forEach(img => img.onerror = function() {
-    this.onerror=null;
-    this.src='/public/uploads/placeholder.png';
-})
+const imageTags = document.querySelectorAll("img");
+
+function appendOnError(images) {
+    images.forEach(img => img.onerror = function() {
+        this.onerror=null;
+        this.src='/public/uploads/placeholder.png';
+    })
+}
+
+appendOnError(imageTags);
+
