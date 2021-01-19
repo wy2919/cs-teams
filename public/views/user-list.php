@@ -42,20 +42,23 @@
             if($users != null){ ?>
             <section class="users">
                 <?php foreach ($users as $user) { ?>
+<!--                        TODO: ROUTE-GUARD: getIdByUsername.. wszedzie?-->
                 <div class="user">
-                    <img src="public/uploads/<?php echo $user->getImage() ?>" alt="user avatar">
-                    <div class="user-details">
-                        <p id="username"><?php echo $user->getUsername() ?></p>
-                        <p><strong>Rank: </strong><?php echo $user->getRank() ?></p>
-                        <p><strong>Elo: </strong><?php echo $user->getElo() ?></p>
-                    </div>
+
+                    <a class="link" href="/profile/<?= $user->getId() ?>">
+                        <img src="public/uploads/<?php echo $user->getImage() ?>" alt="user avatar">
+                        <div class="user-details">
+                            <p id="username"><?php echo $user->getUsername() ?></p>
+                            <p><strong>Rank: </strong><?php echo $user->getRank() ?></p>
+                            <p><strong>Elo: </strong><?php echo $user->getElo() ?></p>
+                        </div>
+                    </a>
                     <div class="user-buttons">
                         <form action="conversation" method="post">
                             <input type="hidden" name="userId" value="<?= $user->getId() ?>">
                             <button class="btn user-btn">Message</button>
                         </form>
-                        <form action="profile" method="post">
-                            <input type="hidden" name="userId" value="<?= $user->getId() ?>">
+                        <form action="profile/<?= $user->getId() ?>" method="post">
                             <button class="btn user-btn">Profile</button>
                         </form>
                     </div>

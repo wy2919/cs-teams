@@ -179,10 +179,10 @@ class UserController extends AppController
     }
 
     // specific user profile
-    public function profile()
+    public function profile($id)
     {
         return $this->render('user-details', [
-            'user' => $this->userRepository->getUserDtoById($_POST['userId']),
+            'user' => $this->userRepository->getUserDtoById($id),
             'message' => $this->message,
             'isAdmin' => RouteGuard::hasAdminRole()
         ]);

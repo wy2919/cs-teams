@@ -38,8 +38,7 @@
 
                     <div class="inside-friend">
 
-                        <form class="friend-details" action="profile" method="post">
-                            <input type="hidden" name="userId" value=" <?=$selected->getUserId()?>->">
+                        <form class="friend-details" action="profile/<?=$selected->getUserId()?>" method="post">
                             <img src="public/uploads/<?= $selected->getImage() ?>" alt="user avatar" class="friend-img">
                             <p class="friend-name"><?= $selected->getUsername() ?></p>
                             <button type="submit" class="btn profile-btn">Profile</button>

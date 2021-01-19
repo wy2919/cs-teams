@@ -68,6 +68,10 @@ body {
     margin-top: 5vh;
 }
 
+.link {
+    display: flex;
+}
+
 .user img {
     width: 8em;
     height: 8em;

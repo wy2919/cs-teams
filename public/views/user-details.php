@@ -22,7 +22,7 @@
 
                     <div class="user-info">
                         <p><?= $user->getUsername() ?></p>
-                        <img src="public/uploads/<?= $user->getImage() ?>" alt="user avatar">
+                        <img src="/public/uploads/<?= $user->getImage() ?>" alt="user avatar">
                         <p><strong>Elo: </strong><?= $user->getElo() ?></p>
                         <p><strong>Rank: </strong><?= $user->getRank() ?></p>
                     </div>
