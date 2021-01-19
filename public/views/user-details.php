@@ -26,7 +26,7 @@
                         <p><strong>Elo: </strong><?= $user->getElo() ?></p>
                         <p><strong>Rank: </strong><?= $user->getRank() ?></p>
                     </div>
-                    <form class="description" action="conversation" method="post">
+                    <form class="description" action="/conversation" method="post">
                         <input type="hidden" name="userId" value="<?=$user->getId() ?>">
                         <p><?= $user->getDescription() ?></p>
                         <button type="submit" class="btn">Message</button>
@@ -34,7 +34,7 @@
 
                 </div>
                 </div>
-                <form action="rateUser" method="post">
+                <form action="/rateUser" method="post">
                     <input type="hidden" name="userId" value="<?= $user->getId()?>">
                 <div class="rate-user">
                     <div class="rate">
@@ -105,7 +105,7 @@
             </form>
 
             <?php if($isAdmin) { ?>
-            <form class="admin-panel" action="editProfile" method="post">
+            <form class="admin-panel" action="/editProfile" method="post">
                 <input type="hidden" name="userId" value="<?= $user->getId()?>">
                 <button type="submit" class="btn">Edit</button>
             </form>

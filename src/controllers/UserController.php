@@ -182,7 +182,7 @@ class UserController extends AppController
     public function profile($id)
     {
         return $this->render('user-details', [
-            'user' => $this->userRepository->getUserDtoById($id),
+            'user' => $this->userRepository->getUserDtoById((int) $id),
             'message' => $this->message,
             'isAdmin' => RouteGuard::hasAdminRole()
         ]);
@@ -205,7 +205,7 @@ class UserController extends AppController
         } else {
             $this->message = 'You successfully rated player.';
         }
-        return $this->profile();
+        return $this->profile($_POST['userId']);
     }
 
     private function validateAvatar(array $file): bool

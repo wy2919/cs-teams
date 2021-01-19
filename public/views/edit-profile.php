@@ -14,7 +14,7 @@
 
         <?php include('navigation.php') ?>
 
-        <main>
+        <main class="main">
 
         <p class="message">
             <?php
@@ -24,7 +24,7 @@
 
         <div class="avatar-container edit-container">
             <div class="column-flex">
-                <p class="panel-title">Avatar</p>
+                <p class="panel-title title">Avatar</p>
                 <img class="user-avatar" src="public/uploads/<?= $user->getImage()?>" alt="user avatar">
             </div>
             <form class="avatar-form" action="editAvatar" method="POST" enctype="multipart/form-data">
@@ -70,11 +70,11 @@
                 <form class="between-form" action="editPassword" method="POST">
                     <div class="column-flex">
                         <p class="password-header">Current password:</p>
-                        <input id="old-password" name="password" class="password-input" type="password">
+                        <input id="old-password" name="password" class="password-input" type="password" autocomplete="on">
                         <p class="password-header">New password:</p>
-                        <input id="new-password" name="newPassword" class="password-input" type="password">
+                        <input id="new-password" name="newPassword" class="password-input" type="password" autocomplete="on">
                         <p class="password-header">Confirm new password:</p>
-                        <input id="new-password-confirm" name="newPasswordConfirm" class="password-input" type="password">
+                        <input id="new-password-confirm" name="newPasswordConfirm" class="password-input" type="password" autocomplete="on">
                     </div>
                     <input type="hidden" name="userId" value="<?= $user->getId()?>">
                     <button class="btn button" type="submit">Change</button>

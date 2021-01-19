@@ -26,8 +26,8 @@
             </div>
             <input name="email" type="text" placeholder="email">
             <input name="username" type="text" placeholder="login">
-            <input name="password" type="password" placeholder="password">
-            <input name="passwordConfirm" type="password" placeholder="password">
+            <input name="password" type="password" placeholder="password" autocomplete="on">
+            <input name="passwordConfirm" type="password" placeholder="password" autocomplete="on">
             <select name="rank">
                 <?php foreach($ranks as $rank){ ?>
                 <option value="<?php echo $rank->getId() ?>"><?php echo $rank->getRank() ?></option>

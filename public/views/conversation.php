@@ -17,7 +17,7 @@
 
         <main class="main">
             <input type="hidden" value="0">
-            <p class="header">Conversation</p>
+            <p class="header title">Conversation</p>
             
             <div class="communicator-container">
                 <div class="friend-list">
