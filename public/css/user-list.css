@@ -98,6 +98,10 @@ body {
     align-items: center;
 }
 
+.user-buttons form {
+    margin: .2em;
+}
+
 .user-btn {
     height: 2em;
     width: 7em;
@@ -149,7 +153,7 @@ body {
     }
 
     .user-buttons button{
-        width: 10em;
+        width: 8em;
     }
 
     .user-buttons button:first-child{
@@ -167,9 +171,8 @@ body {
 
 
 @media only screen and (max-width: 900px) {
-
-    body {
-        font-size: 16px;
+    .user {
+        width: 70vw;
     }
 
     .user-list>p {
@@ -182,9 +185,9 @@ body {
         width: 80vw;
     }
 
-    .search-filter>select {
+    .search-filter select {
         align-self: center;
-        font-size: 1.5em;
+        font-size: 1em;
     }
 
     .search-filter>.user-elo {
@@ -196,36 +199,56 @@ body {
 
 
 @media only screen and (max-width: 700px) {
-    body {
-        font-size: 20px;
-    }
-
-    .search-filter>select {
-        font-size: 1.3em;
-    }
-
-    .user-elo p{
-        font-size: 2em;;
-    }
-}
-
-
-@media only screen and (max-width: 500px) {
-
-    body {
-        font-size: 28px;
-    }
-
-    .search-filter{
-        width: 100vw;
-    }
 
     .user {
         width: 90vw;
     }
 
-    .user-elo p{
-        font-size: 2.5em;
+    .user-buttons button{
+        width: 7em;
     }
 
+    .user-elo {
+        width: 60%;
+    }
+
+    .search-filter select {
+        width: 55%;
+    }
+}
+
+
+@media only screen and (max-width: 550px) {
+
+    .search-filter{
+        width: 100vw;
+    }
+
+    .user-buttons {
+        display: none;
+    }
+
+    .user {
+        width: 100%;
+    }
+
+}
+
+@media only screen and (max-width: 450px) {
+
+    body {
+        font-size: .9em;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+
+    body {
+        font-size: .8em;
+    }
+
+
+    .user-elo p{
+        font-size: 1.2em;;
+    }
 }
