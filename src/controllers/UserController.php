@@ -48,19 +48,13 @@ class UserController extends AppController
         $this->validateAuthorizationToModifyUser($userId);
 
         if(isset($_POST['rank'])){
-            if ($this->userRepository->setUserRank($userId, $_POST['rank'])) {
-                $this->message = 'Rank Changed successfully.';
-            } else {
-                $this->message = 'Could not change rank.';
-            }
+            $isSuccessful = $this->userRepository->setUserRank($userId, $_POST['rank']);
+            $this->message = $isSuccessful ? 'Rank Changed successfully.' : 'Could not change rank.';
         }
         else if(isset($_POST['description'])){
             $userDetailsId = $this->userRepository->getUserDetailsId($userId);
-            if ($this->userRepository->setUserDescription($userDetailsId, $_POST['description'])) {
-                $this->message = 'Description Changed successfully.';
-            } else {
-                $this->message = 'Could not change description.';
-            }
+            $isSuccessful = $this->userRepository->setUserDescription($userDetailsId, $_POST['description']);
+            $this->message = $isSuccessful ? 'Description Changed successfully.' : 'Could not change description.';
         }
         return $this->editProfile();
     }
@@ -76,12 +70,8 @@ class UserController extends AppController
                 $_FILES['file']['tmp_name'],
                 dirname(__DIR__) . self::UPLOAD_DIRECTORY . $_FILES['file']['name']
             );
-
-            if($this->userRepository->setUserImage($userId, $_FILES['file']['name'])) {
-                $this->message = 'Image Changed successfully.';
-            } else {
-                $this->message = 'Could not change Image.';
-            }
+            $isSuccessful = $this->userRepository->setUserImage($userId, $_FILES['file']['name']);
+            $this->message = $isSuccessful ? 'Image Changed successfully.' : 'Could not change Image.';
         }
         return $this->editProfile();
     }
@@ -115,7 +105,6 @@ class UserController extends AppController
         }
     }
 
-    // session user profile
     public function myDetails()
     {
         $userId = RouteGuard::getAuthenticatedUserId();
@@ -143,10 +132,7 @@ class UserController extends AppController
             $conversations = $this->conversationRepository->getUserConversations($currentUserId);
 
             $filtered = array_filter($conversations, function ($conv) use ($conversationId) {
-                if ($conv->getId() === $conversationId) {
-                    return true;
-                }
-                return false;
+                return $conv->getId() === $conversationId;
             });
 
             $selected = reset($filtered);
@@ -178,7 +164,6 @@ class UserController extends AppController
         }
     }
 
-    // specific user profile
     public function profile($id)
     {
         return $this->render('user-details', [
@@ -200,11 +185,7 @@ class UserController extends AppController
             $_POST['friendliness'],
             $_POST['communication']
         ));
-        if (!$wasNotAlreadyRated) {
-            $this->message = 'You already rated this player!';
-        } else {
-            $this->message = 'You successfully rated player.';
-        }
+        $this->message = $wasNotAlreadyRated ? 'You successfully rated player.' : 'You already rated this player!';
         return $this->profile($_POST['userId']);
     }
 
