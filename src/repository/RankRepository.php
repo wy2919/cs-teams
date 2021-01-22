@@ -30,8 +30,9 @@ class RankRepository extends Repository
     public function getRanks()
     {
         $statement = $this->database->connect()->prepare('
-            SELECT * 
-            FROM public.ranks'
+            SELECT *
+            FROM public.ranks
+            ORDER BY id'
         );
         $statement->execute();
         $records = $statement->fetchAll(PDO::FETCH_ASSOC);
