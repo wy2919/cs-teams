@@ -19,12 +19,8 @@
             <p>Log in</p>
             <div class="message">
                 <?php
-                    if(isset($messages)){
-                        foreach ($messages as $message) {
-                            echo $message;
-                        }
-                    }
-                    ?>
+                if(isset($message)) echo $message;
+                ?>
             </div>
             <input name="email" type="text" placeholder="email">
             <input name="password" type="password" placeholder="password" autocomplete="on">

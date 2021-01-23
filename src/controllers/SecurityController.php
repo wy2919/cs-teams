@@ -32,11 +32,11 @@ class SecurityController extends AppController
         $user = $this->userRepository->getUserByEmail($email);
 
         if (!$user){
-            return $this->render('login', ['messages' => ['User with this email not exist!']]);
+            return $this->render('login', ['message' => 'User with this email not exist!']);
         }
 
         if(!password_verify($password, $user->getPassword())) {
-            return $this->render('login', ['messages'=>['Incorrect password']]);
+            return $this->render('login', ['message'=>'Incorrect password']);
         }
 
         $user = $this->userRepository->getUserByEmail($email);
@@ -85,7 +85,7 @@ class SecurityController extends AppController
                 null
             ));
 
-        $this->render('login', ['messages' => ['Account created!']]);
+        $this->render('login', ['message' => 'Account created!']);
     }
 
     public function editPassword()
@@ -129,6 +129,6 @@ class SecurityController extends AppController
 
     private function renderRegisterWithMessage($message){
         $ranks = $this->rankRepository->getRanks();
-        return $this->render('register', ['messages'=>[$message],'ranks'=>$ranks]);
+        return $this->render('register', ['message'=>$message,'ranks'=>$ranks]);
     }
 }
