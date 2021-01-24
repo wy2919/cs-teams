@@ -36,11 +36,15 @@ class UserController extends AppController
         $userId = $_POST['userId'];
         $this->validateAuthorizationToModifyUser($userId);
 
-        return $this->render('edit-profile', [
-            'message' => $this->message,
-            'ranks' => $this->rankRepository->getRanks(),
-            'user' => $this->userRepository->getUserDtoById($userId)
-        ]);
+        try {
+            return $this->render('edit-profile', [
+                'message' => $this->message,
+                'ranks' => $this->rankRepository->getRanks(),
+                'user' => $this->userRepository->getUserDtoById($userId)
+            ]);
+        } catch (UnexpectedValueException $e){
+            $this->handleException($e);
+        }
     }
 
     public function editDetails()
@@ -53,7 +57,11 @@ class UserController extends AppController
             $this->message = $isSuccessful ? 'Rank Changed successfully.' : 'Could not change rank.';
         }
         else if(isset($_POST['description'])){
-            $userDetailsId = $this->userRepository->getUserDetailsId($userId);
+            try {
+                $userDetailsId = $this->userRepository->getUserDetailsId($userId);
+            } catch (UnexpectedValueException $e){
+                $this->handleException($e);
+            }
             $isSuccessful = $this->userRepository->setUserDescription($userDetailsId, $_POST['description']);
             $this->message = $isSuccessful ? 'Description Changed successfully.' : 'Could not change description.';
         }
@@ -104,7 +112,7 @@ class UserController extends AppController
             if($rank < 0) {
                echo json_encode($this->userRepository->eloFilteredUsersDtoExceptUser($currentUserId, $elo));
             } else {
-                echo json_encode($this->userRepository->eloRankFilteredUsersDtoExceptUser($currentUserId, $elo, $rank));
+                echo json_encode($this->userRepository->eloAndRankFilteredUsersDtoExceptUser($currentUserId, $elo, $rank));
             }
         }
     }
@@ -112,8 +120,11 @@ class UserController extends AppController
     public function myDetails()
     {
         $userId = RouteGuard::getAuthenticatedUserId();
-        return $this->render('my-profile', ['user' => $this->userRepository->getUserDtoById($userId)]);
-
+        try {
+            return $this->render('my-profile', ['user' => $this->userRepository->getUserDtoById($userId)]);
+        } catch (UnexpectedValueException $e){
+            $this->handleException($e);
+        }
     }
 
     public function conversation()
@@ -133,7 +144,7 @@ class UserController extends AppController
         } else {
             // creates conversation/return id of existing one if there is
             try {
-                $conversationId = $this->conversationRepository->createConversation($currentUserId, $_POST['userId']);
+                $conversationId = $this->conversationRepository->getOrCreateConversation($currentUserId, $_POST['userId']);
             } catch (UnexpectedValueException $e) {
                 return $this->handleException($e);
             }
@@ -147,10 +158,16 @@ class UserController extends AppController
             $messages = $selected ? $this->conversationRepository->getConversationMessages($conversationId) : null;
         }
 
-        return $this->render('conversation', ['user' => $this->userRepository->getUserDtoById($currentUserId),
-            'conversations' => $conversations,
-            'selected' => $selected,
-            'messages' => $messages]);
+        try {
+            return $this->render('conversation', [
+                'user' => $this->userRepository->getUserDtoById($currentUserId),
+                'conversations' => $conversations,
+                'selected' => $selected,
+                'messages' => $messages]);
+        } catch (UnexpectedValueException $e){
+            $this->handleException($e);
+        }
+
     }
 
     public function message()
@@ -174,24 +191,25 @@ class UserController extends AppController
 
     public function profile($username)
     {
-        $user = $this->userRepository->getUserDtoByUsername($username);
-        if(!$this->validateModelExists($user, 'There is no user with such username')){
-            return null;
+        try {
+            return $this->render('user-details', [
+                'user' => $this->userRepository->getUserDtoByUsername($username),
+                'message' => $this->message,
+                'isAdmin' => RouteGuard::hasAdminRole()
+            ]);
+        } catch (UnexpectedValueException $e){
+            $this->handleException($e);
         }
-
-        return $this->render('user-details', [
-            'user' => $user,
-            'message' => $this->message,
-            'isAdmin' => RouteGuard::hasAdminRole()
-        ]);
     }
 
     public function rateUser()
     {
         $currentUserId = RouteGuard::getAuthenticatedUserId();
-        $userToBeRated = $this->userRepository->getUserByUsername($_POST['username']);
-        if(!$this->validateModelExists($userToBeRated, 'There is no user with such username')){
-            return null;
+
+        try {
+            $userToBeRated = $this->userRepository->getUserDtoByUsername($_POST['username']);
+        } catch (UnexpectedValueException $e){
+            $this->handleException($e);
         }
 
         $wasNotAlreadyRated = $this->ratingRepository->attemptToCreateRating(new Rating(

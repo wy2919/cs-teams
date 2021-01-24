@@ -71,7 +71,7 @@ class ConversationRepository extends Repository
         return $assocArr;
     }
 
-    public function createConversation($idUser1, $idUser2): int {
+    public function getOrCreateConversation($idUser1, $idUser2): int {
 
         $conversationId = $this->getConversationId($idUser1, $idUser2);
 

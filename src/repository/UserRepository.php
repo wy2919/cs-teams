@@ -23,9 +23,13 @@ class UserRepository extends Repository
                     ON ud.id = u.id_user_details
             WHERE u.id = :id
         ');
-
         $statement->execute([$userId]);
-        return $statement->fetch(PDO::FETCH_ASSOC)['id'];
+
+        $userDetailsId = $statement->fetch(PDO::FETCH_ASSOC)['id'];
+        if(!$userDetailsId) {
+            throw new UnexpectedValueException('UserDetails not found.');
+        }
+        return $userDetailsId;
     }
 
     public function getUserDtoById(int $id): ?UserDto
@@ -36,9 +40,13 @@ class UserRepository extends Repository
             WHERE id = :id
         ');
         $statement->execute([$id]);
-        $record = $statement->fetch(PDO::FETCH_ASSOC);
 
-        return $this->userMapper->mapAssocToDto($record);
+        $userDtoAssoc = $statement->fetch(PDO::FETCH_ASSOC);
+        if(!$userDtoAssoc) {
+            throw new UnexpectedValueException('User not found.');
+        }
+
+        return $this->userMapper->mapAssocToDto($userDtoAssoc);
     }
 
     public function getUserDtoByUsername(string $username): ?UserDto
@@ -49,9 +57,13 @@ class UserRepository extends Repository
             WHERE username = :username
         ');
         $statement->execute([$username]);
-        $record = $statement->fetch(PDO::FETCH_ASSOC);
 
-        return $this->userMapper->mapAssocToDto($record);
+        $userDtoAssoc = $statement->fetch(PDO::FETCH_ASSOC);
+        if(!$userDtoAssoc) {
+            throw new UnexpectedValueException('User not found.');
+        }
+
+        return $this->userMapper->mapAssocToDto($userDtoAssoc);
     }
 
     public function getUsersDtoExceptUser(int $id)
@@ -62,14 +74,13 @@ class UserRepository extends Repository
             WHERE id != :id
         ');
         $statement->execute([$id]);
-        $records = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $userDtoAssoc = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        return $this->userMapper->mapMultipleAssocToDto($records);
+        return $this->userMapper->mapMultipleAssocToDto($userDtoAssoc);
     }
 
-    public function eloRankFilteredUsersDtoExceptUser(int $userId, float $elo, int $rankId)
+    public function eloAndRankFilteredUsersDtoExceptUser(int $userId, float $elo, int $rankId)
     {
-
         $statement = $this->database->connect()->prepare('
             SELECT
                 u.id, u.email, u.username, u.image, u.description, r.rank, u.elo
@@ -87,7 +98,6 @@ class UserRepository extends Repository
 
     public function eloFilteredUsersDtoExceptUser(int $userId, float $elo)
     {
-
         $statement = $this->database->connect()->prepare('
             SELECT
                 u.id, u.email, u.username, u.image, u.description, r.rank, u.elo
@@ -112,9 +122,9 @@ class UserRepository extends Repository
         ');
         $statement->execute([$userId]);
 
-        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        $userAssoc = $statement->fetch(PDO::FETCH_ASSOC);
 
-        return $this->userMapper->mapAssocArrayToUser($user);
+        return $this->userMapper->mapAssocArrayToUser($userAssoc);
     }
 
     public function getUserByEmail(string $email): ?User
@@ -138,7 +148,6 @@ class UserRepository extends Repository
             FROM public.users 
             WHERE username = :username
         ');
-
         $statement->bindParam(':username', $username, PDO::PARAM_STR);
         $statement->execute();
 
@@ -147,14 +156,13 @@ class UserRepository extends Repository
         return $this->userMapper->mapAssocArrayToUser($record);
     }
 
-    public function addUser(User $user): void
+    public function createUser(User $user): void
     {
         $statement = $this->database->connect()->prepare('
             INSERT INTO public.users 
                 (email, password, username, id_rank, id_user_details) 
                 VALUES(?, ?, ?, ?, ?)
         ');
-
         $statement->execute([
             $user->getEmail(),
             $user->getPassword(),
@@ -166,7 +174,6 @@ class UserRepository extends Repository
 
     public function addUserDetails(): int
     {
-
         $statement = $this->database->connect()->prepare('
             INSERT INTO 
                 public.users_details(description) 
@@ -230,8 +237,8 @@ class UserRepository extends Repository
             LEFT JOIN users u on ur.id_user_details = u.id_user_details
             WHERE u.id = :id
         ');
-
         $statement->execute([(int)$id]);
+
         return $statement->fetchAll(PDO::FETCH_COLUMN, 0);
     }
 }

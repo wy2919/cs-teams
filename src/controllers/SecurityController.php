@@ -73,7 +73,7 @@ class SecurityController extends AppController
         $rank = $_POST['rank'];
 
         $this->validateUserNotExists($email, $username);
-        $this->userRepository->addUser(
+        $this->userRepository->createUser(
             new User(
                 null,
                 $email,
@@ -109,10 +109,14 @@ class SecurityController extends AppController
                 $userId, password_hash($_POST['newPassword'], PASSWORD_DEFAULT));
             $message = $isSuccessful ? 'Password Changed successfully.' : 'Could not change password.';
         }
-        return $this->render('edit-profile', [
-            'message' => $message,
-            'ranks' => $this->rankRepository->getRanks(),
-            'user' => $this->userRepository->getUserDtoById($userId)]);
+        try {
+            return $this->render('edit-profile', [
+                'message' => $message,
+                'ranks' => $this->rankRepository->getRanks(),
+                'user' => $this->userRepository->getUserDtoById($userId)]);
+        } catch (UnexpectedValueException $e){
+            $this->handleException($e);
+        }
     }
 
     private function validateUserNotExists($email, $username) {

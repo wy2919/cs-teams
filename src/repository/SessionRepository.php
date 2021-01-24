@@ -41,21 +41,32 @@ class SessionRepository extends Repository
                 SET 
                     token = :token,
                     expiration = :expiration
-            WHERE id_user = :id_user
-        ');
-        } else {
+            WHERE id_user = :id_user ');
+        }
+        else {
             $statement = $this->database->connect()->prepare('
             INSERT INTO public.sessions
                 (id_user, token, expiration)
-                VALUES (:id_user, :token, :expiration)
-                ');
+                VALUES (:id_user, :token, :expiration)');
         }
+
         $expiration = date("Y-m-d H:i:s", $expiration);
         $statement->bindParam(':id_user', $userId, PDO::PARAM_INT);
         $statement->bindParam(':token', $token, PDO::PARAM_STR);
         $statement->bindParam(':expiration', $expiration);
 
         return $statement->execute();
+    }
+
+    public function deleteToken($token)
+    {
+        $statement = $this->database->connect()->prepare('
+            DELETE
+            FROM public.sessions 
+            WHERE token = :token;
+        ');
+        $statement->bindParam(':token', $token, PDO::PARAM_STR);
+        $statement->execute();
     }
 
     private function isSessionCreated($userId)
@@ -69,16 +80,5 @@ class SessionRepository extends Repository
         $statement->execute([$userId]);
         $rows = $statement->fetchAll();
         return count($rows) !== 0;
-    }
-
-    public function deleteToken($token)
-    {
-        $statement = $this->database->connect()->prepare('
-            DELETE
-            FROM public.sessions 
-            WHERE token = :token;
-        ');
-        $statement->bindParam(':token', $token, PDO::PARAM_STR);
-        $statement->execute();
     }
 }
