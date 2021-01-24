@@ -33,6 +33,17 @@ class SessionRepository extends Repository
         return $statement->fetch()['id_user'];
     }
 
+    public function deleteToken($token)
+    {
+        $statement = $this->database->connect()->prepare('
+            DELETE
+            FROM public.sessions 
+            WHERE token = :token;
+        ');
+        $statement->bindParam(':token', $token, PDO::PARAM_STR);
+        $statement->execute();
+    }
+
     public function createSession($userId, $token, $expiration)
     {
         if( $this->isSessionCreated($userId)) {
@@ -56,17 +67,6 @@ class SessionRepository extends Repository
         $statement->bindParam(':expiration', $expiration);
 
         return $statement->execute();
-    }
-
-    public function deleteToken($token)
-    {
-        $statement = $this->database->connect()->prepare('
-            DELETE
-            FROM public.sessions 
-            WHERE token = :token;
-        ');
-        $statement->bindParam(':token', $token, PDO::PARAM_STR);
-        $statement->execute();
     }
 
     private function isSessionCreated($userId)

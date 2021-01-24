@@ -102,7 +102,7 @@ class SecurityController extends AppController
             $message = 'new Password and confirmation does not match!';
         }
         else if(!password_verify($_POST['password'], $this->userRepository->getUserById($userId)->getPassword())) {
-                $message = 'wrong password!';
+            $message = 'wrong password!';
         }
         else {
             $isSuccessful = $this->userRepository->setUserPassword(

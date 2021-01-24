@@ -35,6 +35,19 @@ class AppController {
     }
 
     protected function handleException($exception) {
-        return $this->render('error', ['message'=>$exception->getMessage()]);
+        return $this->render('error', ['message' => $exception->getMessage()]);
+    }
+
+    protected function decodeJsonRequest() {
+        $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
+        if ($contentType === "application/json") {
+            $content = trim(file_get_contents("php://input"));
+            $decoded = json_decode($content, true);
+            header('Content-type: application/json');
+            http_response_code(200);
+            return $decoded;
+        }
+        $this->render('error', ['message' => 'Request not supported.']);
+        return false;
     }
 }

@@ -25,19 +25,15 @@ class ConversationController extends AppController
 
     public function message()
     {
-        $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
-        if ($contentType === "application/json") {
-            $content = trim(file_get_contents("php://input"));
-            $decoded = json_decode($content, true);
-            $message = $decoded['message'];
-            $conversationId = $decoded['conversationId'];
-
-            header('Content-type: application/json');
-            http_response_code(200);
-
-            $this->conversationRepository->newMessage($conversationId, $this->currentUserId, $message);
-            echo json_encode($this->conversationRepository->getConversationMessagesAssoc($conversationId));
+        $decoded = $this->decodeJsonRequest();
+        if(!$decoded) {
+            return null;
         }
+        $message = $decoded['message'];
+        $conversationId = $decoded['conversationId'];
+        $this->conversationRepository->newMessage($conversationId, $this->currentUserId, $message);
+
+        echo json_encode($this->conversationRepository->getConversationMessagesAssoc($conversationId));
     }
 
     public function conversation()

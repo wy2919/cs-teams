@@ -71,26 +71,30 @@ class ConversationRepository extends Repository
         return $assocArr;
     }
 
-    public function getOrCreateConversation($idUser1, $idUser2): int {
-
+    public function getOrCreateConversation($idUser1, $idUser2): int
+    {
         $conversationId = $this->getConversationId($idUser1, $idUser2);
 
         if($conversationId == null) {
             $conversationId = $this->insertConversation($idUser1, $idUser2);
         }
+
         return $conversationId;
     }
 
-    public function newMessage($conversationId, $sendingUserId, $message): bool {
+    public function newMessage($conversationId, $sendingUserId, $message): bool
+    {
         $statement = $this->database->connect()->prepare('
             INSERT INTO public.messages
                 (id_conversation, id_sender, message) 
                 VALUES(?, ?, ?)
         ');
+
         return $statement->execute([$conversationId, $sendingUserId, $message]);
     }
 
-    private function insertConversation($idUser1, $idUser2) {
+    private function insertConversation($idUser1, $idUser2)
+    {
         $statement = $this->database->connect()->prepare('
                 INSERT INTO public.conversations
                     (id_user_1, id_user_2) 
@@ -107,7 +111,8 @@ class ConversationRepository extends Repository
         return $conversationId;
     }
 
-    private function getConversationId($idUser1, $idUser2) {
+    private function getConversationId($idUser1, $idUser2)
+    {
         $statement = $this->database->connect()->prepare('
             SELECT c.id
             FROM public.conversations c
@@ -118,6 +123,7 @@ class ConversationRepository extends Repository
             WHERE c.id_user_1 = :id_2 AND c.id_user_2 = :id_1
         ');
         $statement->execute([$idUser1, $idUser2]);
+
         return $statement->fetch(PDO::FETCH_ASSOC)['id'];
     }
 }
