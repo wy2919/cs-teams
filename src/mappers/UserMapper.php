@@ -25,7 +25,7 @@ class UserMapper
     public function mapMultipleAssocToDto($records)
     {
         if ($records == false) {
-            return null;
+            return [];
         }
 
         $users = array();
@@ -38,7 +38,7 @@ class UserMapper
     public function mapAssocArrayToUser($record)
     {
         if ($record == false) {
-            return null;
+            return [];
         }
 
         return new User(

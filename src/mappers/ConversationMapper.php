@@ -20,7 +20,7 @@ class ConversationMapper
     public function mapMultipleAssocToConversation($records)
     {
         if ($records == false) {
-            return null;
+            return [];
         }
 
         $conversations = array();

@@ -16,6 +16,7 @@ class UserController extends AppController
     const SUPPORTED_TYPES = ['image/png', 'image/jpeg'];
     const UPLOAD_DIRECTORY = '/../public/uploads/';
 
+    private int $currentUserId;
     private string $message = '';
     private UserRepository $userRepository;
     private ConversationRepository $conversationRepository;
@@ -29,60 +30,50 @@ class UserController extends AppController
         $this->conversationRepository = new ConversationRepository();
         $this->rankRepository = new RankRepository();
         $this->ratingRepository = new RatingRepository();
+        $this->currentUserId = RouteGuard::getAuthenticatedUserId();
     }
 
     public function editProfile()
     {
         $userId = $_POST['userId'];
+        $rankId = $_POST['rankId'];
+        $description = $_POST['description'];
         $this->validateAuthorizationToModifyUser($userId);
 
+        if(isset($rankId)){
+            $this->setRank($userId, $rankId);
+        }
+        else if(isset($description)){
+            $this->setDescription($userId, $description);
+        }
+        else if(isset($_FILES['file'])) {
+            $this->setAvatar();
+        }
+        return $this->loadEditProfile($userId);
+    }
+
+    public function myDetails()
+    {
         try {
-            return $this->render('edit-profile', [
-                'message' => $this->message,
-                'ranks' => $this->rankRepository->getRanks(),
-                'user' => $this->userRepository->getUserDtoById($userId)
+            return $this->render('my-profile', [
+                'user' => $this->userRepository->getUserDtoById($this->currentUserId)
             ]);
         } catch (UnexpectedValueException $e){
-            $this->handleException($e);
+            return $this->handleException($e);
         }
     }
 
-    public function editDetails()
+    public function profile($username)
     {
-        $userId = $_POST['userId'];
-        $this->validateAuthorizationToModifyUser($userId);
-
-        if(isset($_POST['rank'])){
-            $isSuccessful = $this->userRepository->setUserRank($userId, $_POST['rank']);
-            $this->message = $isSuccessful ? 'Rank Changed successfully.' : 'Could not change rank.';
+        try {
+            return $this->render('user-details', [
+                'user' => $this->userRepository->getUserDtoByUsername($username),
+                'message' => $this->message,
+                'isAdmin' => RouteGuard::hasAdminRole()
+            ]);
+        } catch (UnexpectedValueException $e){
+            return $this->handleException($e);
         }
-        else if(isset($_POST['description'])){
-            try {
-                $userDetailsId = $this->userRepository->getUserDetailsId($userId);
-            } catch (UnexpectedValueException $e){
-                $this->handleException($e);
-            }
-            $isSuccessful = $this->userRepository->setUserDescription($userDetailsId, $_POST['description']);
-            $this->message = $isSuccessful ? 'Description Changed successfully.' : 'Could not change description.';
-        }
-        return $this->editProfile();
-    }
-
-    public function editAvatar()
-    {
-        $userId = $_POST['userId'];
-        $this->validateAuthorizationToModifyUser($userId);
-
-        if ($this->isPost() && is_uploaded_file($_FILES['file']['tmp_name']) && $this->validateAvatar($_FILES['file'])) {          // 'file' to nazwa name="" ustawiona w html, a tmp_name to tak już jest..
-
-            move_uploaded_file(
-                $_FILES['file']['tmp_name'],
-                dirname(__DIR__) . self::UPLOAD_DIRECTORY . $_FILES['file']['name']
-            );
-            $isSuccessful = $this->userRepository->setUserImage($userId, $_FILES['file']['name']);
-            $this->message = $isSuccessful ? 'Image Changed successfully.' : 'Could not change Image.';
-        }
-        return $this->editProfile();
     }
 
     public function users()
@@ -113,34 +104,12 @@ class UserController extends AppController
         }
     }
 
-    public function myDetails()
-    {
-        try {
-            return $this->render('my-profile', ['user' => $this->userRepository->getUserDtoById($this->currentUserId)]);
-        } catch (UnexpectedValueException $e){
-            $this->handleException($e);
-        }
-    }
-
-    public function profile($username)
-    {
-        try {
-            return $this->render('user-details', [
-                'user' => $this->userRepository->getUserDtoByUsername($username),
-                'message' => $this->message,
-                'isAdmin' => RouteGuard::hasAdminRole()
-            ]);
-        } catch (UnexpectedValueException $e){
-            $this->handleException($e);
-        }
-    }
-
     public function rateUser()
     {
         try {
             $userToBeRated = $this->userRepository->getUserDtoByUsername($_POST['username']);
         } catch (UnexpectedValueException $e){
-            $this->handleException($e);
+            return $this->handleException($e);
         }
 
         $wasNotAlreadyRated = $this->ratingRepository->attemptToCreateRating(new Rating(
@@ -152,7 +121,38 @@ class UserController extends AppController
             $_POST['communication']
         ));
         $this->message = $wasNotAlreadyRated ? 'You successfully rated player.' : 'You already rated this player!';
+
         return $this->profile($userToBeRated->getUsername());
+    }
+
+    private function setRank($userId, $rankId) {
+        $isSuccessful = $this->userRepository->setUserRank($userId, $rankId);
+        $this->message = $isSuccessful ? 'Rank Changed successfully.' : 'Could not change rank.';
+    }
+
+    private function setDescription($userId, $description) {
+        try {
+            $userDetailsId = $this->userRepository->getUserDetailsId($userId);
+        } catch (UnexpectedValueException $e){
+            return $this->handleException($e);
+        }
+        $isSuccessful = $this->userRepository->setUserDescription($userDetailsId, $description);
+        $this->message = $isSuccessful ? 'Description Changed successfully.' : 'Could not change description.';
+    }
+
+    private function setAvatar()
+    {
+        $userId = $_POST['userId'];
+
+        if ($this->isPost() && is_uploaded_file($_FILES['file']['tmp_name']) && $this->validateAvatar($_FILES['file'])) {          // 'file' to nazwa name="" ustawiona w html, a tmp_name to tak już jest..
+
+            move_uploaded_file(
+                $_FILES['file']['tmp_name'],
+                dirname(__DIR__) . self::UPLOAD_DIRECTORY . $_FILES['file']['name']
+            );
+            $isSuccessful = $this->userRepository->setUserImage($userId, $_FILES['file']['name']);
+            $this->message = $isSuccessful ? 'Image Changed successfully.' : 'Could not change Image.';
+        }
     }
 
     private function validateAvatar(array $file): bool
@@ -167,6 +167,18 @@ class UserController extends AppController
             return false;
         }
         return true;
+    }
+
+    private function loadEditProfile($userId) {
+        try {
+            return $this->render('edit-profile', [
+                'message' => $this->message,
+                'ranks' => $this->rankRepository->getRanks(),
+                'user' => $this->userRepository->getUserDtoById($userId)
+            ]);
+        } catch (UnexpectedValueException $e){
+            return $this->handleException($e);
+        }
     }
 
     private function validateAuthorizationToModifyUser($userId){

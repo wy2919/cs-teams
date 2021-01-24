@@ -13,12 +13,14 @@ class ConversationController extends AppController
 
     private UserRepository $userRepository;
     private ConversationRepository $conversationRepository;
+    private int $currentUserId;
 
     public function __construct()
     {
         parent::__construct();
         $this->userRepository = new UserRepository();
         $this->conversationRepository = new ConversationRepository();
+        $this->currentUserId = RouteGuard::getAuthenticatedUserId();
     }
 
     public function message()
@@ -62,7 +64,7 @@ class ConversationController extends AppController
                 'messages' => $messages
             ]);
         } catch (UnexpectedValueException $e){
-            $this->handleException($e);
+            return $this->handleException($e);
         }
     }
 

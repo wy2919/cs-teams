@@ -91,7 +91,7 @@ class SecurityController extends AppController
     public function editPassword()
     {
         $userId = $_POST['userId'];
-        if($userId !== $this->currentUserId && !RouteGuard::hasAdminRole()){
+        if($userId !== RouteGuard::getAuthenticatedUserId() && !RouteGuard::hasAdminRole()){
             return $this->render('login');
         }
 
@@ -115,7 +115,7 @@ class SecurityController extends AppController
                 'ranks' => $this->rankRepository->getRanks(),
                 'user' => $this->userRepository->getUserDtoById($userId)]);
         } catch (UnexpectedValueException $e){
-            $this->handleException($e);
+            return $this->handleException($e);
         }
     }
 

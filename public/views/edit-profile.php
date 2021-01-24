@@ -25,7 +25,7 @@
                 <p class="panel-title title">Avatar</p>
                 <img class="user-avatar" src="public/uploads/<?= $user->getImage()?>" alt="user avatar">
             </div>
-            <form class="avatar-form" action="editAvatar" method="POST" enctype="multipart/form-data">
+            <form class="avatar-form" action="editProfile" method="POST" enctype="multipart/form-data">
                 <input class="avatar-input" type="file" name="file">
                 <input type="hidden" name="userId" value="<?= $user->getId()?>">
                 <button class="btn button" type="submit">Change</button>
@@ -37,8 +37,8 @@
         <div class="edit-container column-flex">
             <p class="panel-title">Rank</p>
 
-            <form class="between-form" action="editDetails" method="POST">
-                <select class="rank-select" name="rank">
+            <form class="between-form" action="editProfile" method="POST">
+                <select class="rank-select" name="rankId">
                     <?php foreach ($ranks as $rank) { ?>
                         <option value="<?php echo $rank->getId() ?>" <?php if($rank->getRank() == $user->getRank()) echo"selected"?>><?php echo $rank->getRank() ?></option>
                     <?php } ?>
@@ -53,7 +53,7 @@
             <div class="edit-container column-flex">
                 <p class="panel-title">Description</p>
 
-                <form class="between-form" action="editDetails" method="POST">
+                <form class="between-form" action="editProfile" method="POST">
                     <textarea name="description" class="description-input" maxlength="150"><?= $user->getDescription()?></textarea>
                     <input type="hidden" name="userId" value="<?= $user->getId()?>">
                     <button class="btn button" type="submit">Change</button>

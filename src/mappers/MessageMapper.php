@@ -18,7 +18,7 @@ class MessageMapper
     public function mapMultipleAssocToMessage($records)
     {
         if ($records == false) {
-            return null;
+            return [];
         }
 
         $messages = array();

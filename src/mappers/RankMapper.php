@@ -18,7 +18,7 @@ class RankMapper
     public function mapMultipleAssocToRank($records)
     {
         if ($records == false) {
-            return null;
+            return [];
         }
 
         $ranks = array();
