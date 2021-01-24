@@ -31,4 +31,12 @@ class AppController {
 
         print $output;
     }
+
+    protected function validateModelExists($model, $onErrorMessage) : bool{
+        if(!isset($model)) {
+            $this->render('error', ['message'=>$onErrorMessage]);
+            return false;
+        }
+        return true;
+    }
 }

@@ -1,0 +1,22 @@
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.error-title {
+    font-size: 1.5em;
+}
+
+.error-message {
+    font-size: 1.2em;
+    margin: .2em;
+}
+
+.error-message:last-child {
+    font-size: 1.1em;
+}
+
+.error-title, .error-message {
+    text-align: center;
+}

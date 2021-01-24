@@ -39,7 +39,8 @@ class UserController extends AppController
         return $this->render('edit-profile', [
             'message' => $this->message,
             'ranks' => $this->rankRepository->getRanks(),
-            'user' => $this->userRepository->getUserDtoById($userId)]);
+            'user' => $this->userRepository->getUserDtoById($userId)
+        ]);
     }
 
     public function editDetails()
@@ -79,8 +80,11 @@ class UserController extends AppController
     public function users()
     {
         $userId = RouteGuard::getAuthenticatedUserId();
-        return $this->render('user-list', ['ranks' => $this->rankRepository->getRanks(),
-            'users' => $this->userRepository->getUsersDtoExceptUser($userId)]);
+
+        return $this->render('user-list', [
+            'ranks' => $this->rankRepository->getRanks(),
+            'users' => $this->userRepository->getUsersDtoExceptUser($userId)
+        ]);
     }
 
     public function filter()
@@ -167,9 +171,12 @@ class UserController extends AppController
     public function profile($username)
     {
         $user = $this->userRepository->getUserDtoByUsername($username);
+        if(!$this->validateModelExists($user, 'There is no user with such username')){
+            return null;
+        }
 
         return $this->render('user-details', [
-            'user' => $this->userRepository->getUserDtoById($user->getId()),
+            'user' => $user,
             'message' => $this->message,
             'isAdmin' => RouteGuard::hasAdminRole()
         ]);
@@ -179,6 +186,9 @@ class UserController extends AppController
     {
         $currentUserId = RouteGuard::getAuthenticatedUserId();
         $userToBeRated = $this->userRepository->getUserByUsername($_POST['username']);
+        if(!$this->validateModelExists($userToBeRated, 'There is no user with such username')){
+            return null;
+        }
 
         $wasNotAlreadyRated = $this->ratingRepository->addRating(new Rating(
             null,
@@ -212,4 +222,5 @@ class UserController extends AppController
             header("Location: {$url}/login");
         }
     }
+
 }
