@@ -127,68 +127,6 @@ class UserController extends AppController
         }
     }
 
-    public function conversation()
-    {
-        $currentUserId = RouteGuard::getAuthenticatedUserId();
-
-        $selected = null;
-        $messages = null;
-
-        // just display conversation (no specific user-chat selected)
-        if (!$_POST['userId']) {
-            $conversations = $this->conversationRepository->getUserConversations($currentUserId);
-            if (count($conversations) > 0) {
-                $selected = $conversations[0];
-                $messages = $this->conversationRepository->getConversationMessages($selected->getId());
-            }
-        } else {
-            // creates conversation/return id of existing one if there is
-            try {
-                $conversationId = $this->conversationRepository->getOrCreateConversation($currentUserId, $_POST['userId']);
-            } catch (UnexpectedValueException $e) {
-                return $this->handleException($e);
-            }
-            $conversations = $this->conversationRepository->getUserConversations($currentUserId);
-
-            $filtered = array_filter($conversations, function ($conv) use ($conversationId) {
-                return $conv->getId() === $conversationId;
-            });
-
-            $selected = reset($filtered);
-            $messages = $selected ? $this->conversationRepository->getConversationMessages($conversationId) : null;
-        }
-
-        try {
-            return $this->render('conversation', [
-                'user' => $this->userRepository->getUserDtoById($currentUserId),
-                'conversations' => $conversations,
-                'selected' => $selected,
-                'messages' => $messages]);
-        } catch (UnexpectedValueException $e){
-            $this->handleException($e);
-        }
-
-    }
-
-    public function message()
-    {
-        $userId = RouteGuard::getAuthenticatedUserId();
-
-        $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
-        if ($contentType === "application/json") {
-            $content = trim(file_get_contents("php://input"));
-            $decoded = json_decode($content, true);
-            $message = $decoded['message'];
-            $conversationId = $decoded['conversationId'];
-
-            header('Content-type: application/json');
-            http_response_code(200);
-
-            $this->conversationRepository->newMessage($conversationId, $userId, $message);
-            echo json_encode($this->conversationRepository->getConversationMessagesAssoc($conversationId));
-        }
-    }
-
     public function profile($username)
     {
         try {
