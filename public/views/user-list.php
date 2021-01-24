@@ -45,7 +45,7 @@
 <!--                        TODO: ROUTE-GUARD: getIdByUsername.. wszedzie?-->
                 <div class="user">
 
-                    <a class="link" href="/profile/<?= $user->getId() ?>">
+                    <a class="link" href="/profile/<?= $user->getUsername() ?>">
                         <img src="public/uploads/<?php echo $user->getImage() ?>" alt="user avatar">
                         <div class="user-details">
                             <p id="username"><?php echo $user->getUsername() ?></p>
@@ -58,7 +58,7 @@
                             <input type="hidden" name="userId" value="<?= $user->getId() ?>">
                             <button class="btn user-btn">Message</button>
                         </form>
-                        <form action="profile/<?= $user->getId() ?>" method="post">
+                        <form action="profile/<?= $user->getUsername() ?>" method="post">
                             <button class="btn user-btn">Profile</button>
                         </form>
                     </div>

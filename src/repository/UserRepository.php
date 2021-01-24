@@ -41,6 +41,19 @@ class UserRepository extends Repository
         return $this->userMapper->mapAssocToDto($record);
     }
 
+    public function getUserDtoByUsername(string $username): ?UserDto
+    {
+        $statement = $this->database->connect()->prepare('
+            SELECT * 
+            FROM public.user_dto 
+            WHERE username = :username
+        ');
+        $statement->execute([$username]);
+        $record = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $this->userMapper->mapAssocToDto($record);
+    }
+
     public function getUsersDtoExceptUser(int $id)
     {
         $statement = $this->database->connect()->prepare('

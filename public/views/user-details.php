@@ -35,7 +35,7 @@
                 </div>
                 </div>
                 <form action="/rateUser" method="post">
-                    <input type="hidden" name="userId" value="<?= $user->getId()?>">
+                    <input type="hidden" name="username" value="<?= $user->getUsername()?>">
                 <div class="rate-user">
                     <div class="rate">
                         <p>Skills:</p>

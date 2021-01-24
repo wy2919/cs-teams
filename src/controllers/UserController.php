@@ -164,10 +164,12 @@ class UserController extends AppController
         }
     }
 
-    public function profile($id)
+    public function profile($username)
     {
+        $user = $this->userRepository->getUserDtoByUsername($username);
+
         return $this->render('user-details', [
-            'user' => $this->userRepository->getUserDtoById((int) $id),
+            'user' => $this->userRepository->getUserDtoById($user->getId()),
             'message' => $this->message,
             'isAdmin' => RouteGuard::hasAdminRole()
         ]);
@@ -175,18 +177,19 @@ class UserController extends AppController
 
     public function rateUser()
     {
-        $userId = RouteGuard::getAuthenticatedUserId();
+        $currentUserId = RouteGuard::getAuthenticatedUserId();
+        $userToBeRated = $this->userRepository->getUserByUsername($_POST['username']);
 
         $wasNotAlreadyRated = $this->ratingRepository->addRating(new Rating(
             null,
-            $_POST['userId'],
-            $userId,
+            $userToBeRated->getId(),
+            $currentUserId,
             $_POST['skills'],
             $_POST['friendliness'],
             $_POST['communication']
         ));
         $this->message = $wasNotAlreadyRated ? 'You successfully rated player.' : 'You already rated this player!';
-        return $this->profile($_POST['userId']);
+        return $this->profile($userToBeRated->getUsername());
     }
 
     private function validateAvatar(array $file): bool
