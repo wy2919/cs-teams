@@ -14,19 +14,6 @@ class RankRepository extends Repository
         $this->rankMapper = new RankMapper();
     }
 
-    public function getRank(int $id): ?Rank
-    {
-        $statement = $this->database->connect()->prepare('
-            SELECT * 
-            FROM public.ranks 
-            WHERE id = :id;
-        ');
-        $statement->execute([$id]);
-        $record = $statement->fetch(PDO::FETCH_ASSOC);    // association array
-
-        return $this->rankMapper->mapAssocToRank($record);
-    }
-
     public function getRanks()
     {
         $statement = $this->database->connect()->prepare('

@@ -30,6 +30,7 @@ class AppController {
         }
 
         print $output;
+        return null;
     }
 
     protected function validateModelExists($model, $onErrorMessage) : bool{
@@ -38,5 +39,10 @@ class AppController {
             return false;
         }
         return true;
+    }
+
+
+    protected function handleException($message) {
+        return $this->render('error', ['message'=>$message]);
     }
 }

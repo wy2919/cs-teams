@@ -39,7 +39,7 @@ class ConversationRepository extends Repository
             WHERE c.id_user_2 = :id;
         ');
         $statement->execute([$id]);
-        $records = $statement->fetchAll(PDO::FETCH_ASSOC);    // association array
+        $records = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $this->conversationMapper->mapMultipleAssocToConversation($records);
     }
@@ -60,16 +60,7 @@ class ConversationRepository extends Repository
 
     public function getConversationMessagesAssoc($conversationId)
     {
-        $statement = $this->database->connect()->prepare('
-            SELECT id_sender, message 
-            FROM public.messages 
-            WHERE id_conversation = :id
-            ORDER BY created_at;
-        ');
-        $statement->execute([$conversationId]);
-        $records = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        $messages =  $this->messageMapper->mapMultipleAssocToMessage($records);
+        $messages =  $this->getConversationMessages($conversationId);
 
         $assocArr = array();
         foreach ($messages as $message){
@@ -80,29 +71,12 @@ class ConversationRepository extends Repository
         return $assocArr;
     }
 
-    public function newConversation($user_1, $user_2): int {
-        $statement = $this->database->connect()->prepare('
-            SELECT c.id
-            FROM public.conversations c
-            WHERE c.id_user_1 = :id_1 AND c.id_user_2 = :id_2
-            UNION
-            SELECT c.id
-            FROM public.conversations c
-            WHERE c.id_user_1 = :id_2 AND c.id_user_2 = :id_1
-        ');
-        $statement->execute([$user_1, $user_2]);
-        $conversationId = $statement->fetch(PDO::FETCH_ASSOC)['id'];
+    public function createConversation($idUser1, $idUser2): int {
+
+        $conversationId = $this->getConversationId($idUser1, $idUser2);
 
         if($conversationId == null) {
-            $statement = $this->database->connect()->prepare('
-                INSERT INTO public.conversations
-                    (id_user_1, id_user_2) 
-                    VALUES (?, ?) 
-                    RETURNING id;
-            ');
-            $statement->execute([$user_1, $user_2]);
-
-            $conversationId = $statement->fetch(PDO::FETCH_ASSOC)['id'];
+            $conversationId = $this->insertConversation($idUser1, $idUser2);
         }
         return $conversationId;
     }
@@ -114,5 +88,36 @@ class ConversationRepository extends Repository
                 VALUES(?, ?, ?)
         ');
         return $statement->execute([$conversationId, $senderId, $message]);
+    }
+
+    private function insertConversation($idUser1, $idUser2) {
+        $statement = $this->database->connect()->prepare('
+                INSERT INTO public.conversations
+                    (id_user_1, id_user_2) 
+                    VALUES (?, ?) 
+                    RETURNING id;
+            ');
+        $statement->execute([$idUser1, $idUser2]);
+
+        $conversationId = $statement->fetch(PDO::FETCH_ASSOC)['id'];
+        if(!$conversationId) {
+            throw new UnexpectedValueException('Could not create conversation with specified users.');
+        }
+
+        return $conversationId;
+    }
+
+    private function getConversationId($idUser1, $idUser2) {
+        $statement = $this->database->connect()->prepare('
+            SELECT c.id
+            FROM public.conversations c
+            WHERE c.id_user_1 = :id_1 AND c.id_user_2 = :id_2
+            UNION
+            SELECT c.id
+            FROM public.conversations c
+            WHERE c.id_user_1 = :id_2 AND c.id_user_2 = :id_1
+        ');
+        $statement->execute([$idUser1, $idUser2]);
+        return $statement->fetch(PDO::FETCH_ASSOC)['id'];
     }
 }

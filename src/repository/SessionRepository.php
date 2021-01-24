@@ -51,7 +51,6 @@ class SessionRepository extends Repository
                 ');
         }
         $expiration = date("Y-m-d H:i:s", $expiration);
-
         $statement->bindParam(':id_user', $userId, PDO::PARAM_INT);
         $statement->bindParam(':token', $token, PDO::PARAM_STR);
         $statement->bindParam(':expiration', $expiration);

@@ -132,7 +132,11 @@ class UserController extends AppController
             }
         } else {
             // creates conversation/return id of existing one if there is
-            $conversationId = $this->conversationRepository->newConversation($currentUserId, $_POST['userId']);
+            try {
+                $conversationId = $this->conversationRepository->createConversation($currentUserId, $_POST['userId']);
+            } catch (UnexpectedValueException $e) {
+                return $this->handleException($e);
+            }
             $conversations = $this->conversationRepository->getUserConversations($currentUserId);
 
             $filtered = array_filter($conversations, function ($conv) use ($conversationId) {
@@ -222,5 +226,4 @@ class UserController extends AppController
             header("Location: {$url}/login");
         }
     }
-
 }
