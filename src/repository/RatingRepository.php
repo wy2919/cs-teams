@@ -30,7 +30,7 @@ class RatingRepository extends Repository
 
         return $statement->execute([
             $rating->getUserId(),
-            $rating->getUserRatingId(), // it can be read from session
+            $rating->getUserRatingId(),
             $rating->getSkills(),
             $rating->getFriendliness(),
             $rating->getCommunication()

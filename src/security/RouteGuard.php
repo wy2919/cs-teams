@@ -15,7 +15,7 @@ class RouteGuard
         if(isset($_COOKIE[self::TOKEN_NAME])){
             return $sessionRepository->isSessionValid($_COOKIE[self::TOKEN_NAME]);
         }
-        $url = "http://$_SERVER[HTTP_HOST]";    // server address
+        $url = "http://$_SERVER[HTTP_HOST]";
         header("Location: {$url}/login");
         return false;
     }
@@ -23,8 +23,8 @@ class RouteGuard
 
     public static function getAuthenticatedUserId() {
         // no need to checkAuth because it's checked in Routing.php before each routing
-            $sessionRepository = new SessionRepository();
-            return $sessionRepository->getSessionUserId($_COOKIE[self::TOKEN_NAME]);
+        $sessionRepository = new SessionRepository();
+        return $sessionRepository->getSessionUserId($_COOKIE[self::TOKEN_NAME]);
     }
 
     public static function hasAdminRole() {

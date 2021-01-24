@@ -26,7 +26,7 @@ class Database
                 $this->password,
                 ["sslmode" => "prefer"]
             );
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // more failure info
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $conn;
         } catch(PDOException $e) {
             die("Connection failed, error: ".$e);

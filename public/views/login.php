@@ -14,7 +14,6 @@
             <img src="/public/img/logo.svg" alt="logo">
         </div>
 
-<!--                               html request  /login typu post-->
         <form class="login" action="login" method="post">
             <p>Log in</p>
             <div class="message">

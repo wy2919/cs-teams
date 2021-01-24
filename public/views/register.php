@@ -12,7 +12,7 @@
         <div class="logo">
             <img src="/public/img/logo.svg" alt="logo">
         </div>
-<!---->
+
         <form class="login register" action="register" method="post">
             <p>Register</p>
             <div class="message">

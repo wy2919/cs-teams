@@ -42,7 +42,6 @@
             if($users != null){ ?>
             <section class="users">
                 <?php foreach ($users as $user) { ?>
-<!--                        TODO: ROUTE-GUARD: getIdByUsername.. wszedzie?-->
                 <div class="user">
 
                     <a class="link" href="/profile/<?= $user->getUsername() ?>">

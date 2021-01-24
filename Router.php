@@ -17,15 +17,15 @@ class Router {
 
     public static function run($url) {
         $urlParts = explode("/", $url);
-        $action = $urlParts[0]; // first split of url
+        $action = $urlParts[0];
 
         if(!array_key_exists($action, self::$routes)){
             die("Wong url!");
         }
 
-        $controller = self::$routes[$action];   // search controller by function name
-        $object = new $controller; // create new controller by name
-        $action = $action ?: 'users';   // default page
+        $controller = self::$routes[$action];
+        $object = new $controller;
+        $action = $action ?: 'users';
 
         if($action != 'login' && $action != 'register'){
             RouteGuard::checkAuthentication();

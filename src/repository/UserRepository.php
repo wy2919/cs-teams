@@ -81,7 +81,7 @@ class UserRepository extends Repository
               AND u.elo >= :elo
               ');
         $statement->execute([(int)$userId, (int)$rankId, (float)$elo]);
-        //json
+
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -100,7 +100,6 @@ class UserRepository extends Repository
 
         $statement->execute([(int)$userId, (float)$elo]);
 
-        // json
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -113,7 +112,7 @@ class UserRepository extends Repository
         ');
         $statement->execute([$userId]);
 
-        $user = $statement->fetch(PDO::FETCH_ASSOC);    // association array
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $this->userMapper->mapAssocArrayToUser($user);
     }
@@ -127,7 +126,7 @@ class UserRepository extends Repository
         ');
         $statement->execute([$email]);
 
-        $user = $statement->fetch(PDO::FETCH_ASSOC);    // association array
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $this->userMapper->mapAssocArrayToUser($user);
     }
@@ -143,7 +142,7 @@ class UserRepository extends Repository
         $statement->bindParam(':username', $username, PDO::PARAM_STR);
         $statement->execute();
 
-        $record = $statement->fetch(PDO::FETCH_ASSOC);    // association array
+        $record = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $this->userMapper->mapAssocArrayToUser($record);
     }
