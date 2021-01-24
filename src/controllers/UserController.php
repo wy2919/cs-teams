@@ -194,7 +194,7 @@ class UserController extends AppController
             return null;
         }
 
-        $wasNotAlreadyRated = $this->ratingRepository->addRating(new Rating(
+        $wasNotAlreadyRated = $this->ratingRepository->attemptToCreateRating(new Rating(
             null,
             $userToBeRated->getId(),
             $currentUserId,

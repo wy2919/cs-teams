@@ -18,7 +18,7 @@ class ConversationRepository extends Repository
         $this->messageMapper = new MessageMapper();
     }
 
-    public function getUserConversations(int $id)
+    public function getUserConversations(int $userId)
     {
         session_start();
         $statement = $this->database->connect()->prepare('
@@ -38,7 +38,7 @@ class ConversationRepository extends Repository
                  LEFT JOIN public.users u ON c.id_user_1 = u.id
             WHERE c.id_user_2 = :id;
         ');
-        $statement->execute([$id]);
+        $statement->execute([$userId]);
         $records = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $this->conversationMapper->mapMultipleAssocToConversation($records);
@@ -81,13 +81,13 @@ class ConversationRepository extends Repository
         return $conversationId;
     }
 
-    public function newMessage($conversationId, $senderId, $message): bool {
+    public function newMessage($conversationId, $sendingUserId, $message): bool {
         $statement = $this->database->connect()->prepare('
             INSERT INTO public.messages
                 (id_conversation, id_sender, message) 
                 VALUES(?, ?, ?)
         ');
-        return $statement->execute([$conversationId, $senderId, $message]);
+        return $statement->execute([$conversationId, $sendingUserId, $message]);
     }
 
     private function insertConversation($idUser1, $idUser2) {
