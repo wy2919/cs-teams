@@ -18,9 +18,7 @@
         <form class="login" action="login" method="post">
             <p>Log in</p>
             <div class="message">
-                <?php
-                if(isset($message)) echo $message;
-                ?>
+                <?php include('message.php') ?>
             </div>
             <input name="email" type="text" placeholder="email">
             <input name="password" type="password" placeholder="password" autocomplete="on">

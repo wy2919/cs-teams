@@ -17,9 +17,7 @@
         <main class="main">
 
         <p class="message">
-            <?php
-            if(isset($message)) echo $message;
-            ?>
+            <?php include('message.php') ?>
         </p>
 
         <div class="avatar-container edit-container">

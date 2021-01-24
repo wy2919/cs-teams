@@ -16,9 +16,7 @@
         <form class="login register" action="register" method="post">
             <p>Register</p>
             <div class="message">
-                <?php
-                if(isset($message)) echo $message;
-                ?>
+                <?php include('message.php') ?>
             </div>
             <input name="email" type="text" placeholder="email">
             <input name="username" type="text" placeholder="login">

@@ -16,13 +16,7 @@
     <main class="main">
         <h2 class="error-title">We have a problem here..</h2>
         <p class="error-message">
-            <?php
-                if(isset($message)) {
-                    echo $message;
-                } else {
-                    echo "unknown error.";
-                }
-             ?>
+            <?php include('message.php') ?>
         </p>
         <p class="error-message">
             For more information please contact us on: awskowalczyk@gmail.com

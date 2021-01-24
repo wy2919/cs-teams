@@ -17,7 +17,9 @@
             
             <div class="user-details">
                 <h2 class="title">User Details</h2>
-                <p class="messages"><?= $message?></p>
+                <p class="messages">
+                    <?php include('message.php') ?>
+                </p>
                 <div class="container">
 
                     <div class="user-info">
