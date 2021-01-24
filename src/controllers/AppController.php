@@ -1,12 +1,15 @@
 <?php
 
+require_once __DIR__ . '/../security/RouteGuard.php';
 class AppController {
 
+    protected int $currentUserId;
     private $request;
 
     public function __construct()
     {
         $this->request = $_SERVER['REQUEST_METHOD'];
+        $this->currentUserId = RouteGuard::getAuthenticatedUserId();
     }
 
     protected function isGet(): bool {

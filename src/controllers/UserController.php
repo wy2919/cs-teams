@@ -87,18 +87,14 @@ class UserController extends AppController
 
     public function users()
     {
-        $userId = RouteGuard::getAuthenticatedUserId();
-
         return $this->render('user-list', [
             'ranks' => $this->rankRepository->getRanks(),
-            'users' => $this->userRepository->getUsersDtoExceptUser($userId)
+            'users' => $this->userRepository->getUsersDtoExceptUser($this->currentUserId)
         ]);
     }
 
     public function filter()
     {
-        $currentUserId = RouteGuard::getAuthenticatedUserId();
-
         $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
         if ($contentType === "application/json") {
             $content = trim(file_get_contents("php://input"));
@@ -110,18 +106,17 @@ class UserController extends AppController
             http_response_code(200);
 
             if($rank < 0) {
-               echo json_encode($this->userRepository->eloFilteredUsersDtoExceptUser($currentUserId, $elo));
+               echo json_encode($this->userRepository->eloFilteredUsersDtoExceptUser($this->currentUserId, $elo));
             } else {
-                echo json_encode($this->userRepository->eloAndRankFilteredUsersDtoExceptUser($currentUserId, $elo, $rank));
+                echo json_encode($this->userRepository->eloAndRankFilteredUsersDtoExceptUser($this->currentUserId, $elo, $rank));
             }
         }
     }
 
     public function myDetails()
     {
-        $userId = RouteGuard::getAuthenticatedUserId();
         try {
-            return $this->render('my-profile', ['user' => $this->userRepository->getUserDtoById($userId)]);
+            return $this->render('my-profile', ['user' => $this->userRepository->getUserDtoById($this->currentUserId)]);
         } catch (UnexpectedValueException $e){
             $this->handleException($e);
         }
@@ -142,8 +137,6 @@ class UserController extends AppController
 
     public function rateUser()
     {
-        $currentUserId = RouteGuard::getAuthenticatedUserId();
-
         try {
             $userToBeRated = $this->userRepository->getUserDtoByUsername($_POST['username']);
         } catch (UnexpectedValueException $e){
@@ -153,7 +146,7 @@ class UserController extends AppController
         $wasNotAlreadyRated = $this->ratingRepository->attemptToCreateRating(new Rating(
             null,
             $userToBeRated->getId(),
-            $currentUserId,
+            $this->currentUserId,
             $_POST['skills'],
             $_POST['friendliness'],
             $_POST['communication']
@@ -177,7 +170,7 @@ class UserController extends AppController
     }
 
     private function validateAuthorizationToModifyUser($userId){
-        if($userId != RouteGuard::getAuthenticatedUserId() && !RouteGuard::hasAdminRole()){
+        if($userId != $this->currentUserId && !RouteGuard::hasAdminRole()){
             $url = "http://$_SERVER[HTTP_HOST]";    // server address
             header("Location: {$url}/login");
         }

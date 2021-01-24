@@ -91,7 +91,7 @@ class SecurityController extends AppController
     public function editPassword()
     {
         $userId = $_POST['userId'];
-        if($userId !== RouteGuard::getAuthenticatedUserId() && !RouteGuard::hasAdminRole()){
+        if($userId !== $this->currentUserId && !RouteGuard::hasAdminRole()){
             return $this->render('login');
         }
 

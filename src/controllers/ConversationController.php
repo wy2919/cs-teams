@@ -7,7 +7,6 @@ require_once __DIR__ . '/../repository/UserRepository.php';
 require_once __DIR__ . '/../repository/ConversationRepository.php';
 require_once __DIR__ . '/../repository/RankRepository.php';
 require_once __DIR__ . '/../repository/RatingRepository.php';
-require_once __DIR__ . '/../security/RouteGuard.php';
 
 class ConversationController extends AppController
 {
@@ -24,8 +23,6 @@ class ConversationController extends AppController
 
     public function message()
     {
-        $userId = RouteGuard::getAuthenticatedUserId();
-
         $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
         if ($contentType === "application/json") {
             $content = trim(file_get_contents("php://input"));
@@ -36,21 +33,20 @@ class ConversationController extends AppController
             header('Content-type: application/json');
             http_response_code(200);
 
-            $this->conversationRepository->newMessage($conversationId, $userId, $message);
+            $this->conversationRepository->newMessage($conversationId, $this->currentUserId, $message);
             echo json_encode($this->conversationRepository->getConversationMessagesAssoc($conversationId));
         }
     }
 
     public function conversation()
     {
-        $currentUserId = RouteGuard::getAuthenticatedUserId();
         $otherUserId = $_POST['userId'];
-        $conversations = $this->conversationRepository->getUserConversations($currentUserId) ?: [];
+        $conversations = $this->conversationRepository->getUserConversations($this->currentUserId) ?: [];
         $selectedConversation = null;
         $messages = [];
 
         if (isset($otherUserId)) {
-            $selectedConversation = $this->setUpConversation($currentUserId, $otherUserId);
+            $selectedConversation = $this->setUpConversation($this->currentUserId, $otherUserId);
             $messages = $this->conversationRepository->getConversationMessages($selectedConversation->getId());
         }
         else if (count($conversations) > 0) {
@@ -60,7 +56,7 @@ class ConversationController extends AppController
 
         try {
             return $this->render('conversation', [
-                'user' => $this->userRepository->getUserDtoById($currentUserId),
+                'user' => $this->userRepository->getUserDtoById($this->currentUserId),
                 'conversations' => $conversations,
                 'selected' => $selectedConversation,
                 'messages' => $messages
