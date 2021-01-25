@@ -3,10 +3,10 @@ html {
 }
 
 body {
-    background-image: url("../img/background-img.jpg");
-    background-repeat: no-repeat;
     background-size: cover;
+    background-repeat: no-repeat;
     background-position: center center;
+    background-image: url("../img/background-img.jpg");
 }
 
 .container {
@@ -30,36 +30,36 @@ body {
     align-items: center;
     width: 300px;
     height: 360px;
-    background: #FFFFFF 0 0 no-repeat padding-box;
-    border: 1px solid #707070;
     border-radius: 1em;
+    border: 1px solid #707070;
+    background: #FFFFFF 0 0 no-repeat padding-box;
 }
 
 .login p {
     margin: 0.9em 0;
-    font: normal normal normal 2em Segoe UI;
-    letter-spacing: 1px;
     color: #707070;
+    letter-spacing: 1px;
+    font: normal normal normal 2em Segoe UI;
 }
 
 .login input {
     margin: 0.5em;
     padding: 0.7em;
-    font-size: 1em;
     width: 80%;
     height: 1em;
-    border: 1.5px solid #707070;
+    font-size: 1em;
     border-radius: 1.5em;
+    border: 1.5px solid #707070;
     background: #E3E3E3 0 0 no-repeat padding-box;
 }
 
 select {
-    height: 2.2em;
-    width: 60%;
     margin-top: .7em;
+    width: 60%;
+    height: 2.2em;
+    font-size: 1em;
     border: 1px solid #000000;
     background: #E3E3E3 0 0 no-repeat padding-box;
-    font-size: 1em;
 }
 
 .login button {
@@ -79,21 +79,21 @@ select {
 }
 
 .rank {
-    background: #E3E3E3 0 0 no-repeat padding-box;
-    border: 2px solid #707070;
-    border-radius: 1em;
     width: 80%;
     height: 2em;
     font-size: 1em;
+    border-radius: 1em;
+    border: 2px solid #707070;
+    background: #E3E3E3 0 0 no-repeat padding-box;
 }
 
 .invalid {
+    outline: none;
+    border-radius: 1em;
+    border: 2px solid red;
+    box-shadow: 0 0 0.2em red;
     color: #1A0E68;
     background-color: red;
-    border: 2px solid red;
-    border-radius: 1em;
-    box-shadow: 0 0 0.2em red;
-    outline: none;
 }
 
 @media only screen and (max-width: 900px){
@@ -134,9 +134,7 @@ select {
         width: 50%;
         height: 90%;
     }
-
 }
-
 
 @media only screen and (max-width: 600px){
 
@@ -160,11 +158,11 @@ select {
     .register {
         height: 100%;
     }
-
 }
 
 @media only screen and (max-width: 400px) {
-        .login button:first-of-type{
+
+    .login button:first-of-type {
         margin-top: 13%;
     }
 
@@ -175,6 +173,4 @@ select {
     .register {
         height: 100%;
     }
-
 }
-

@@ -5,8 +5,8 @@
 
 .user-details {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    flex-direction: column;
     margin-top: 1em;
 }
 
@@ -24,32 +24,32 @@
 }
 
 .description p {
-    width: 25vw;
     margin-top: 3em;
+    width: 25vw;
 }
 
 .description p {
     padding: .2em 0 0 .2em;
     min-height: 68%;
-    background-color: #F0F0F0;
     border-radius: .35em;
+    background-color: #F0F0F0;
 }
 
 .description button {
     align-self: center;
-    min-height: 2em;
     width: 6em;
+    min-height: 2em;
 }
 
 .main h2 {
-    font-size: 2em;
     margin: auto;
+    font-size: 2em;
 }
 
-.user-info p:first-child{
+.user-info p:first-child {
+    margin-bottom: .2em;
     font-size: 1.7em;
     font-weight: bold;
-    margin-bottom: .2em;
 }
 
 .user-info p {
@@ -57,15 +57,14 @@
 }
 
 .user-info img {
+    margin-right: 1.5em;
     width: 15em;
     height: 15em;
-    margin-right: 1.5em;
     object-fit: cover;
-    box-shadow: 1px 4px 6px #00000099;
+    border-radius: 1.5em;
     border: 1px solid #000000;
-    border-radius: 1.5em
+    box-shadow: 1px 4px 6px #00000099;
 }
-
 
 .rate-user{
     display: flex;
@@ -78,10 +77,10 @@
 }
 
 .rate {
+    float: right;
     margin: 2em;
     font-weight: 700;
     font-size: 1.2em;
-    float: right;
 }
 
 .stars{
@@ -109,20 +108,20 @@ input:checked ~ label {
 }
 
 .rate label {
+    padding: 2px;
     font-size: 1.2em;
     color: cornflowerblue;
-    padding: 2px;
 }
 
 .rate-button {
     position: relative;
-    width: 8em;
-    height: 1.8em;
     left: 50%;
     transform: translateX(-50%);
+    width: 8em;
+    height: 1.8em;
     font-size: 1em;
-    border: 2px solid #BCE0FD;
     border-radius: 4px;
+    border: 2px solid #BCE0FD;
     color: #2699FB;
     background-color: white;
 }
@@ -133,8 +132,8 @@ input:checked ~ label {
 }
 
 .admin-panel button {
-    height: 1.8em;
     width: 5em;
+    height: 1.8em;
 }
 
 @media only screen and (max-width: 1200px){
@@ -148,11 +147,10 @@ input:checked ~ label {
     }
 
     .description>p {
-        width: 40vw;
         margin-top: 3em;
+        width: 40vw;
     }
 }
-
 
 @media only screen and (max-width: 900px){
 
@@ -171,10 +169,7 @@ input:checked ~ label {
     .rate-button {
         top: 3%;
     }
-
-
 }
-
 
 @media only screen and (max-width: 750px){
 
@@ -188,8 +183,8 @@ input:checked ~ label {
     }
 
     .description>p {
-        width: 40vw;
         margin-top: 3em;
+        width: 40vw;
     }
 
     .container {
@@ -211,13 +206,12 @@ input:checked ~ label {
     }
 
     .description p {
+        margin-top: .5em;
         width: 80vw;
         font-size: 1.1em;
-        margin-top: .5em;
     }
 
 }
-
 
 @media only screen and (max-width: 600px){
     
@@ -231,9 +225,9 @@ input:checked ~ label {
     }
     
     .rate-user {
-        margin-top: 2.5em;
         flex-direction: column;
         align-items: center;
+        margin-top: 2.5em;
         font-size: .65em;
     }
 
@@ -250,15 +244,15 @@ input:checked ~ label {
     }
 
     .rate label {
-        font-size: 1.4em;
         margin: 0.3em;
+        font-size: 1.4em;
     }
 
     .rate-button {
-        font-size: .8em;
         margin-top: .5em;
         width: 7em;
         height: 1.5em;
+        font-size: .8em;
     }
 
     .description {
@@ -266,12 +260,12 @@ input:checked ~ label {
     }
 
     .description p {
-            font-size: .85em;
+        font-size: .85em;
     }
 
     .admin-panel button {
-        height: 1.4em;
-        width: 4em;
         margin-bottom: 2em;
+        width: 4em;
+        height: 1.4em;
     }
 }

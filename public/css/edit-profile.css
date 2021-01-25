@@ -5,22 +5,22 @@ main {
 }
 
 .invalid {
+    outline: none;
+    border: 2px solid red;
     color: #1A0E68;
     background-color: red;
-    border: 2px solid red;
     box-shadow: 0 0 0.2em red;
-    outline: none;
 }
 
 .message {
     margin: 1em 0 0 0;
-    color: darkred;
     font-weight: bold;
+    color: darkred;
 }
 
 .edit-container {
-    width: 40%;
     margin: .4em 0;
+    width: 40%;
 }
 
 .edit-container:last-child {
@@ -28,19 +28,19 @@ main {
 }
 
 .panel-title {
+    margin: .4em 0;
     font-size: 1.5em;
     font-weight: bold;
-    margin: .4em 0;
 }
 
 hr {
     display: block;
-    height: 1px;
-    width: 40%;
-    border: 0;
-    border-top: 1px solid black;
     margin: .5em 0;
     padding: 0;
+    width: 40%;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #000000;
 }
 
 .column-flex {
@@ -63,13 +63,13 @@ hr {
 }
 
 .user-avatar {
+    margin: 0 1em;
     width: 10em;
     height: 10em;
-    margin: 0 1em;
     object-fit: cover;
-    box-shadow: 0 3px 6px #00000099;
     border: 1px solid #000000;
-    border-radius: 1.5em
+    border-radius: 1.5em;
+    box-shadow: 0 3px 6px #00000099;
 }
 
 .avatar-form {
@@ -79,11 +79,11 @@ hr {
 /* RANK stuff */
 
 .rank-select {
-    height: 2.2em;
-    width: 40%;
-    background: #E3E3E3 0 0 no-repeat padding-box;
-    border: 1px solid #000000;
     margin: 0 .5em;
+    width: 40%;
+    height: 2.2em;
+    border: 1px solid #000000;
+    background: #E3E3E3 0 0 no-repeat padding-box;
 }
 
 .between-form {
@@ -94,8 +94,8 @@ hr {
 /* DESCRIPTION stuff */
 
 .description-input {
-    height: 5em;
     width: 50%;
+    height: 5em;
     font-size: 1.2em;
 }
 
@@ -117,15 +117,15 @@ hr {
 }
 
 .password-input {
-    height: 1.6em;
-    width: 100%;
-    background: #E3E3E3 0 0 no-repeat padding-box;
-    border: 1px solid #000000;
     margin-top: 0;
+    width: 100%;
+    height: 1.6em;
+    border: 1px solid #000000;
+    background: #E3E3E3 0 0 no-repeat padding-box;
 }
 
-
 @media only screen and (max-width: 1350px) {
+
     main {
         font-size: 1.1em;
     }
@@ -144,6 +144,7 @@ hr {
 }
 
 @media only screen and (max-width: 1000px) {
+
     main {
         font-size: 1.25em;
     }
@@ -158,6 +159,7 @@ hr {
 }
 
 @media only screen and (max-width: 900px) {
+
     main {
         font-size: 1.3em;
     }
@@ -185,9 +187,9 @@ hr {
     }
 
     .button {
-        font-size: .8em;
         align-self: center;
         margin-top: 1em;
+        font-size: .8em;
     }
 
     .panel-title {
@@ -212,6 +214,7 @@ hr {
 }
 
 @media only screen and (max-width: 650px) {
+
     main {
         font-size: 1.2em;
     }
@@ -230,6 +233,7 @@ hr {
 }
 
 @media only screen and (max-width: 450px) {
+
     .rank-select {
         width: 65%;
     }
