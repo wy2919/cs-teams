@@ -3,9 +3,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/public/css/user-list.css">
     <link rel="stylesheet" type="text/css" href="/public/css/main.css">
-    <script type="text/javascript" src="/public/js/main.js" defer></script>
+    <script type="text/javascript" src="/public/js/img-default.js" defer></script>
     <script type="text/javascript" src="/public/js/slider.js" defer></script>
-        <script type="text/javascript" src="/public/js/filter.js" defer></script>
+        <script type="text/javascript" src="/public/js/user-filter.js" defer></script>
 
     <script src="https://kit.fontawesome.com/3010d94d2f.js" crossorigin="anonymous"></script>
     <title>User list</title>

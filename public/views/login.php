@@ -3,7 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/public/css/main.css">
     <link rel="stylesheet" type="text/css" href="/public/css/login.css">
-    <script type="text/javascript" src="/public/js/main.js" defer></script>
+    <script type="text/javascript" src="/public/js/account-validation.js" defer></script>
     <title>Login page</title>
 
 </head>

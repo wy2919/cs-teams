@@ -4,8 +4,7 @@ const userContainer = document.querySelector('.users');
 
 function addEvent(element){
     element.addEventListener('change', () => {
-
-        const data = {rank: rank.value, elo: elo.value}
+        const data = {rank: rank.value, elo: elo.value};
 
         fetch("/filter", {
             method: "POST",
@@ -26,14 +25,14 @@ function addEvent(element){
 
 function loadUsers(users) {
     users.forEach(user => {
-        createUser(user);
+        createUserTemplate(user);
     })
 }
 
-function createUser(user) {
+function createUserTemplate(user) {
     const template = document.querySelector('#user-template');
 
-    const clone = template.content.cloneNode(true )
+    const clone = template.content.cloneNode(true );
 
     const image = clone.querySelector("img");
     image.src= `/public/uploads/${user.image}`;
@@ -48,14 +47,13 @@ function createUser(user) {
     const elo = rank.nextElementSibling;
     elo.innerHTML = elo.innerHTML + ' ' + user.elo;
 
-    const inputs = clone.querySelectorAll('input[name=userId]')
+    const inputs = clone.querySelectorAll('input[name=userId]');
     inputs.forEach( input => {
         input.value = user.id;
-    })
+    });
 
     userContainer.appendChild(clone);
 }
 
-
 addEvent(rank);
-addEvent(elo)
+addEvent(elo);

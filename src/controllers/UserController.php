@@ -30,7 +30,9 @@ class UserController extends AppController
         $this->conversationRepository = new ConversationRepository();
         $this->rankRepository = new RankRepository();
         $this->ratingRepository = new RatingRepository();
-        $this->currentUserId = RouteGuard::getAuthenticatedUserId();
+        if(RouteGuard::checkAuthentication()) {
+            $this->currentUserId = RouteGuard::getAuthenticatedUserId();
+        }
     }
 
     public function editProfile()

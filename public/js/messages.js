@@ -10,7 +10,7 @@ messageContainer.scrollTop = messageContainer.scrollHeight;
 
 sendButton.addEventListener('click', () => {
 
-    const data = {conversationId: conversationId.value, message: message.value}
+    const data = {conversationId: conversationId.value, message: message.value};
 
     fetch("/message", {
         method: "POST",
@@ -29,22 +29,20 @@ sendButton.addEventListener('click', () => {
         })
 });
 
-
 function loadMessages(messages)
 {
     messages.forEach(message => {
-        createMessage(message);
+        createMessageTemplate(message);
     })
 }
 
-
-function createMessage(message) {
+function createMessageTemplate(message) {
     const template = document.querySelector('#msg-template');
-    const clone = template.content.cloneNode(true )
+    const clone = template.content.cloneNode(true );
     const messageBox = clone.querySelector('#who-send');
 
     const messageInput = clone.querySelector('#message-value');
-    messageInput.innerHTML = message.message
+    messageInput.innerHTML = message.message;
 
     const image = clone.querySelector('img');
     appendOnError([image]);
@@ -54,7 +52,7 @@ function createMessage(message) {
         messageBox.classList.add('friend-msg');
 
         const clonedMessageContainer = clone.querySelector('.msg-container');
-        clonedMessageContainer.style='flex-direction: row-reverse'
+        clonedMessageContainer.style='flex-direction: row-reverse';
     } else {
         image.src = `/public/uploads/${currentUserImage.value}`;
         messageBox.classList.add('self-msg');
