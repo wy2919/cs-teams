@@ -148,7 +148,7 @@ a {
     .hamburger-ul {
         display: flex;
         flex-direction: column;
-        margin-left: 1.6em;
+        margin-left: 1em;
         list-style-type: none;
     }
 
@@ -174,18 +174,36 @@ a {
 
     .hamburger {
         margin: 1.5em .8em .8em;
+        font-size: 35px !important;
         color: black;
     }
 
     .hamburger-nav .hamburger {
         color: white;
+        font-size: 35px !important;
     }
 
     .hamburger-nav {
         left: 0;
+        font-size: 25px !important;
     }
 
     .title {
         visibility: hidden;
     }
+}
+
+
+@media only screen and (max-width: 600px) {
+
+    .hamburger-nav .hamburger {
+        color: white;
+        font-size: 25px !important;
+    }
+
+    .hamburger-nav {
+        left: 0;
+        font-size: 20px !important;
+    }
+
 }

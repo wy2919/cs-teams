@@ -13,14 +13,14 @@
 <body>
 <div class="base-container">
 
-    <?php include('navigation.php') ?>
+    <?php include('components/navigation.php') ?>
 
     <main class="main">
 
         <h2 class="error-title">We have a problem here..</h2>
 
         <p class="error-message">
-            <?php include('message.php') ?>
+            <?php include('components/message.php') ?>
         </p>
 
         <p class="error-message">
