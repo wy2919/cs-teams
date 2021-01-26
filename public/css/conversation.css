@@ -98,7 +98,6 @@
 .friend-details {
     display: flex;
     align-items: center;
-    width: 70%;
     height: 18%;
 }
 
@@ -115,6 +114,7 @@
 .friend-name {
     font-size: 1.3em;
     font-weight: bold;
+    margin-right: 1em;
 }
 
 .profile-btn {
@@ -239,7 +239,7 @@
 @media only screen and (max-width: 900px) {
 
     body {
-        font-size: 1.4em;
+        font-size: 1.1em;
     }
 
     .header {
@@ -247,31 +247,62 @@
         top: 1em;
     }
 
+    .communicator-container {
+        flex-direction: column-reverse;
+        justify-content: center;
+        margin-top: 4em;
+        margin-bottom: 0;
+        width: 100%;
+        height: 100%;
+    }
+
     .friend-list {
         display: none;
     }
 
-    .communicator-container {
-        width: 100%;
-    }
-
     .friend {
-        width: 100%;
+        height: 70%;
         box-shadow: none;
         border-radius: 0 20px 20px 0;
         background: #FFFFFF 0 0 no-repeat padding-box;
     }
 
-    .inside-friend {
+    .inside-friend, .friend {
         min-width: 100%;
-        height: 100%;
     }
 
     .friend-details {
-        min-height: 30%;
+        align-self: center;
+        margin: 1em;
+        min-height: auto;
     }
 
     .message-box {
         height: 50%;
+        width: 90%;
+    }
+
+    .profile-btn {
+        margin: .5em;
+    }
+}
+
+
+@media only screen and (max-width: 450px) {
+
+    .friend-details {
+        font-size: .9em;
+    }
+
+    #send-btn {
+        padding: .3em 1.5em;
+    }
+
+    .friend-name {
+        margin-right: 0;
+    }
+
+    .profile-btn {
+        display: none;
     }
 }
