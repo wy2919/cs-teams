@@ -176,6 +176,10 @@ body {
 
 @media only screen and (max-width: 900px) {
 
+    .main {
+        margin-top: 3.5em;
+    }
+
     .user {
         width: 70vw;
     }

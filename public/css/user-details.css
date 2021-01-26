@@ -74,6 +74,8 @@
 
 .messages{
     color: darkred;
+    margin-top: 1.5em;
+    margin-bottom: 0em;
 }
 
 .rate {
@@ -211,6 +213,9 @@ input:checked ~ label {
         font-size: 1.1em;
     }
 
+    .messages {
+        font-size: .8em;
+    }
 }
 
 @media only screen and (max-width: 600px){

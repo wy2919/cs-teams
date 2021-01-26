@@ -60,7 +60,7 @@ input {
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    height: 8%;
+    height: 55px;
     border: 1px solid black;
     background: transparent linear-gradient(180deg, #1A0E68 0%, #0D0734 100%) 0 0 no-repeat padding-box;
 }
@@ -160,7 +160,7 @@ a {
 @media only screen and (max-width: 900px) {
 
     .main {
-        margin-top: 4em;
+        margin-top: 0em;
     }
 
     .navigation {
@@ -170,6 +170,11 @@ a {
 
     .navigation img{
         display: none;
+    }
+
+    .navigation i {
+        margin-top: 1em;
+        margin-left: .8em;
     }
 
     .hamburger {
@@ -207,3 +212,4 @@ a {
     }
 
 }
+

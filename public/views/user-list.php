@@ -2,8 +2,8 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" type="text/css" href="/public/css/user-list.css">
     <link rel="stylesheet" type="text/css" href="/public/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/user-list.css">
 
     <script type="text/javascript" src="/public/js/img-default.js" defer></script>
     <script type="text/javascript" src="/public/js/slider.js" defer></script>
