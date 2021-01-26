@@ -110,6 +110,11 @@ class UserController extends AppController
             return $this->handleException($e);
         }
 
+        if($userToBeRated->getId() === $this->currentUserId) {
+            $this->message = "Unfortunately You can't rate Yourself ;)";
+            return $this->profile($userToBeRated->getUsername());
+        }
+
         $wasNotAlreadyRated = $this->ratingRepository->attemptToCreateRating(new Rating(
             null,
             $userToBeRated->getId(),
