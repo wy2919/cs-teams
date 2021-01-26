@@ -38,7 +38,7 @@ class UserMapper
     public function mapAssocArrayToUser($record)
     {
         if ($record == false) {
-            return [];
+            return null;
         }
 
         return new User(
