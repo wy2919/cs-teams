@@ -28,8 +28,8 @@ class Router {
         $object = new $controller;
         $action = $action ?: 'users';
 
-        if($action != 'login' && $action != 'register'){
-            RouteGuard::checkAuthentication();
+        if($action != 'login' && $action != 'register' && !RouteGuard::checkAuthentication()){
+           return self::run('login');
         }
 
         $pathVariable = $urlParts[1] ?? '';

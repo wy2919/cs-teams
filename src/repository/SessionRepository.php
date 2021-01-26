@@ -16,9 +16,8 @@ class SessionRepository extends Repository
                   expiration > now();
         ');
         $statement->execute([$token]);
-        $record = $statement->fetch();
-
-        return count($record) !== 0;
+        $count = $statement->fetch()['count'];
+        return $count !== 0;
     }
 
     public function getSessionUserId($token)
@@ -46,20 +45,11 @@ class SessionRepository extends Repository
 
     public function createSession($userId, $token, $expiration)
     {
-        if( $this->isSessionCreated($userId)) {
-            $statement = $this->database->connect()->prepare('
-            UPDATE public.sessions 
-                SET 
-                    token = :token,
-                    expiration = :expiration
-            WHERE id_user = :id_user ');
-        }
-        else {
-            $statement = $this->database->connect()->prepare('
-            INSERT INTO public.sessions
-                (id_user, token, expiration)
-                VALUES (:id_user, :token, :expiration)');
-        }
+        $statement = $this->database->connect()->prepare('
+        INSERT INTO public.sessions
+            (id_user, token, expiration)
+            VALUES (:id_user, :token, :expiration)'
+        );
 
         $expiration = date("Y-m-d H:i:s", $expiration);
         $statement->bindParam(':id_user', $userId, PDO::PARAM_INT);
@@ -67,18 +57,5 @@ class SessionRepository extends Repository
         $statement->bindParam(':expiration', $expiration);
 
         return $statement->execute();
-    }
-
-    private function isSessionCreated($userId)
-    {
-        $statement = $this->database->connect()->prepare('
-            SELECT id
-            FROM public.sessions 
-            WHERE id_user = :id;
-        ');
-
-        $statement->execute([$userId]);
-        $rows = $statement->fetchAll();
-        return count($rows) !== 0;
     }
 }
