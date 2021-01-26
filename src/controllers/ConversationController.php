@@ -13,14 +13,12 @@ class ConversationController extends AppController
 
     private UserRepository $userRepository;
     private ConversationRepository $conversationRepository;
-    private int $currentUserId;
 
     public function __construct()
     {
         parent::__construct();
         $this->userRepository = new UserRepository();
         $this->conversationRepository = new ConversationRepository();
-        $this->currentUserId = RouteGuard::getAuthenticatedUserId();
     }
 
     public function message()
@@ -31,7 +29,7 @@ class ConversationController extends AppController
         }
         $message = $decoded['message'];
         $conversationId = $decoded['conversationId'];
-        $this->conversationRepository->newMessage($conversationId, $this->currentUserId, $message);
+        $this->conversationRepository->newMessage($conversationId, RouteGuard::getAuthenticatedUserId(), $message);
 
         echo json_encode($this->conversationRepository->getConversationMessagesAssoc($conversationId));
     }
@@ -39,12 +37,13 @@ class ConversationController extends AppController
     public function conversation()
     {
         $otherUserId = $_POST['userId'];
-        $conversations = $this->conversationRepository->getUserConversations($this->currentUserId) ?: [];
+        $currentUserId = RouteGuard::getAuthenticatedUserId();
+        $conversations = $this->conversationRepository->getUserConversations($currentUserId) ?: [];
         $selectedConversation = null;
         $messages = [];
 
         if (isset($otherUserId)) {
-            $selectedConversation = $this->setUpConversation($this->currentUserId, $otherUserId);
+            $selectedConversation = $this->setUpConversation($currentUserId, $otherUserId);
             $messages = $this->conversationRepository->getConversationMessages($selectedConversation->getId());
         }
         else if (count($conversations) > 0) {
@@ -54,7 +53,7 @@ class ConversationController extends AppController
 
         try {
             return $this->render('conversation', [
-                'user' => $this->userRepository->getUserDtoById($this->currentUserId),
+                'user' => $this->userRepository->getUserDtoById($currentUserId),
                 'conversations' => $conversations,
                 'selected' => $selectedConversation,
                 'messages' => $messages

@@ -16,7 +16,6 @@ class UserController extends AppController
     const SUPPORTED_TYPES = ['image/png', 'image/jpeg'];
     const UPLOAD_DIRECTORY = '/../public/uploads/';
 
-    private int $currentUserId;
     private string $message = '';
     private UserRepository $userRepository;
     private ConversationRepository $conversationRepository;
@@ -30,9 +29,7 @@ class UserController extends AppController
         $this->conversationRepository = new ConversationRepository();
         $this->rankRepository = new RankRepository();
         $this->ratingRepository = new RatingRepository();
-        if(RouteGuard::checkAuthentication()) {
-            $this->currentUserId = RouteGuard::getAuthenticatedUserId();
-        }
+
     }
 
     public function editProfile()
@@ -58,7 +55,7 @@ class UserController extends AppController
     {
         try {
             return $this->render('my-profile', [
-                'user' => $this->userRepository->getUserDtoById($this->currentUserId)
+                'user' => $this->userRepository->getUserDtoById(RouteGuard::getAuthenticatedUserId())
             ]);
         } catch (UnexpectedValueException $e){
             return $this->handleException($e);
@@ -82,7 +79,7 @@ class UserController extends AppController
     {
         return $this->render('user-list', [
             'ranks' => $this->rankRepository->getRanks(),
-            'users' => $this->userRepository->getUsersDtoExceptUser($this->currentUserId)
+            'users' => $this->userRepository->getUsersDtoExceptUser(RouteGuard::getAuthenticatedUserId())
         ]);
     }
 
@@ -95,10 +92,12 @@ class UserController extends AppController
         $rank = (int)$decoded['rank'];
         $elo = (int)$decoded['elo'];
 
+        $currentUserId = RouteGuard::getAuthenticatedUserId();
+
         if($rank < 0) {
-           echo json_encode($this->userRepository->eloFilteredUsersDtoExceptUser($this->currentUserId, $elo));
+           echo json_encode($this->userRepository->eloFilteredUsersDtoExceptUser($currentUserId, $elo));
         } else {
-            echo json_encode($this->userRepository->eloAndRankFilteredUsersDtoExceptUser($this->currentUserId, $elo, $rank));
+            echo json_encode($this->userRepository->eloAndRankFilteredUsersDtoExceptUser($currentUserId, $elo, $rank));
         }
     }
 
@@ -110,7 +109,7 @@ class UserController extends AppController
             return $this->handleException($e);
         }
 
-        if($userToBeRated->getId() === $this->currentUserId) {
+        if($userToBeRated->getId() === RouteGuard::getAuthenticatedUserId()) {
             $this->message = "Unfortunately You can't rate Yourself ;)";
             return $this->profile($userToBeRated->getUsername());
         }
@@ -118,7 +117,7 @@ class UserController extends AppController
         $wasNotAlreadyRated = $this->ratingRepository->attemptToCreateRating(new Rating(
             null,
             $userToBeRated->getId(),
-            $this->currentUserId,
+            RouteGuard::getAuthenticatedUserId(),
             $_POST['skills'],
             $_POST['friendliness'],
             $_POST['communication']
@@ -185,7 +184,7 @@ class UserController extends AppController
     }
 
     private function validateAuthorizationToModifyUser($userId){
-        if($userId != $this->currentUserId && !RouteGuard::hasAdminRole()){
+        if($userId != RouteGuard::getAuthenticatedUserId() && !RouteGuard::hasAdminRole()){
             $url = "http://$_SERVER[HTTP_HOST]";    // server address
             header("Location: {$url}/login");
         }
