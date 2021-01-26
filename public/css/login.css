@@ -14,8 +14,9 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 5%;
     width: 40vw;
-    height: 70vh;
+    height: 100%;
 }
 
 .logo {
@@ -99,11 +100,12 @@ select {
 @media only screen and (max-width: 900px){
 
     body {
-        background-size: auto 100vh;
+        /*background-size: auto 100vh;*/
         background-position-x: 0;
     }
 
     .container{
+        margin-top: 10%;
         width: 100vw;
     }
 
@@ -141,6 +143,10 @@ select {
     body {
     }
 
+    .container {
+        margin-top: 15%;
+    }
+
     .login {
         width: 60%;
         height: 65%;
@@ -173,5 +179,9 @@ select {
 
     .register {
         height: 100%;
+    }
+
+    .register p {
+        margin: .2em;
     }
 }
