@@ -31,12 +31,17 @@ function loadUsers(users) {
 
 function createUserTemplate(user) {
     const template = document.querySelector('#user-template');
-
     const clone = template.content.cloneNode(true );
+    const profileButtonForm = clone.querySelector('.profile-form');
+    const link = clone.querySelector("a");
 
     const image = clone.querySelector("img");
     image.src= `/public/uploads/${user.image}`;
     appendOnError([image]);
+
+    const profileLink = `/profile/${user.username}`;
+    profileButtonForm.action = profileLink;
+    link.href = profileLink;
 
     const username = clone.querySelector('#username');
     username.innerHTML = user.username;

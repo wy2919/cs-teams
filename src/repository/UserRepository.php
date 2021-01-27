@@ -83,7 +83,7 @@ class UserRepository extends Repository
     {
         $statement = $this->database->connect()->prepare('
             SELECT
-                u.id, u.email, u.username, u.image, u.description, r.rank, u.elo
+                u.id, u.email, u.username, u.image, u.description, r.rank, round( CAST(u.elo as numeric), 1) as elo
             FROM public.user_dto u 
                 LEFT JOIN public.ranks r 
                     ON u.rank = r.rank 
@@ -92,7 +92,6 @@ class UserRepository extends Repository
               AND u.elo >= :elo
               ');
         $statement->execute([(int)$userId, (int)$rankId, (float)$elo]);
-
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -100,14 +99,13 @@ class UserRepository extends Repository
     {
         $statement = $this->database->connect()->prepare('
             SELECT
-                u.id, u.email, u.username, u.image, u.description, r.rank, u.elo
+                u.id, u.email, u.username, u.image, u.description, r.rank, round( CAST(u.elo as numeric), 1) as elo
             FROM public.user_dto u 
                 LEFT JOIN public.ranks r 
                     ON u.rank = r.rank 
             WHERE u.id != :id_user 
               AND u.elo >= :elo
         ');
-
         $statement->execute([(int)$userId, (float)$elo]);
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);

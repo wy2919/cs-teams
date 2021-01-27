@@ -1,13 +1,17 @@
 <template id="user-template">
     <div class="user">
 
-        <img src="" alt="user avatar">
+        <a class="link" href="">
 
-        <div class="user-details">
-            <p id="username"></p>
-            <p><strong>Rank: </strong></p>
-            <p><strong>Elo: </strong></p>
-        </div>
+            <img src="" alt="user avatar">
+
+            <div class="user-details">
+                <p id="username"></p>
+                <p><strong>Rank: </strong></p>
+                <p><strong>Elo: </strong></p>
+            </div>
+
+        </a>
 
         <div class="user-buttons">
 
@@ -16,7 +20,7 @@
                 <button class="btn user-btn">Message</button>
             </form>
 
-            <form action="profile" method="post">
+            <form class="profile-form" method="post">
                 <input type="hidden" name="userId">
                 <button class="btn user-btn">Profile</button>
             </form>
