@@ -105,13 +105,13 @@ select {
     }
 
     .container{
-        margin-top: 10%;
+        margin-top: 5%;
         width: 100vw;
     }
 
     .login input {
         width: 70%;
-        height: 1.5em;
+        height: 1.3em;
     }
 
     select {
@@ -129,7 +129,11 @@ select {
     }
 
     .login button:first-of-type{
-        margin-top: 10%;
+        margin-top: 2em;
+    }
+
+    .login button:last-of-type {
+        margin-bottom: 1.5em;
     }
 
     .register {
@@ -169,7 +173,7 @@ select {
 @media only screen and (max-width: 400px) {
 
     .login button:first-of-type {
-        margin-top: 13%;
+        margin-top: 10%;
     }
 
     .login {

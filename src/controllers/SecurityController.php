@@ -59,11 +59,10 @@ class SecurityController extends AppController
         if($this->isGet()){
             return $this->renderRegisterWithMessage('');
         }
-        if($_POST['password'] != $_POST['passwordConfirm']) {
-            return $this->renderRegisterWithMessage('Password does not match');
-        }
-        if(strlen($_POST['password']) <= 5){
-            return $this->renderRegisterWithMessage('Password must be longer than 5 characters!');
+
+        $validationErrorMessage = $this->validateRegistrationInputs();
+        if($validationErrorMessage != null){
+            return $this->renderRegisterWithMessage($validationErrorMessage);
         }
 
         $email = $_POST['email'];
@@ -72,7 +71,6 @@ class SecurityController extends AppController
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $rank = $_POST['rank'];
 
-        $this->validateUserNotExists($email, $username);
         $this->userRepository->createUser(
             new User(
                 null,
@@ -85,7 +83,7 @@ class SecurityController extends AppController
                 null
             ));
 
-        $this->render('login', ['message' => 'Account created!']);
+       return $this->render('login', ['message' => 'Account created!']);
     }
 
     public function editPassword()
@@ -119,16 +117,40 @@ class SecurityController extends AppController
         }
     }
 
-    private function validateUserNotExists($email, $username) {
+    private function validateRegistrationInputs() : ?string {
+        $regex = '/^[^0-9][_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
+
+        if(!preg_match($regex, $_POST['email'])){
+            return 'Email is not valid.';
+        }
+        if(strlen($_POST['username']) < 5){
+            return 'Username must be longer than 5 characters!';
+        }
+        if(strlen($_POST['username']) > 15){
+            return 'Username must be shorter than 15 characters!';
+        }
+        if($_POST['password'] != $_POST['passwordConfirm']) {
+            return 'Password does not match';
+        }
+        if(strlen($_POST['password']) <= 5){
+            return 'Password must be longer than 5 characters!';
+        }
+
+        return $this->validateUserNotExists($_POST['email'], $_POST['username']);
+    }
+
+    private function validateUserNotExists($email, $username): ?string {
         $user = $this->userRepository->getUserByEmail($email);
         if ($user){
-            return $this->renderRegisterWithMessage('User with this email exist!');
+            return 'User with this email exist!';
         }
 
         $user = $this->userRepository->getUserByUsername($username);
         if ($user){
-            return $this->renderRegisterWithMessage('User with this username exist!');
+            return 'User with this username exist!';
         }
+
+        return null;
     }
 
     private function renderRegisterWithMessage($message){
