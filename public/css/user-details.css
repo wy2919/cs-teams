@@ -33,6 +33,7 @@
     min-height: 68%;
     border-radius: .35em;
     background-color: #F0F0F0;
+    word-wrap: break-word;
 }
 
 .description button {
@@ -75,7 +76,7 @@
 .messages{
     color: darkred;
     margin-top: 1.5em;
-    margin-bottom: 0em;
+    margin-bottom: 0;
 }
 
 .rate {

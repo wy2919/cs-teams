@@ -20,7 +20,7 @@ class UserDto
         $this->description = $description;
         $this->image = $image;
         $this->rank = $rank;
-        $this->elo = $elo;
+        $this->elo = round($elo, 1);
     }
 
     public function getId(): ?int
