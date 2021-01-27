@@ -3,30 +3,31 @@ const currentUserImage = document.querySelector('input[name="userImage"]');
 const friendImage = document.querySelector('input[name="friendImage"]');
 const message = document.querySelector('input[name="message"]');
 const conversationId = document.querySelector('input[name="conversationId"]');
-const messageInput = document.querySelector('input[name="message"]');
 const sendButton = document.querySelector('button[id="send-btn"]');
 
 messageContainer.scrollTop = messageContainer.scrollHeight;
 
 sendButton.addEventListener('click', () => {
 
-    const data = {conversationId: conversationId.value, message: message.value};
+    if(message.value.length > 0) {
+        const data = {conversationId: conversationId.value, message: message.value};
 
-    fetch("/message", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-        .then( response => {
-            return response.json();
+        fetch("/message", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         })
-        .then(messages => {
-            messageContainer.innerHTML = "";
-            loadMessages(messages);
-            messageInput.value = '';
-        })
+            .then(response => {
+                return response.json();
+            })
+            .then(messages => {
+                messageContainer.innerHTML = "";
+                loadMessages(messages);
+                message.value = '';
+            });
+    }
 });
 
 function loadMessages(messages)
