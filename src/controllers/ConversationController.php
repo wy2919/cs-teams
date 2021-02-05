@@ -44,6 +44,7 @@ class ConversationController extends AppController
 
         if (isset($otherUserId)) {
             $selectedConversation = $this->setUpConversation($currentUserId, $otherUserId);
+            $conversations = $this->conversationRepository->getUserConversations($currentUserId) ?: [];
             $messages = $this->conversationRepository->getConversationMessages($selectedConversation->getId());
         }
         else if (count($conversations) > 0) {
