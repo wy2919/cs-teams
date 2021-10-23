@@ -1,7 +1,7 @@
 # cs-teams
 The project is a responsive WEB-APP built with docker and deployed with heroku: http://csteams.herokuapp.com
 
-Web application designed to be used as site for finding other people willing to party up and play together in CS:GO. It provides rating system for evaluation of player behavior and skills. Furthermore users may text each other to get to know someone better and arrange a game.
+Web application designed to be used as site for finding other people willing to party up and play together in CS:GO. It provides rating system for evaluation of player behavior and skills. Furthermore users may create conversations to get to know each other better and arrange a game. Project is deployed using heroku.
 
 ## technologies
 - html, css
