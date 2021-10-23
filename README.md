@@ -1,7 +1,7 @@
 # cs-teams
 The project is a responsive WEB-APP built with docker and deployed with heroku: http://csteams.herokuapp.com
 
-Csteams is a site that allows users to meet other people willing to party up, write with them and rate specific traits.
+Web application designed to be used as site for finding other people willing to party up and play together in CS:GO. It provides rating system for evaluation of player behavior and skills. Furthermore users may text each other to get to know someone better and arrange a game.
 
 ## technologies
 - html, css
