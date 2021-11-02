@@ -30,6 +30,6 @@ RUN apk add --no-cache --virtual .build-deps $BUILD_DEPS \
 RUN apk add --no-cache --virtual .run-deps $RUN_DEPS
 
 # COPY . /app
-COPY ./public/views/ /app
+COPY ./public/views /app
 
 VOLUME [ "/app" ]
