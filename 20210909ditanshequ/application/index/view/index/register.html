@@ -1,0 +1,148 @@
+<!--包含头部文件-->
+<{include file="public/header" /}>
+
+<title><{$config.cfg_webname}></title>
+<meta name="keywords" content="<{$config.cfg_keywords}>">
+<meta name="description" content="<{$config.cfg_description}>">
+</head>
+<body>
+
+<div class="lgbg">
+    <div class="distab w100 h100">
+        <div class="tab_cell w100">
+            <div class="lgbox">
+                <i class="lgi lgil"></i><i class="lgi lgir"></i>
+                <div class="lgtop layui-form">
+                    <div class="lgipt posrelative">
+                        <i><img src="__INDEX__/images/lgico1_03.png"/></i>
+                        <input type="text" placeholder="请输入手机号" name="" lay-verify="required" id="account" autocomplete="off"/>
+                    </div>
+                    <div class="lgipt posrelative">
+                        <i><img src="__INDEX__/images/lgico2_03.png"/></i>
+                        <input type="password" placeholder="请输入密码" name="" lay-verify="required" id="password" autocomplete="off"/>
+                    </div>
+                    <div class="lgipt posrelative">
+                        <i><img src="__INDEX__/images/lgico2_03.png"/></i>
+                        <input type="password" placeholder="请再次输入密码" name="" id="password2" autocomplete="off"/>
+                    </div>
+                    <div class="lgipt lgipt1 posrelative">
+                        <i><img src="__INDEX__/images/lgico3_03.png"/></i>
+                        <input type="text" placeholder="输入验证码" name="" id="captcha" autocomplete="off"/>
+                        <span class="code" id="yzm"></span>
+                        <button class="hqcode" id="hqcode">获取验证码</button>
+                    </div>
+                    <a class="sbmipt hoverop" lay-submit onclick="checkVal()">下一步</a>
+                </div>
+                <div class="clearfix lgbot">
+                    <a href="<{:url('index/login')}>" class="fl active">返回登陆</a>
+                    <a href="<{:url('index')}>" class="fr">返回首页>></a>
+                    <a href="__ADMINLOGIN__" class="fr" style="margin-right: 20px">管理员登录>></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script>
+
+    var captch = '2468';
+    var num = 60;
+    $(function () {
+        $('#hqcode').click(function () { //验证码
+            randomPassword();
+        })
+    })
+
+    function randomPassword() {
+        var phone = $('#account').val();
+        if(!(/^1[3456789]\d{9}$/.test(phone))){
+            layer.alert('手机号码有误，请重填!', {icon: 1});
+            return;
+        }
+
+        if($('#hqcode').html() != "获取验证码") {
+            layer.msg('请稍后继续操作!', {icon: 1, time: 2000});
+        }else{
+            djs();
+            $.ajax({
+                type: 'POST',
+                url: "<{:url('User/sendMsg')}>",
+                data:{
+                    phone:phone
+                },
+                dataType: 'json',
+                success: function(data){
+                    captch = data['msg'];
+                }
+            });
+        }
+
+    }
+
+
+    function djs() {
+        $('#hqcode').html("已发送("+num+")");
+        var obj = setInterval(function () {
+            num--;
+            if(num<0){
+                num = 60;
+                clearInterval(obj);
+                $('#hqcode').html("获取验证码");
+            }
+            $('#hqcode').html("已发送("+num+")");
+        },1000)
+    }
+
+
+    function checkVal() {
+
+        var phone = $('#account').val();
+        if(!(/^1[3456789]\d{9}$/.test(phone))){
+            layer.alert('手机号码有误，请重填!', {icon: 1});
+            return false;
+        }
+
+        if($('#password').val() != $('#password2').val()){
+            layer.alert('两次密码输入不一致!', {icon: 1});
+            return false;
+        }
+
+        if ($('#captcha').val() != captch) {
+            layer.alert('验证码错误!', {icon: 1});
+            return false;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: "<{:url('register')}>",
+            data: {
+                account: $('#account').val().replace(/(^\s*)|(\s*$)/g, ""),
+                password: $('#password').val().replace(/(^\s*)|(\s*$)/g, ""),
+            },
+            dataType: 'text',
+            success: function (data) {
+                randomPassword();
+                var msg = '注册成功!';
+                switch (data) {
+                    case 'error':
+                        msg = '注册失败!';
+                        break;
+                    case 'repeat':
+                        msg = '账号重复!';
+                        break;
+                }
+                if (msg == '注册成功!') {
+                    location.href = "<{:url('index')}>";
+                } else {
+                    layer.alert(msg, {icon: 1, time: 2000,});
+                }
+
+
+            }
+        });
+
+    }
+</script>

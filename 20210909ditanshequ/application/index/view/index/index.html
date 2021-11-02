@@ -1,0 +1,289 @@
+<!--包含头部文件-->
+<{include file="public/header" /}>
+
+<title><{$config.cfg_webname}></title>
+<meta name="keywords" content="<{$config.cfg_keywords}>">
+<meta name="description" content="<{$config.cfg_description}>">
+
+<style>
+ #list{
+	 background-color: #fff;
+	 margin-bottom: 10px;
+ }
+ .seachBtn {
+	 border: 0;
+	 width: 74px;
+	 height: 29px;
+	 text-align: center;
+	 cursor: pointer;
+	 margin-left: 10px;
+ }
+</style>
+	</head>
+	<body>
+
+	<{include file="public/headinfo" /}>
+
+
+	<div class="idxpd">
+		<div class="wrap">
+			<div class="swiper-container swiper-container-bn layui-hide-xs">
+			    <div class="swiper-wrapper swiper-wrapper-bn">
+
+					<{volist name="banners" id="vo"}>
+					<div class="swiper-slide">
+						<a class="bnimg" data-background="<{$vo.bannersrc}>" href=""></a>
+					</div>
+					<{/volist}>
+
+			    </div>
+			    <div class="swiper-pagination"></div>
+			    <div class="swiper-button-next swiper-button-next-bn"></div>
+    			<div class="swiper-button-prev swiper-button-prev-bn"></div>
+			</div>
+		</div>
+		<div class="wrap">
+			<!--<marquee  direction=left behavior=scroll loop=3 scrollamount=1 scrolldelay=10 align=top height=30 width=100% hspace=20 vspace=10 >-->
+				<!--<{volist name="quote" id="vo"}>-->
+					<!--**公司已在 <{$vo.create_time}>参与投标“ <{$vo.order.title}>”项目 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+				<!--<{/volist}>-->
+			<!--</marquee>-->
+		</div>
+		<div class="m1 mt_40 layui-hide-xs">
+			<div class="wrap bgwhite bordetrbl" >
+				<div class="m1w clearfix" id="project">
+					<span class="fl m1l"><img class="middle mr5" src="__INDEX__/images/m1ico1_03.png"/>项目</span>
+
+					<div class="fr m1r clearfix">
+						<span class="m1rl fl active" catid="" >不限</span>
+						<div class="fr m1rr">
+							<{volist name="proinfo" id="vo"}>
+							<span proid="<{$vo.id}>" ><{$vo.name}></span>
+							<{/volist}>
+						</div>
+					</div>
+				</div>
+				<div class="m1w clearfix" id="category">
+					<span class="fl m1l"><img class="middle mr5" src="__INDEX__/images/m1ico2_03.png"/>类目</span>
+					<div class="fr m1r clearfix">
+						<span class="m1rl fl active" catid="" >不限</span>
+						<div class="fr m1rr">
+							<{volist name="cates" id="vo"}>
+									<span catid="<{$vo.id}>" title="<{$vo.name}>"><{$vo.name}></span>
+							<{/volist}>
+						</div>
+					</div>
+				</div>
+
+				<div class="m1w clearfix" id="dtime">
+					<span class="fl m1l">截止时间</span>
+					<div class="fr m1r clearfix">
+						<div class="fr m1rr">
+							<div class="clearfix m1rrb">
+								<input placeholder="mm/dd/yyyy" class="fl inline laydate-icon" type="text" name="" id="end" value="" style="margin-right: 20px" />
+								招标公告标题：<input type="text" id="kwd"> <button type="button" class="seachBtn" onclick="getOrders()">查找</button>
+								<div style="display:inline-block;float: right">
+									<img src="__INDEX__/images/list_1.png" alt="" id="listPng" onclick="listPng()">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="mt_10 m2">
+			<div class="wrap">
+				<div class="m2ab wrap" id="list">
+				    <div class="layui-row mt_25 layui-hide-xs">
+				        <div class="layui-col-xs12 layui-col-md6"><b>招标公告名称</b></div>
+				        <div class="layui-col-xs4 layui-col-md2"><b>所属项目</b></div>
+				        <div class="layui-col-xs4 layui-col-md2"><b>报名截止时间</b></div>
+				        <div class="layui-col-xs4 layui-col-md2"><b>投标</b></div>
+				    </div>
+				    <{volist name="orders" id="vo"}>
+				    <div class="layui-row mt_25">
+				        <div class="layui-col-xs12 layui-col-md6"><{$vo.title}></div>
+				        <div class="layui-col-xs6 layui-col-md2"><i class="colorindex"><{$vo.project.name}></i></div>
+				        <div class="layui-col-xs6 layui-col-md2"><{$vo.endtime|substr=0,13}>:00:00</div>
+				        <div class="layui-col-xs12 layui-col-md2"><a  href="<{:url('zbinfo',['id'=>$vo.id])}>" onclick="return islogin()">我要投标</a></div>
+				    </div>
+				    <{/volist}>
+				</div>
+
+				<div id="barcon" class="pager mt_40 textcenter">
+					<a href="">上一页</a>
+					<a href="" class="active">1</a>
+					<a href="">2</a>
+					<a href="">3</a>
+					<a href="">4</a>
+					<a href="">5</a>
+					<a href="javascript:">...</a>
+					<a href="">146</a>
+					<a href="">下一页</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--包含footer文件-->
+	<{include file="public/footer" /}>
+
+	<script src="__INDEX__/laydate/laydate.js"></script>
+	<script>
+		var PngType="block";//默认九宫格
+		!function(){
+			laydate.skin('default');//切换皮肤，请查看skins下面皮肤库
+            $(".m1r span").bind('click',function(){
+                $(this).parent(".m1rr").siblings(".m1rl").removeClass("active");
+                $(this).siblings("span").removeClass("active");
+                $(this).addClass("active");
+                getOrders()
+            })
+            $(".m1rl").bind('click',function(){
+                $(this).siblings(".m1rr").find('span').removeClass("active");
+                $(this).addClass("active");
+                getOrders()
+            })
+
+		}();
+
+
+		var end = {
+		    elem: '#end',
+		    format: 'YYYY-MM-DD',
+			// min: laydate.now(),
+		    max: '2099-06-16',
+		    istime: false,
+		    istoday: false,
+		    choose: function(datas){
+		        start.max = datas; //结束日选好后，充值开始日的最大日期
+                getOrders('');
+		    }
+		};
+		laydate(end);
+
+		/*判断是否登录*/
+		function islogin() {
+			if($('#supname').val() == ''){
+			     layer.msg('请登录查看详情!',{icon:1,time:5000,end:function(){
+			         location.href="<{:url('/index/index/login')}>";
+			     }});
+			    return false;
+			}
+        }
+
+		/*获取订单*/
+		function getOrders(obj){
+			var projectid = $('#project .active').attr('proid');/*获取项目信息*/
+			var catid = $('#category .active').attr('catid');/*获取商品信息*/
+
+			$.ajax({
+			    type: 'POST',
+			    url: "<{:url('getorders')}>",
+			    data:{
+                    projectid:projectid,
+                    catid:catid,
+                    kwd:$('#kwd').val(),
+                    endtime:$('#end').val(),
+			    },
+			    dataType: 'json',
+			    success: function(data){
+                    setOrders(data);//修改商品列表
+			    }
+			});
+		}
+
+		function setOrders(data){
+		    var list = '';
+		    var list1 = `<div class="layui-row mt_25">
+				        <div class="layui-col-xs6 layui-col-md6"><b>招标公告名称</b></div>
+				        <div class="layui-col-xs6 layui-col-md2"><b>所属项目</b></div>
+				        <div class="layui-col-xs6 layui-col-md2"><b>报名截止时间</b></div>
+				        <div class="layui-col-xs6 layui-col-md2"><b>投标</b></div>
+				    </div>`;
+			for(var i in data){
+                list1 += `<div class="layui-row mt_25">
+				        <div class="layui-col-xs6 layui-col-md6">`+data[i]['title']+`</div>
+				        <div class="layui-col-xs6 layui-col-md2"><i class="colorindex">`+data[i]['pro']['name']+`</i></div>
+				        <div class="layui-col-xs6 layui-col-md2">`+data[i]['endtime']+`</div>
+				        <div class="layui-col-xs6 layui-col-md2"><a href="<{:url('zbinfo')}>?id=`+data[i]['id']+`" onclick="return islogin()">我要投标</a></div>
+				    </div>`;
+			}
+
+			$('#list').html(list1);
+            goPage(1); //pageNum 为你要跳转的页码
+        }
+
+        goPage(1); //pageNum 为你要跳转的页码
+
+        /**
+         * 分页函数
+         * pno--页数
+         * psize--每页显示记录数
+         * 分页部分是从真实数据行开始，因而存在加减某个常数，以确定真正的记录数
+         * 纯js分页实质是数据行全部加载，通过是否显示属性完成分页功能
+         **/
+        function goPage(pno){
+            var itable = document.getElementById("idData");
+            var num = $(itable).find('.m2a').length;//表格所有行数(所有记录数)
+
+            var totalPage = 0;//总页数
+            var pageSize = 9;//每页显示行数
+            //总共分几页
+            if(num/pageSize > parseInt(num/pageSize)){
+                totalPage=parseInt(num/pageSize)+1;
+            }else{
+                totalPage=parseInt(num/pageSize);
+            }
+            var currentPage = pno;//当前页数
+            var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31
+            var endRow = currentPage * pageSize;//结束显示的行   40
+            endRow = (endRow > num)? num : endRow;    //40
+            //遍历显示数据实现分页
+            for(var i=1;i<(num+1);i++){
+                var irow = $(itable).find('.m2a')[i-1];
+                var irow1 = $('#list').find('.us4tab2')[i-1];
+                if(i>=startRow && i<=endRow){
+                    irow.style.display = "inline-block";
+                    irow1.style.display = "block";
+                }else{
+                    irow.style.display = "none";
+                    irow1.style.display = "none";
+                }
+            }
+
+            var tempStr = "";
+
+
+            if(currentPage>1){
+                tempStr += "<a class='btn' href=\"#\" onClick=\"goPage("+(currentPage-1)+")\">上一页</a>"
+            }else{
+                tempStr += "<a class='btn'>上一页</a>";
+            }
+
+            var pi= 1; //固定頁碼
+            if(pno>=3){
+                if(totalPage-pno  > 2){  pi = pno - 2; }else{  pi = totalPage - 4; }
+            }
+
+            for(var pageIndex = pi;pageIndex<pi+5;pageIndex++){
+                if(pageIndex >= totalPage+1)break;
+                if(pageIndex <= 0)continue;
+                if(pageIndex == pno){
+                    tempStr += "<a class=\"active\" onclick=\"goPage("+pageIndex+")\">"+ pageIndex +"</a>";
+                }else{
+                    tempStr += "<a onclick=\"goPage("+pageIndex+")\">"+ pageIndex +"</a>";
+                }
+            }
+
+            if(currentPage<totalPage){
+                tempStr += "<a class='btn' href=\"#\" onClick=\"goPage("+(currentPage+1)+")\">下一页</a>";
+            }else{
+                tempStr += "<a class='btn'>下一页</a>";
+            }
+            document.getElementById("barcon").innerHTML = tempStr;
+        }
+
+	</script>
+	</body>
+</html>

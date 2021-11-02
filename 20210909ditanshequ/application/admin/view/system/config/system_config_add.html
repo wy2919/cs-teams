@@ -1,0 +1,127 @@
+<!doctype html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title><{$config.cfg_webname}></title>
+    <meta name="keywords" content="<{$config.cfg_keywords}>">
+    <meta name="description" content="<{$config.cfg_description}>">
+
+    <{include file="public/header" /}>
+
+    <!--<script type="text/javascript" src="__LIB__/ueditor/1.4.3/ueditor.config.js"></script>-->
+    <!--<script type="text/javascript" src="__LIB__/ueditor/1.4.3/ueditor.all.min.js"> </script>-->
+
+</head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form" method="post">
+            <input type="hidden" name="type" value="">
+            <input type="hidden" name="filename" value="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">参数名：</label>
+                <div class="layui-input-block"> <!-- layui-input-inline -->
+                    <input type="text" id="sys_field" name="varname" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">变量名：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="sys_name" name="info" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">参数值：</label>
+                <div class="layui-input-block">
+                    <!--<script id="content" type="text/plain" style="width:100%;height:600px;"></script>-->
+                    <textarea class="layui-textarea" name="value" lay-verify="required" id="" cols="30" rows="10"></textarea>
+                    <!--<input type="text" id="sys_val" name="value" lay-verify="required" autocomplete="off" class="layui-input">-->
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">上传图片：</label>
+                <div class="layui-input-inline">
+                    <button type="button" class="layui-btn upfile">
+                        <i class="layui-icon">&#xe67c;</i>上传图片
+                    </button>
+                    <br>
+                    <img height="100px" id="sc" src="" alt="">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label"></label>
+                <button type="button" lay-submit lay-filter="go" class="layui-btn" >提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+     // var content=UE.getEditor('content');
+    /*上传图片*/
+    layui.use(['upload','form', 'layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form,
+            layer = layui.layer;
+        var upload = layui.upload;
+
+        upload.render({
+            elem:'.upfile'
+            ,url:"<{:url('upload')}>"
+            ,data:{}
+            ,accept:'file'
+            ,size:0
+            ,multiple:false
+            ,done:function (res) {
+                console.log(res);
+                $('#sc').attr('src',res['path']);
+                $('textarea[name="value"]').val(res['path']);
+                $('input[name="type"]').val('path');
+                $('input[name="filename"]').val(res['name']);
+            }
+        })
+
+
+
+        /*表单*/
+        form.on('submit(go)', function(data){
+            // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+            // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            url_post("<{:url('systemConfigAdd')}>",data.field,function (res) {
+                layer.msg(res.message,{ icon:1,time:2000, end:function () {
+                        parent.location.reload();
+                }})
+            })
+            // $.ajax({
+            //     type: 'POST',
+            //     url: "<{:url('systemConfigAdd')}>",
+            //     data:data.field,
+            //     dataType: 'text',
+            //     success: function(data){
+            //         // var msg = '添加失败!';
+            //         // if(data == 'ok'){
+            //         //     msg = '添加成功!'
+            //         // }
+            //         // layer.msg(msg,{
+            //         //     icon:1,time:1000,
+            //         //     end:function () {
+            //         //         parent.location.reload();
+            //         //     }
+            //         // });
+            //     }
+            // });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

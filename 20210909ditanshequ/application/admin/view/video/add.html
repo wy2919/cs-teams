@@ -1,0 +1,176 @@
+<!doctype html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title><<{$config.cfg_webname}></title>
+    <meta name="keywords" content="<<{$config.cfg_keywords}>">
+    <meta name="description" content="<<{$config.cfg_description}>">
+    <{include file="public/header" /}>
+    <style>
+        .c-red {
+            color: red;
+        }
+
+        .layui-form-label {
+            width: 90px;
+        }
+
+        .layui-input-block {
+            margin-left: 130px;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form" lay-filter="formTest" action="" method="post">
+            <input type="hidden" name="type" value="2">
+            <{:make_input('文章标题', 'title', '')}>
+            <{:make_input('观看此视频增加的积分', 'jifen', 0)}>
+            <{:make_input('浏览量', 'browse', '')}>
+            <{:make_input('点赞量', 'praise', '')}>
+
+
+            <div class="layui-form-item" style="z-index:30; position: relative;">
+                <label class="layui-form-label">分类：</label>
+                <div class="layui-input-block">
+
+                    <{volist name="$type" id="vo"}>
+                    <input value="<{$vo.id}>" type="checkbox" name="types[]" title="<{$vo.name}>" ><div class="layui-unselect layui-form-checkbox layui-form-checked"><span>阅读</span><i class="layui-icon layui-icon-ok"></i></div>
+                    <{/volist}>
+
+                </div>
+            </div>
+
+
+
+            <div class="layui-form-item" style="z-index: 80; position: relative;">
+                <label class="layui-form-label">封面缩略图：</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="img" value="">
+                    <button type="button" class="layui-btn img">
+                        <i class="layui-icon">&#xe67c;</i>上传封面缩略图
+                    </button>
+                    <br>
+                    <img height="100px" id="img" src="" alt="">
+                </div>
+            </div>
+
+
+            <!--			<{:make_input('视频时长', 'praise', '')}>-->
+            <{:make_uploadFile('视频', 'video','')}>
+
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label"></label>
+                <button type="button" lay-submit lay-filter="go" class="layui-btn">提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="contentVal" style="display: none"></div>
+<script type="text/javascript" src="__LIB__/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__LIB__/ueditor/1.4.3/ueditor.all.min.js"></script>
+<script type="text/javascript">
+    var content = UE.getEditor('content');
+    UE.getEditor('content').addListener("ready", function () {
+        // editor准备好之后才可以使用
+        UE.getEditor('content').setContent($('#contentVal').html());
+    })
+    var tiem = 0
+
+    layui.config({
+        base: '__LIB__/layui/lay/'
+    }).extend({
+        treeSelect: 'treeSelect/treeSelect'
+    }).use(['layer', 'table', 'form', 'treeSelect', 'upload'], function () {
+        var form = layui.form,
+            upload = layui.upload;
+
+        upload.render({
+            elem: '.img'
+            , url: "<{:url('upload')}>"
+            , data: {}
+            , accept: 'file'
+            , size: 0
+            , multiple: false
+            , done: function (res) {
+                $('#img').attr('src', res['path']);
+                $('input[name="img"]').val(res['path']);
+            }
+        })
+
+        // 单文件上传（文件）
+        upload.render({
+            elem: '.uploadFile'
+            , url: 'upload'
+            , multiple: false
+            , accept: 'file'
+            , data: {disk: 'file'}
+            , before: function (obj) {
+                layer.load(1);
+            }
+            , done: function (res) {
+                $("#" + $(this.item).data("id")).val(res['path'])
+                $("#filenamea").val(res['name'])
+                $(this.item).html('已上传,点击重传').attr('class', 'layui-btn layui-btn-normal uploadFile')
+
+                videoTime(res['path'],res=>{
+                    tiem = res
+                })
+
+
+                layer.closeAll('loading')
+            }, error: function (index, upload) {
+            }
+        })
+
+
+        //监听提交
+        form.on('submit(go)', function (data) {
+            data.field['duration'] = tiem
+            url_post("<{:url('Add')}>", data.field, function (res) {
+
+                // return
+                layer.msg(res.message, {
+                    icon: 1, time: 1000, end: function () {
+                        parent.location.reload();
+                    }
+                });
+            });
+            return false;
+        });
+    });
+
+    // 获取视频时长并转换 支持网络路径
+	function videoTime(path,callback) {
+
+        var audio = new Audio(path)
+        audio.addEventListener("loadedmetadata", function (e) {
+            let result = parseInt(audio.duration)
+            let h = Math.floor(result / 3600) < 10 ? '0' + Math.floor(result / 3600) : Math.floor(result / 3600);
+            let m = Math.floor((result / 60 % 60)) < 10 ? '0' + Math.floor((result / 60 % 60)) : Math.floor((result / 60 % 60));
+            let s = Math.floor((result % 60)) < 10 ? '0' + Math.floor((result % 60)) : Math.floor((result % 60));
+
+            // let res = '';
+            // if(h !== '00') res += `${h}:`;
+            // if(m !== '00') res += `${m}:`;
+            // res += `${s}`;
+            // alert(h+':'+m+':'+s)
+
+            callback(h+':'+m+':'+s)
+        });
+	}
+
+
+    // function videoTime(path){
+    // 	//
+    //
+    //
+	// }
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

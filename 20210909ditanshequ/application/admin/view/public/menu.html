@@ -1,0 +1,85 @@
+
+
+<div class="left-nav">
+    <div id="side-nav">
+        <ul id="nav">
+            <li>
+                <a href="javascript:;" onclick="showHome()" >
+                    <i class="iconfont left-nav-li" lay-tips="class">&#xe723;</i>
+                    <cite>首页</cite>
+                </a>
+            </li>
+            <script>
+                function showHome(){
+                    $('.layui-tab-title li').removeClass('layui-this');
+                    $('.home').addClass('layui-this');
+                    $('.layui-tab-item').removeClass('layui-show');
+                    $('.layui-tab-item').eq(0).addClass('layui-show')
+                }
+            </script>
+
+            <{volist name="menus" id="vo"}>
+            <li>
+                <{if $vo.url == ''}>
+                    <a href="javascript:;">
+                        <i class="iconfont left-nav-li" lay-tips="<{$vo.module_name}>"><{$vo.left_icon|raw}></i>
+                        <cite><{$vo.module_name}></cite>
+                        <i class="iconfont nav_right">&#xe697;</i>
+                    </a>
+                <{else /}>
+                    <a onclick="xadmin.add_tab('<{$vo.module_name}>','<{:url(\'\'.$vo.url.\'\')}>')">
+                        <i class="iconfont left-nav-li"><{$vo.left_icon|raw}></i>
+                        <cite><{$vo.module_name}></cite>
+                    </a>
+                <{/if}>
+
+                <{if isset($vo._child)}>
+                <ul class="sub-menu">
+
+                    <{volist name="$vo._child" id="vo1"}>
+                    <li>
+                        <{if $vo1.url == ''}>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="<{$vo1.module_name}>">&#xe6a7;</i>
+                            <cite><{$vo1.module_name}></cite>
+                            <i class="iconfont nav_right">&#xe697;</i>
+                        </a>
+                        <{else /}>
+                        <a onclick="xadmin.add_tab('<{$vo1.module_name}>','<{:url(\'\'.$vo1.url.\'\')}>')">
+                            <i class="iconfont left-nav-li">&#xe6a7;</i>
+                            <cite><{$vo1.module_name}></cite>
+                        </a>
+                        <{/if}>
+
+                        <{if isset($vo1._child)}>
+                        <ul class="sub-menu">
+                            <{volist name="$vo1._child" id="vo2"}>
+                            <li>
+                                <{if $vo2.url == ''}>
+                                <a href="javascript:;">
+                                    <i class="iconfont left-nav-li" lay-tips="<{$vo2.module_name}>">&#xe6a7;</i>
+                                    <cite><{$vo2.module_name}></cite>
+                                    <i class="iconfont nav_right">&#xe697;</i>
+                                </a>
+                                <{else /}>
+                                <a onclick="xadmin.add_tab('<{$vo2.module_name}>','<{:url(\'\'.$vo2.url.\'\')}>')">
+                                    <i class="iconfont left-nav-li">&#xe6a7;</i>
+                                    <cite><{$vo2.module_name}></cite>
+                                </a>
+                                <{/if}>
+                            </li>
+                            <{/volist}>
+
+                        </ul>
+                        <{/if}>
+
+                    </li>
+                    <{/volist}>
+
+                </ul>
+                <{/if}>
+            </li>
+            <{/volist}>
+        </ul>
+    </div>
+</div>

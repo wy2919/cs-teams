@@ -1,0 +1,241 @@
+<!--包含头部文件-->
+<{include file="public/header" /}>
+
+<title><{$config.cfg_webname}></title>
+<meta name="keywords" content="<{$config.cfg_keywords}>">
+<meta name="description" content="<{$config.cfg_description}>">
+</head>
+<body>
+<{include file="public/headinfo" /}>
+<div class="idxpd">
+    <div class="wrap clearfix">
+        <{include file="public/usermenu" /}>
+        <div class="fr usr">
+            <div class="us1">
+                <div class="us4top">项目列表 <{$Request.param.status}></div>
+                <div class="us4a mt_25">
+                    <a href="<{:url('userorders',['status'=>''])}>" <{if $Request.param.status == ""}> class="active"<{/if}>>已投项目</a>
+                    <a href="<{:url('userorders',['status'=>'通过'])}>" <{if $Request.param.status == "通过"}> class="active"<{/if}>>已通过项目</a>
+                    <!--<a href="<{:url('userorders',['status'=>'待定'])}>" <{if $Request.param.status == "待定"}> class="active"<{/if}>>待定修改</a>-->
+                    <a href="<{:url('userorders',['status'=>'淘汰'])}>" <{if $Request.param.status == "淘汰"}> class="active"<{/if}>>被淘汰项目</a>
+                </div>
+                <div class="us4tab1 mt_25">
+                    <table border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <th>招标公告订单名称</th>
+                            <th>招标公告分类</th>
+                            <th>投标价格</th>
+                            <th>投标状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <{volist name="list" id="vo"}>
+                    <div class="us4tab1 us4tab2 mt_25">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td colspan="5" class="active">投标时间：<{$vo.create_time|getDateTime}></td>
+                            </tr>
+                            <tr>
+                                <td><a href="<{:url('/index/index/zbinfo',['id'=>$vo.order.id])}>"><{$vo.order.title}></a></td>
+                                <td><{$vo.order.catinfo.name}></td>
+                                <td><i class="colorindex">￥<{$vo.price}></i></td>
+                                <td quoteid="<{$vo.id}>"><{$vo.status|getOrderStatus|raw}></td>
+                                <td><a href="<{:url('/index/index/zbinfo')}>?id=<{$vo.order.id}>"><button type="button" class="layui-btn layui-btn-normal">重新编辑</button></a></td>
+                            </tr>
+                        </table>
+                    </div>
+                <{/volist}>
+
+                <div id="barcon" class="pager textcenter mt_30">
+                    <a href="">上一页</a>
+                    <a href="">1</a>
+                    <a href="">2</a>
+                    <a href="">3</a>
+                    <a href="">4</a>
+                    <a href="javascript:">...</a>
+                    <a href="">146</a>
+                    <a href="">下一页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--弹窗-->
+<div class="tc tc1">
+    <div class="distab w100 h100">
+        <div class="tab_cell w100">
+            <div class="tcbox bgwhite">
+                <i class="closetc"><img src="__INDEX__/images/close_03.png"/></i>
+                <div class="tctop">修改报价</div>
+                <div class="clearfix tcclr">
+                    <span class="fl">投标价格：</span>
+                    <div class="fr tcr">
+                        <input type="text" placeholder="请输入价格" id="price" value=""/>
+                    </div>
+                </div>
+                <div class="clearfix tcclr">
+                    <span class="fl">资质图片：</span>
+                    <div class="fr tcr">
+                        <div class="lgbrsc">
+                            <div class="lgbrscsp posrelative">
+                                <img class="middle mr5" src="__INDEX__/images/scico_03.png"/>上传图片
+                                <input type="file" name="" id="sc" value=""/>
+                            </div>
+                            <i class="tcri">支持：jpg .png ...</i>
+                            <img id="scimg" src="__INDEX__/images/yyzz_03.jpg"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="textcenter mt_30 tcsbma">
+                    <a onclick="bid()" class="hoverop">点击提交</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--包含footer文件-->
+<{include file="public/footer" /}>
+
+</body>
+</html>
+
+
+<script>
+    var quoteid = '';
+    $(function(){
+        $("#sc").change(function(e) {
+            var imgBox = e.target;
+            uploadImg($('#scimg'), imgBox)
+        });
+        function uploadImg(element, tag) {
+            var file = tag.files[0];
+            var imgSrc;
+            if (!/image\/\w+/.test(file.type)) {
+                alert("只能上传图片！");
+                return false;
+            }
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function() {
+                console.log(this.result);
+                imgSrc = this.result;
+                $(".schide").css("opacity","0");
+                $('#scimg').css("opacity","1");
+                $("#scimg").attr("src", imgSrc);
+            };
+        }
+    })
+
+    $(".clicktc_order").click(function(){
+        $(".tc1").toggleClass("tc_active");
+        quoteid = $(this).parent().attr('quoteid');
+    })
+
+
+    function bid() {
+        var formData = new FormData();
+
+        formData.append("zizhipic",$("#sc")[0].files[0]);
+        formData.append("id", quoteid);
+        formData.append("price", $("#price").val());
+
+        $.ajax({
+            url:"<{:url('modprice')}>",
+            dataType:'text',
+            type:'POST',
+            async: false,
+            data: formData,
+            processData : false, // 使数据不做处理
+            contentType : false, // 不要设置Content-Type请求头
+            success: function(data){
+                var msg = '修改成功!';
+
+                layer.msg(msg,{
+                    icon:1,time:2000,
+                    end:function () {
+                        location.reload();
+                    }
+                });
+            }
+        });
+
+    }
+
+
+    goPage(1); //pageNum 为你要跳转的页码
+
+    /**
+     * 分页函数
+     * pno--页数
+     * psize--每页显示记录数
+     * 分页部分是从真实数据行开始，因而存在加减某个常数，以确定真正的记录数
+     * 纯js分页实质是数据行全部加载，通过是否显示属性完成分页功能
+     **/
+    function goPage(pno){
+        var num = $('.us4tab2').length;//表格所有行数(所有记录数)
+
+        var totalPage = 0;//总页数
+        var pageSize = 8;//每页显示行数
+        //总共分几页
+        if(num/pageSize > parseInt(num/pageSize)){
+            totalPage=parseInt(num/pageSize)+1;
+        }else{
+            totalPage=parseInt(num/pageSize);
+        }
+        var currentPage = pno;//当前页数
+        var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31
+        var endRow = currentPage * pageSize;//结束显示的行   40
+        endRow = (endRow > num)? num : endRow;    //40
+        //遍历显示数据实现分页
+        for(var i=1;i<(num+1);i++){
+            var irow = $('.us4tab2')[i-1];
+            if(i>=startRow && i<=endRow){
+                irow.style.display = "block";
+            }else{
+                irow.style.display = "none";
+            }
+        }
+
+        var tempStr = "";
+
+
+        if(currentPage>1){
+            tempStr += "<a class='btn' href=\"#\" onClick=\"goPage("+(currentPage-1)+")\">上一页</a>"
+        }else{
+            tempStr += "<a class='btn'>上一页</a>";
+        }
+
+        var pi= 1; //固定頁碼
+        if(pno>=3){
+            if(totalPage-pno  > 2){
+                pi = pno - 2;
+            }else{
+                pi = totalPage - 4;
+            }
+        }
+
+        for(var pageIndex = pi;pageIndex<pi+5;pageIndex++){
+            if(pageIndex >= totalPage+1)break;
+            if(pageIndex == pno){
+                tempStr += "<a class=\"active\" onclick=\"goPage("+pageIndex+")\">"+ pageIndex +"</a>";
+            }else{
+                tempStr += "<a onclick=\"goPage("+pageIndex+")\">"+ pageIndex +"</a>";
+            }
+        }
+
+
+        if(currentPage<totalPage){
+            tempStr += "<a class='btn' href=\"#\" onClick=\"goPage("+(currentPage+1)+")\">下一页</a>";
+        }else{
+            tempStr += "<a class='btn'>下一页</a>";
+        }
+
+        document.getElementById("barcon").innerHTML = tempStr;
+
+    }
+</script>
+

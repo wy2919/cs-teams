@@ -1,0 +1,187 @@
+<!doctype html>
+<html class="x-admin-sm">
+<head>
+	<meta charset="UTF-8">
+	<title><<{$config.cfg_webname}></title>
+	<meta name="keywords" content="<<{$config.cfg_keywords}>">
+	<meta name="description" content="<<{$config.cfg_description}>">
+	<{include file="public/header" /}>
+	<style>
+		.c-red{
+			color: red;
+		}
+		.layui-form-label{
+			width: 90px;
+		}
+		.layui-input-block{
+			margin-left: 130px;
+		}
+	</style>
+
+</head>
+<body>
+
+<div class="layui-fluid">
+	<div class="layui-row">
+		<form class="layui-form" lay-filter="formTest"  action="" method="post">
+			<{:make_input('活动标题', 'name', '')}>
+			<{:make_input('活动简介(小标题)', 'brief', '')}>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="c-red">*</span>开始时间：</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input" id="begin" value="" autocomplete="off"
+						   lay-verify="required" placeholder="开始时间" name="begin">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="c-red">*</span>结束时间：</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input" id="finish" value="" autocomplete="off"
+						   lay-verify="required" placeholder="结束时间" name="finish">
+				</div>
+			</div>
+
+
+			<{:make_input('活动地址', 'site', '')}>
+			<{:make_input('联系人', 'linkman','')}>
+			<{:make_input('联系人手机号', 'phone','')}>
+			<{:make_input('联系人邮箱', 'gmail',  '')}>
+			<{:make_input('招募人数', 'recruitment', '')}>
+
+
+			<div class="layui-form-item" style="z-index: 80; position: relative;">
+				<label class="layui-form-label">封面缩略图：</label>
+				<div class="layui-input-inline">
+					<input type="hidden" name="img" value="">
+					<button type="button" class="layui-btn img">
+						<i class="layui-icon">&#xe67c;</i>上传封面缩略图
+					</button>
+					<br>
+					<img height="100px" id="img" src="" alt="">
+				</div>
+			</div>
+
+
+			<div class="layui-form-item layui-form-text">
+				<label for="desc" class="layui-form-label">活动详情</label>
+				<div class="layui-input-block">
+					<textarea placeholder="请输入活动详情" name="content" class="layui-textarea"></textarea>
+				</div>
+			</div>
+
+
+			<div class="layui-form-item" >
+				<label for="L_repass" class="layui-form-label"></label>
+				<button type="button" lay-submit lay-filter="go" class="layui-btn" >提交</button>
+			</div>
+		</form>
+	</div>
+</div>
+<div id="contentVal" style="display: none"> </div>
+<script type="text/javascript" src="__LIB__/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__LIB__/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<script type="text/javascript">
+	var content=UE.getEditor('content');
+	UE.getEditor('content').addListener("ready", function () {
+		// editor准备好之后才可以使用
+		UE.getEditor('content').setContent($('#contentVal').html());
+	})
+
+	layui.config({
+		base: '__LIB__/layui/lay/'
+	}).extend({
+		treeSelect: 'treeSelect/treeSelect'
+	}).use(['layer', 'table', 'form', 'laydate','treeSelect','upload'], function () {
+		var form = layui.form,
+				upload = layui.upload;
+
+		laydate = layui.laydate;
+		//执行一个laydate实例
+		laydate.render({
+			elem: '#finish', //指定元素
+			type: 'datetime',
+			format: 'yyyy-M-d H:m:s'
+		});
+
+
+		laydate.render({
+			elem: '#begin', //指定元素
+			type: 'datetime',
+			format: 'yyyy-M-d H:m:s'
+		});
+
+		upload.render({
+			elem:'.img'
+			,url:"<{:url('upload')}>"
+			,data:{}
+			,accept:'file'
+			,size:0
+			,multiple:false
+			,done:function (res) {
+				$('#img').attr('src',res['path']);
+				$('input[name="img"]').val(res['path']);
+			}
+		})
+
+		upload.render({
+			elem:'.introduce'
+			,url:"<{:url('upload')}>"
+			,data:{}
+			,accept:'file'
+			,size:0
+			,multiple:false
+			,done:function (res) {
+				$('#introduce').attr('src',res['path']);
+				$('input[name="introduce"]').val(res['path']);
+			}
+		})
+
+		// 单文件上传（文件）
+		upload.render({
+			elem: '.uploadFile'
+			, url: 'upload'
+			, multiple: false
+			, accept: 'file'
+			, data: {disk: 'file'}
+			, before: function (obj) {
+				layer.load(1);
+			}
+			, done: function (res) {
+				$("#"+ $(this.item).data("id")).val(res['path'])
+				$("#filenamea").val(res['name'])
+				$(this.item).html('已上传,点击重传').attr('class', 'layui-btn layui-btn-normal uploadFile')
+				layer.closeAll('loading')
+			}, error: function (index, upload) {
+				// layer.closeAll('loading')
+			}
+		})
+
+
+
+		//监听提交
+		form.on('submit(go)', function(data){
+			if (data.field['img'] == '' || data.field['img'] == null || data.field['img']== undefined){
+				alert('请填写完整')
+				return ;
+			}
+
+			if (data.field['finish'] < data.field['begin']){
+				layer.msg('开始日期大于结束日期');
+				return
+			}
+			data.field['finish'] = (new Date(data.field['finish'])).getTime()/1000
+			data.field['begin'] = (new Date(data.field['begin'])).getTime()/1000
+
+			url_post("<{:url('Add')}>",data.field,function (res) {
+				layer.msg(res.message,{ icon:1,time:1000, end:function () {
+						parent.location.reload();
+					} });
+			});
+			return false;
+		});
+	});
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

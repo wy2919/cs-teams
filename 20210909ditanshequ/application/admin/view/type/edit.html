@@ -1,0 +1,107 @@
+﻿<!doctype html>
+<html class="x-admin-sm">
+<head>
+	<meta charset="UTF-8">
+	<title><<{$config.cfg_webname}></title>
+	<meta name="keywords" content="<<{$config.cfg_keywords}>">
+	<meta name="description" content="<<{$config.cfg_description}>">
+	<{include file="public/header" /}>
+	<style>
+		.c-red{
+			color: red;
+		}
+		.layui-form-label{
+			width: 90px;
+		}
+		.layui-input-block{
+			margin-left: 130px;
+		}
+	</style>
+
+</head>
+<body>
+
+<div class="layui-fluid">
+	<div class="layui-row">
+		<form class="layui-form" lay-filter="formTest"  action="" method="post">
+			<input type="hidden" name="id" value="<{$info.id}>">
+
+
+			<{:make_input('名称', 'name', $info.name ?? '')}>
+
+
+			<div class="layui-form-item">
+				<label for="L_repass" class="layui-form-label"></label>
+				<button type="button" lay-submit lay-filter="go" class="layui-btn" >提交</button>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript" src="__LIB__/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__LIB__/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<script type="text/javascript">
+	var content=UE.getEditor('content');
+	UE.getEditor('content').addListener("ready", function () {
+		// editor准备好之后才可以使用
+		UE.getEditor('content').setContent($('#contentVal').html());
+	})
+
+
+    layui.config({
+        base: '__LIB__/layui/lay/'
+    }).extend({
+        treeSelect: 'treeSelect/treeSelect'
+    }).use(['layer','table','form','treeSelect','upload'], function(){
+        var form = layui.form,
+            upload = layui.upload;
+
+        upload.render({
+            elem:'.img'
+            ,url:"<{:url('upload')}>"
+            ,data:{}
+            ,accept:'file'
+            ,size:0
+            ,multiple:false
+            ,done:function (res) {
+                $('#img').attr('src',res['path']);
+                $('input[name="img"]').val(res['path']);
+            }
+        })
+
+		// 单文件上传（文件）
+		upload.render({
+			elem: '.uploadFile'
+			, url: 'upload'
+			, multiple: false
+			, accept: 'file'
+			, data: {disk: 'file'}
+			, before: function (obj) {
+				layer.load(1);
+			}
+			, done: function (res) {
+					$("#"+ $(this.item).data("id")).val(res['path'])
+					$("#filenamea").val(res['name'])
+					$(this.item).html('已上传,点击重传').attr('class', 'layui-btn layui-btn-normal uploadFile')
+				layer.closeAll('loading')
+			}, error: function (index, upload) {
+				// layer.closeAll('loading')
+			}
+		})
+
+
+
+		//监听提交
+		form.on('submit(go)', function(data){
+			url_post("<{:url('Edit')}>",data.field,function (res) {
+				layer.msg(res.message,{ icon:1,time:1000, end:function () {
+						parent.location.reload();
+					} });
+			});
+			return false;
+		});
+    });
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

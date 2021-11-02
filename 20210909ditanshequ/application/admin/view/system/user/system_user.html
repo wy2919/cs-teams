@@ -1,0 +1,232 @@
+<!doctype html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title><<{$config.cfg_webname}></title>
+    <meta name="keywords" content="<<{$config.cfg_keywords}>">
+    <meta name="description" content="<<{$config.cfg_description}>">
+    <{include file="public/header" /}>
+</head>
+<body>
+
+<div class="x-nav">
+	<span class="layui-breadcrumb">
+		<a href="{:url('Index/indexinfo')}">首页</a>
+		<{$navMenu|raw}>
+	</span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+    </a>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <div class="layui-form">
+                        <div class="layui-input-inline">
+<!--                            <input type="text" class="layui-input" style="display: inline-block;width: 150px" placeholder="昵称" id="nick_name" name="nick_name">-->
+                            <input type="text" class="layui-input" style="display: inline-block;width: 150px"  placeholder="姓名" id="realname" name="realname">
+                            <!--<input type="file" multiple name="bannersrc" class="input-file">-->
+                        </div>
+                        <div class="layui-input-inline">
+                            <select class="select" name="state" id="state" size="1">
+                                <option value="">请选择状态</option>
+                                <option value="1">正常</option>
+                                <option value="2">限制登录</option>
+                            </select>
+                        </div>
+
+<!--                        <div class="layui-input-inline">-->
+<!--                            <select class="select" name="state" id="is_system" size="1">-->
+<!--                                <option value="">请选择类型</option>-->
+<!--                                <option value="1">后台用户</option>-->
+<!--                                <option value="2">前台用户</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+
+                        <button class="layui-btn" id="search" data-type="reload">搜索</button>
+                    </div>
+
+                    <table id="demo" lay-filter="test"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container layui-form">
+        <button class="layui-btn" lay-event="addUser" onclick=""><i class="layui-icon"></i>添加后台账号</button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="modify">修改密码</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="limit">修改限制登录</a>
+</script>
+
+<script type="text/html" id="baruser">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+
+</script>
+
+
+
+<script type="text/javascript">
+
+    layui.use(['table'], function () {
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            , id: 'testReload'
+            , url: "<{:url('systemUser')}>" //数据接口
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , defaultToolbar: ['filter', 'exports', 'print']
+            , page:{
+                limits:[10,50,100]
+            }
+            , cols: [[ //表头
+                // {field: 'nick_name', title: '昵称', width: "10%"}
+                , {field: 'real_name', title: '姓名', width: "10%"}
+                , {field: 'user_sex', title: '性别', width: "5%"}
+                , {field: 'user_tel', title: '手机号', width: "15%"}
+                , {field: 'is_system', title: '类型', width: "10%",templet: function(d){
+                    if(d.is_system == 1){
+                        return '后台用户';
+                    }else{
+                        return '前台用户';
+                    }
+                }}
+                , {field: 'user_status', title: '状态', width: "7%",templet: function(d){
+                     return d.user_status == 1 ? '正常' : '限制登录';
+                }}
+                , {field: 'user_birthday', title: '生日', width: "15%",hide:true}
+                // , {fixed: 'right', width: "20%", align: 'center', toolbar: '#baruser'} //这里的toolbar值是模板元素的选择器
+                , {fixed: 'right', width: "20%", align: 'center', templet: function(d){
+
+                    if (d.is_system == 1){
+                        return '    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>\n' +
+                            '    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>\n' +
+                            '    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="modify">修改密码</a>\n' +
+                            '    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="limit">修改限制登录</a>'
+                    }else {
+                        return '    <a class="layui-btn layui-btn-xs" lay-event="UserEdit">编辑</a>\n'+
+                            '    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="msg">发送消息</a>\n'
+
+                    }
+
+                    }} //这里的toolbar值是模板元素的选择器
+            ]]
+        });
+
+        //头工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+
+            switch (obj.event) {
+                case 'addUser':
+                    xadmin.open('添加管理员', '<{:url(\'systemUserAdd\')}>')
+                    break;
+            };
+        });
+
+        //监听工具条
+        table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+            if (layEvent === 'del') { //删除
+                if(data.id == 'admin'){
+                     layer.msg('超级管理员不能删除!',{icon:1,time:1500});
+                }else{
+                    layer.confirm('真的删除行么', function (index) {
+                        url_post("<{:url('systemUserDel')}>",{id: data.id},function (res) {
+                            layer.msg(res.message,{ icon:1,time:1000, end:function () {
+                                    obj.update({ user_status: str });
+                            }});
+                        });
+                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        layer.close(index);
+                        //向服务端发送删除指令
+                    });
+                }
+
+            } else if (layEvent === 'edit') { //编辑
+                xadmin.open('权限编辑:' + data.id, "<{:url('systemUserEdit')}>?id=" + data.id)
+            } else if (layEvent === 'modify') { //修改密码
+                layer.confirm('确认要修改吗？', function (index) {
+                    layer.open({
+                        content: '密码：<input class="layui-input" id="pwd1" type="text"> <br>\n' +
+                            '重复密码：<input class="layui-input" id="pwd2" type="text">'
+                        , btn: ['确定', '取消']
+                        , yes: function (index, layero) {
+                            //按钮【按钮一】的回调
+                            if ($('#pwd1').val() != '' && $('#pwd1').val() != $('#pwd2').val()) {
+                                layer.msg('密码不一致!', {icon: 1, time: 1000});
+                                return;
+                            }
+                            url_post("<{:url('changepwd')}>",{id: data.id,password: $('#pwd1').val()},function (res) {
+                                layer.msg(res.message,{ icon:1,time:1000, end:function () {
+                                        layer.close(index);
+                                }});
+                            });
+                        }
+                        , btn2: function (index, layero) {
+                            //按钮【按钮二】的回调
+                            layer.closeAll();
+
+                        }
+                    })
+
+                })
+            }
+            else if (layEvent === 'UserEdit') { //编辑
+                xadmin.open('编辑前台用户:' + data.id, "<{:url('Edit')}>?idd=" + data.idd)
+            }
+            else if (layEvent === 'msg') { //编辑
+                xadmin.open('编辑前台用户:' + data.id, "<{:url('Msg')}>?idd=" + data.idd)
+            }
+            else if (layEvent === 'limit') { //限制登录
+                if(data.id == 'admin') {
+                    layer.msg('超级管理员不能限制登录!', {icon: 1, time: 1500});
+                }else{
+                    var str = data.user_status == '1' ? '2' : '1';
+                    url_post("<{:url('Limitlogin')}>",{id: data.id,user_status: str},function (res) {
+                        layer.msg(res.message,{ icon:1,time:1000, end:function () {
+                                obj.update({ user_status: str });
+                        }});
+                    });
+
+                }
+
+            }
+        });
+
+        //数据表格重载
+        $('#search').on('click', function () {
+            //执行重载
+            table.reload('testReload', {
+                page: {curr: 1} //重新从第 1 页开始
+                , where: {
+                    // nick_name: $('#nick_name').val().replace(/(^\s*)|(\s*$)/g, ""),
+                    realname: $('#realname').val().replace(/(^\s*)|(\s*$)/g, ""),
+                    state: $('#state').val(),
+                    // is_system: $('#is_system').val(),
+                }
+            });
+        });
+
+    });
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!doctype html>
+<html class="x-admin-sm">
+<head>
+	<meta charset="UTF-8">
+	<title><{$config.cfg_webname}></title>
+	<meta name="keywords" content="<{$config.cfg_keywords}>">
+	<meta name="description" content="<{$config.cfg_description}>">
+	<{include file="public/header" /}>
+	<style>
+		.c-red{
+			color: red;
+		}
+		.layui-form-label{
+			width: 110px;
+		}
+		.layui-input-block{
+			margin-left: 150px;
+		}
+	</style>
+
+</head>
+<body>
+
+<div class="layui-fluid">
+	<div class="layui-row">
+		<form class="layui-form" lay-filter="formTest"  action="" method="post">
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">父级权限：</label>
+				<div class="layui-input-block">
+					<input type="hidden" name="pid" id="pid" value="0">
+					<input type="hidden" name="level" id="level" value="1">
+					<input type="text" id="tree" lay-filter="tree" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="c-red">*</span>权限名称：</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input" value="" lay-verify="required" placeholder="权限名称" name="module_name">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="c-red">*</span>模块：</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input" autocomplete="off"   value="admin" placeholder="模块" name="module">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="c-red">*</span>控制器：</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input" autocomplete="off" name="contro"  value="" placeholder="控制器" >
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="c-red">*</span>方法名：</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input"  value=""autocomplete="off"   placeholder="方法名" name="method">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">是否是菜单：</label>
+				<div class="layui-input-block">
+					<input type="radio" name="is_menu" value="1" title="是" >
+					<input type="radio" name="is_menu" value="0" title="不是" checked>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="c-red">*</span>左侧小图标：</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input" autocomplete="off" value="& #xe723;"  name="left_icon" style="width: 100px;display: inline-block">  顶级菜单时有效
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="c-red">*</span>排序值：</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input" autocomplete="off" value="1" placeholder="排序值"  name="sort" style="width: 60px;display: inline-block">  &nbsp;&nbsp;&nbsp; 值越小越靠前
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="c-red">*</span>页面导航菜单：</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input" autocomplete="off" value="<a><cite>系统管理</cite></a><a><cite>日志列表</cite></a>" placeholder="页面导航菜单"  name="menu_text">
+				</div>
+			</div>
+
+
+
+			<div class="layui-form-item">
+				<label for="L_repass" class="layui-form-label"></label>
+				<button type="button" lay-submit lay-filter="go" class="layui-btn" >提交</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+</body>
+</html>
+<script type="text/javascript">
+
+    layui.config({
+        base: '__LIB__/layui/lay/'
+    }).extend({
+        treeSelect: 'treeSelect/treeSelect'
+    }).use(['layer','table','form','treeSelect'], function(){
+        var form = layui.form,
+            treeSelect= layui.treeSelect;
+
+        treeSelect.render({
+            elem: '#tree',// 选择器
+            data: "<{:url('getMethodsArrayData')}>",// 数据
+            headers: {},// 请求头
+            type: 'post',// 异步加载方式：get/post，默认get
+            placeholder: '请选择父级权限',// 占位符
+            search: true,// 是否开启搜索功能：true/false，默认false
+            style: {// 一些可定制的样式
+                folder: { enable: true },
+                line: { enable: true }
+            },
+            click: function(d){// 点击回调
+                console.log(d);
+                $('#pid').val(d.current.id)
+                $('#level').val(+d.current.level + 2)
+            },
+            success: function (d) {// 加载完成后的回调函数
+                console.log(d);
+//                选中节点，根据id筛选
+//                 treeSelect.checkNode('tree', 3);
+                // console.log($('#tree').val());
+//                获取zTree对象，可以调用zTree方法
+                var treeObj = treeSelect.zTree('tree');
+                console.log(treeObj);
+//                刷新树结构
+                treeSelect.refresh('tree');
+            }
+        });
+
+
+        //监听提交
+        form.on('submit(go)', function(data){
+            console.log(data.field);
+            url_post("<{:url('systemActionAdd')}>",data.field,function (res) {
+                layer.msg(res.message,{ icon:1,time:1000, end:function () {
+                        parent.location.reload();
+                } });
+            })
+            return false;
+        });
+    });
+
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

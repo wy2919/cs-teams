@@ -1,0 +1,17 @@
+<div class="fl usl">
+    <a href="<{:url('userinfo')}>" class="usla <{if $utype == 'userinfo'}>active<{/if}>">
+        <i class="usli1"></i>用户信息
+    </a>
+    <a href="<{:url('userpwd')}>" class="usla <{if $utype == 'userpwd'}>active<{/if}>">
+        <i class="usli2"></i>修改密码
+    </a>
+    <a href="<{:url('userphone')}>" class="usla <{if $utype == 'userphone'}>active<{/if}>">
+        <i class="usli3"></i>修改手机号
+    </a>
+    <a href="<{:url('userorders')}>" class="usla <{if $utype == 'userorders'}>active<{/if}>">
+        <i class="usli4"></i>投标信息
+    </a>
+    <a href="<{:url('usermsg')}>" class="usla <{if $utype == 'usermsg'}>active<{/if}> layui-hide-xs">
+        <i class="usli5"></i>推荐消息
+    </a>
+</div>

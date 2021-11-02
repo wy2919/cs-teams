@@ -1,0 +1,153 @@
+﻿<!doctype html>
+<html class="x-admin-sm">
+<head>
+	<meta charset="UTF-8">
+	<title><<{$config.cfg_webname}></title>
+	<meta name="keywords" content="<<{$config.cfg_keywords}>">
+	<meta name="description" content="<<{$config.cfg_description}>">
+	<{include file="public/header" /}>
+	<style>
+		.c-red{
+			color: red;
+		}
+		.layui-form-label{
+			width: 90px;
+		}
+		.layui-input-block{
+			margin-left: 130px;
+		}
+	</style>
+
+</head>
+<body>
+
+<div class="layui-fluid">
+	<div class="layui-row">
+		<form class="layui-form" lay-filter="formTest"  action="" method="post">
+
+
+			<div class="layui-form-item" style="z-index: 100; position: relative;">
+				<label class="layui-form-label">消息：</label>
+				<div class="layui-input-block">
+					<select id="search_area" name="" lay-search lay-filter="aaa">
+						<option  value="" >请选择</option>
+						<{volist name="$Exclusive" id="vo"}>
+						<option  value="<{$vo.id}>" ><{$vo.title}></option>
+						<{/volist}>
+					</select>
+
+					<blockquote class="layui-elem-quote layui-quote-nm qq" style="margin-top: 10px;">
+						<{volist name="$data" id="vo"}>
+							<div class="sj layui-upload-list"><{$vo}></div>
+						<{/volist}>
+					</blockquote>
+				</div>
+			</div>
+
+
+			<div class="layui-form-item">
+				<label for="L_repass" class="layui-form-label"></label>
+				<button type="button" class="layui-btn qk layui-btn-danger" >清空</button>
+				<button type="button" lay-submit lay-filter="go" class="layui-btn" >提交</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="__LIB__/xmSelect/xm-select.js" charset="utf-8"></script>
+<script type="text/javascript">
+
+    var demo1 = xmSelect.render({
+        el: '#demo1',
+        language: 'zn',
+    })
+    $.ajax({
+        type: 'POST',
+        url: "<{:url('getRoleArrayData')}>",
+        dataType: 'json',
+        success: function(res){
+            var data = [];
+            for(var i in res){
+                data.push({
+                    name: res[i]['role_name'], value: res[i]['id']
+                });
+            }
+            demo1.update({ data: data, autoRow: true, })
+            demo1.setValue($('#roles').val().split(','))
+        }
+    });
+
+    layui.config({
+        base: '__LIB__/layui/lay/'
+    }).extend({
+        treeSelect: 'treeSelect/treeSelect'
+    }).use(['layer','table','form','treeSelect','upload'], function(){
+        var form = layui.form,
+            upload = layui.upload,
+            treeSelect= layui.treeSelect;
+
+        upload.render({
+            elem:'.qianming'
+            ,url:"<{:url('upload')}>"
+            ,data:{}
+            ,accept:'file'
+            ,size:0
+            ,multiple:false
+            ,done:function (res) {
+                console.log(res);
+                $('#qianming').attr('src',res['path']);
+                $('input[name="qianming"]').val(res['path']);
+            }
+        })
+
+
+		form.on('select(aaa)', function(data){
+			var Arr = []
+
+			var value = data.value  // value选中的value值
+			var text = data.elem[data.elem.selectedIndex].text    // value选中的text值
+
+			if (value == ''){
+				return;
+			}
+
+			for(var i in Arr){
+				if (Arr[i] == text +'-'+ value){
+					return
+				}
+			}
+
+			$('.qq').append('<div class="sj layui-upload-list">'+text +'-'+ value+'</div>')
+		});
+
+
+
+
+		//监听提交
+        form.on('submit(go)', function(data){
+        	var a = []
+			var arr  = $('.sj').each(function(){
+				a.push($(this).html());
+			});
+
+            data.field['data'] = a.join(',')
+            data.field['idd'] = "<{$Request.param.idd}>"
+            url_post("<{:url('Msg')}>",data.field,function (res) {
+                layer.msg(res.message,{ icon:1,time:1000, end:function () {
+                        parent.location.reload();
+                    } });
+            });
+            return false;
+        });
+    });
+
+
+    $('.qk').click(function (e) {
+		$('.qq').empty()
+	})
+
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

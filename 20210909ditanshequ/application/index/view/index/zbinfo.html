@@ -1,0 +1,364 @@
+<!--包含头部文件-->
+<{include file="public/header" /}>
+
+<title><{$config.cfg_webname}></title>
+<meta name="keywords" content="<{$config.cfg_keywords}>">
+<meta name="description" content="<{$config.cfg_description}>">
+</head>
+	<body>
+
+	<{include file="public/headinfo" /}>
+
+	<div class="idxpd">
+		<div class="zbif1 mt_20">
+			<div class="wrap bgwhite bordetrbl">
+				<div class="zbiftop clearfix">
+					<h4 class="fl">招标公告</h4>
+				</div>
+				<div class="zbiftxt padding20">
+					<p class="zbiftxt1"><{$orderinfo.create_time|substr=0,13}>:00:00 发布</p>
+					<span class="posrelative">
+						<i>公告名称</i><{$orderinfo.title}>
+					</span>
+					<span class="posrelative">
+						<i>截止时间</i><{$orderinfo.endtime}>
+					</span>
+					<span class="posrelative" >
+						<i>报名条件</i>
+						<{if $orderinfo['details'] == [] }>"暂无" <{else /}>
+							<{volist name="orderinfo.details" id="vo" key="k"}>
+								<{if  $vo.describe == ""}>continue <{/if}>
+								<p><{$k}>、<{$vo.describe}> </p>
+							<{/volist}>
+						<{/if}>
+						&nbsp;
+					</span>
+					<span class="posrelative">
+						<i>招标类目</i><{$orderinfo.catinfo.name?:"无限制"}>
+					</span>
+					<span class="posrelative">
+						<i>地区限制</i><{$orderinfo.area?$orderinfo.area:"无限制"}>
+					</span>
+					<span class="posrelative">
+						<i>招标人员</i><{$orderinfo.uinfo.real_name}>
+					</span>
+					<span class="posrelative">
+						<i>联系电话</i><{$orderinfo.uinfo.tel?$orderinfo.uinfo.tel:"暂无"}>
+					</span>
+					<span class="posrelative">
+						<i>电子邮箱</i><{$orderinfo.uinfo.email?$orderinfo.uinfo.email:"暂无"}>
+					</span>
+
+					<span class="posrelative">
+						<i>下载附件</i> &nbsp;
+						<{if substr($orderinfo.endtime,0,13) >  date('Y-m-d H')}>
+							<{volist name="orderinfo.enclosure" id="vo"}>
+							    <a href="<{:explode('@@',$vo)[0]}>" download="<{:explode('@@',$vo)[1]}>" style="margin-right: 20px;margin-left:-8px"><{:explode('@@',$vo)[1]}></a>
+							<{/volist}>
+						<{/if}>
+					</span>
+					  	
+					<{if substr($orderinfo.endtime,0,13) > date('Y-m-d H')}>
+						<{if $istb == 'yes'}>
+							<a class="zbifa clicktc" href="javascript:">重新编辑</a>
+						<{else /}>
+							<a class="zbifa clicktc" href="javascript:">我要投标</a>
+						<{/if}>
+					<{else /}>
+						<a href="javascript:" class="layui-btn layui-btn-radius layui-btn-lg">投标截止</a>
+					<{/if}>
+
+				</div>
+			</div>
+		</div>
+		<div class="zbif1 mt_20" style="display: none">
+			<div class="wrap bgwhite bordetrbl">
+				<div class="zbiftop clearfix">
+					<h4 class="fl">已参与服务商</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--弹窗-->
+	<div class="tc tc1">
+		<div class="distab w100 h100">
+			<div class="tab_cell w100">
+				<div class="tcbox bgwhite">
+					<i class="closetc"><img src="__INDEX__/images/close_03.png"/></i>
+					<div class="tctop">参与投标</div>
+					<div style="text-align: center;font-weight: bold;color:#c81623">该页面信息只有本单位和招标公司可以看见</div>
+					<input type="hidden" id="order_id" value="<{$orderinfo.id}>">
+
+					<div class="clearfix tcclr">
+						<span class="fl">投标价格：</span>
+						<div class="fr tcr">
+							<input type="text" placeholder="请填写精确报价" name="" id="price" value="<{$quoteinfo['price']}>" />
+						</div>
+					</div>
+					<div class="clearfix tcclr">
+						<span class="fl">上传附件：</span>
+						<div class="fr tcr">
+							<div class="lgbrsc">
+								<!--<div class="lgbrscsp posrelative">-->
+								<!--	<img class="middle mr5" src="__INDEX__/images/scico_03.png"/>上传附件-->
+								<!--	<input type="file" name="" id="sc1" value="" />-->
+								<!--</div>-->
+								<div class="layui-upload">
+									<input type="hidden" name="reply" value="<{$quoteinfo['reply']}>" />
+									<button type="button" class="layui-btn layui-btn-normal" id="test-upload-change">选择文件</button>
+									<div id="filename" style="display: inline-block;">
+
+									</div>
+								</div>
+								<br>
+								<div class="layui-progress" lay-showpercent="true" lay-filter="demo" >
+									<div class="layui-progress-bar layui-bg-red" lay-percent="0%"></div>
+								</div>
+								
+							<br>请将附件打包至一个压缩包上传(只能上传rar或zip格式文件)。 
+							</div>
+						</div>
+					</div>
+
+					<div class="clearfix tcclr">
+						<span class="fl">姓名：</span>
+						<div class="fr tcr">
+							<input type="text" placeholder="" name="" id="name" value="" />
+						</div>
+					</div>
+					<div class="clearfix tcclr">
+						<span class="fl">联系电话：</span>
+						<div class="fr tcr">
+							<input type="text" placeholder="" name="" id="account" value="" />
+						</div>
+					</div>
+					<div class="clearfix tcclr">
+						<span class="fl">公司名称：</span>
+						<div class="fr tcr">
+							<input type="text" placeholder="" name="" id="companyname" value="" />
+						</div>
+					</div>
+					<div class="clearfix tcclr">
+						<span class="fl">营业执照：</span>
+						<div class="fr tcr" id="business_license">
+							<img src="" height="100px" alt="">
+						</div>
+					</div>
+					<div class="clearfix tcclr">
+						<span class="fl">销售资质：</span>
+						<div class="fr tcr" id="zizhi">
+						</div>
+					</div>
+
+
+					<div class="textcenter mt_30 tcsbma">
+						<a onclick="bid()" class="hoverop">我要投标</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<{include file="public/footer" /}>
+	
+	<script type="text/javascript">
+
+        $(".clicktc").click(function(){
+
+			$.ajax({
+			    type: 'POST',
+			    url: "<{:url('getSup')}>",
+			    data:{"order_id":$("#order_id").val()},
+			    dataType: 'json',
+			    success: function(data){
+                    var msg = data['msg'];
+                    console.log(msg);
+                    switch (msg) {
+                        case 'nocatid':
+                            msg = '不符合该招标类目的招标条件!';
+                            layer.msg(msg,{ icon:1,time:2000, end:function () {
+                                    location.href = "<{:url('/index/User/userinfo')}>";
+                            } });
+                            break;
+                        case 'timeout':
+                            msg = '该订单已过期!';
+                            layer.msg(msg,{icon:1,time:2000});
+                            break;
+						default:
+                            $('#name').val(msg['name']);
+                            $('#account').val(msg['account']);
+                            $('#companyname').val(msg['companyname']);
+                            $('#business_license').html('<img src="'+msg['business_license']+'" height="100px" alt="">');
+                            var imgs = '';
+                            for(var i in msg['headpic'] ){
+                                imgs += '<img src="'+msg['headpic'][i]+'" height="100px" alt="">';
+                            }
+                            $('#zizhi').html(imgs);
+                            $(".tc1").toggleClass("tc_active");
+                    }
+			    }
+			});
+        })
+        $(".closetc").click(function(){
+            $(".tc").removeClass("tc_active");
+        })
+
+
+		//头像上传
+		$(function(){
+	    	$("#sc").change(function(e) {
+	            var imgBox = e.target;
+	            uploadImg($('#scimg'), imgBox)
+	        });
+            $("#sc1").change(function(e) {
+                var sc1Obj = this;
+                var reader = new FileReader();
+                reader.readAsDataURL(e.target.files[0]);
+                reader.onload = function() {
+                   $(sc1Obj).parent().css('background','#0f0');
+                };
+            });
+	        function uploadImg(element, tag) {
+	            var file = tag.files[0];
+	            var imgSrc;
+	            if (!/image\/\w+/.test(file.type)) {
+	                alert("只能上传图片！");
+	                return false;
+	            }
+	            var reader = new FileReader();
+	            reader.readAsDataURL(file);
+	            reader.onload = function() {
+	                console.log(this.result);
+	                imgSrc = this.result;
+	                $(".schide").css("opacity","0");
+					$('#scimg').css("opacity","1");
+	                $("#scimg").attr("src", imgSrc);
+	            };
+	        }
+	    })
+		
+		
+		function bid() {
+		    var price = $("#price").val();
+		    var patrn = /^[0-9]+\.?[0-9]*$/;
+            if (patrn.exec(price) == null || price == "") {
+                alert('请填写精确报价');
+                return;
+            } 
+            if ($('input[name="reply"]').val() == '') {
+                alert('请上传附件');
+                return;
+            } 
+		    
+            var formData = new FormData();
+
+            formData.append("reply",$('input[name="reply"]').val());
+            formData.append("order_id", $("#order_id").val());
+            formData.append("price", price);
+
+            $.ajax({
+                url:"<{:url('zbinfo')}>",
+                dataType:'text',
+                type:'POST',
+                async: false,
+                data: formData,
+                processData : false, // 使数据不做处理
+                contentType : false, // 不要设置Content-Type请求头
+                success: function(data){
+
+                    var msg = '投标成功!';
+                    switch (data) {
+						case 'error':
+                            msg = '投标失败!';
+						    break;
+                        case 'repeat':
+                            msg = '请勿重复投标!';
+                            break;
+						case 'nocatid':
+                            msg = '请完善个人资料!';
+						    break;
+						case 'timeout':
+                            msg = '该订单已过期!';
+						    break;
+                    }
+					layer.msg(msg,{ icon:1,time:2000, end:function () {
+							location.reload();
+					} });
+                }
+            });
+
+        }
+        
+        
+          layui.use(['upload','element','layer'], function(){
+            var $ = layui.jquery
+                ,upload = layui.upload
+                ,element = layui.element
+                ,layer = layui.layer;
+
+            //创建监听函数
+            var xhrOnProgress=function(fun) {
+                xhrOnProgress.onprogress = fun; //绑定监听
+                //使用闭包实现监听绑
+                return function() {
+                    //通过$.ajaxSettings.xhr();获得XMLHttpRequest对象
+                    var xhr = $.ajaxSettings.xhr();
+                    //判断监听函数是否为函数
+                    if (typeof xhrOnProgress.onprogress !== 'function')
+                        return xhr;
+                    //如果有监听函数并且xhr对象支持绑定时就把监听函数绑定上去
+                    if (xhrOnProgress.onprogress && xhr.upload) {
+                        xhr.upload.onprogress = xhrOnProgress.onprogress;
+                    }
+                    return xhr;
+                }
+            };
+
+            //选完文件后不自动上传
+            upload.render({
+                elem: '#test-upload-change'
+                ,url: "<{:url('upfile')}>"
+                // ,auto:false
+                ,exts: 'zip|rar'
+                ,xhr:xhrOnProgress
+                ,progress:function(value){//上传进度回调 value进度值
+                    element.progress('demo', value+'%')//设置页面进度条
+                }
+                ,multiple: false
+                ,choose: function(obj){
+                    //将每次选择的文件追加到文件队列
+                    var files = obj.pushFile();
+
+                    // //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                    obj.preview(function(index, file, result){
+                        console.log(file); //得到文件对象
+                        $('#filename').html(file['name']);
+                    });
+                }
+                ,before: function(input){
+                    //返回的参数item，即为当前的input DOM对象
+                    layer.load(); //上传loading
+                    console.log('文件上传中');
+                }
+                ,done: function(res){
+                    var info = $('input[name="reply"]').val();
+                    if(info == ''){
+                        info = res[0]['path'] +'@@'+res[0]['name'];
+                    }else{
+                        info += '^'+res[0]['path'] +'@@'+res[0]['name'];
+                    }
+                    $('input[name="reply"]').val(info);
+                    
+                    layer.closeAll();
+                    layer.msg("上传成功");
+                }
+            });
+
+        });
+		
+        
+		
+	</script>
+	</body>
+</html>

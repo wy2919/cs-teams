@@ -1,0 +1,125 @@
+<script type="text/javascript">
+    var content=UE.getEditor('content');
+    UE.getEditor('content').addListener("ready", function () {
+        // editor准备好之后才可以使用
+        UE.getEditor('content').setContent($('#contentVal').html());
+    })
+
+
+    layui.config({
+        base: '__LIB__/layui/lay/'
+    }).extend({
+        treeSelect: 'treeSelect/treeSelect'
+    }).use(['layer', 'table', 'form', 'laydate', 'treeSelect', 'upload'], function (){
+        form = layui.form,
+        upload = layui.upload;
+        laydate = layui.laydate;
+
+
+
+        upload.render({
+            elem:'.introduce'
+            ,url:"<{:url('upload')}>"
+            ,data:{}
+            ,accept:'file'
+            ,size:0
+            ,multiple:false
+            ,done:function (res) {
+                $('#introduce').attr('src',res['path']);
+                $('input[name="introduce"]').val(res['path']);
+            }
+        })
+
+        // 执行实例  图集上传
+        upload.render({
+            elem: '#test1' //绑定元素
+            , url: "upload" //上传接口
+            , accept: 'images'
+            , before: function (obj) {
+                layer.msg('图片上传中...', { icon: 16, shade: 0.01, time: 0 })
+            }
+            , multiple: true
+            , done: function (res) {
+
+                $('#slide-pc-priview').append('<li class="item_img" style="display: inline-block;margin-right: 15px;">' +
+                    '<div class="operate">' +
+                    '<i class="toleft layui-icon" onclick="toleft(this)">《</i>' +
+                    '<i class="toright layui-icon" onclick="toright(this)">》</i>' +
+                    '<i  class="close layui-icon" data-path="' + res['path'] + '" onclick="toclose(this)">×</i>' +
+                    '</div>' +
+                    '<img src="' + res['path'] + '" class="img" >' +
+                    '<input type="hidden" name="imgs[]" value="' + res['path'] + '" />' +
+                    '</li>');
+                layer.close(layer.msg());//关闭上传提示窗口
+            }
+        });
+
+        // 单文件上传（文件）
+        upload.render({
+            elem: '.uploadFile'
+            , url: 'upload'
+            , multiple: false
+            , accept: 'file'
+            , data: {disk: 'file'}
+            , before: function (obj) {
+                layer.load(1);
+            }
+            , done: function (res) {
+                $("#" + $(this.item).data("id")).val(res['path'])
+                $("#filenamea").val(res['name'])
+                $(this.item).html('已上传,点击重传').attr('class', 'layui-btn layui-btn-normal uploadFile')
+                layer.closeAll('loading')
+            }, error: function (index, upload) {
+                // layer.closeAll('loading')
+            }
+        })
+
+
+        // 上传文件
+        upload.render({
+            elem: '.img'
+            , url: "<{:url('upload')}>"
+            , data: {}
+            , accept: 'file'
+            , size: 0
+            , multiple: false
+            , done: function (res) {
+                $('#img').attr('src', res['path']);
+                $('input[name="img"]').val(res['path']);
+            }
+        })
+
+        // 上传图片
+        upload.render({
+            elem:'.head_img'
+            ,url:"<{:url('upload')}>"
+            ,data:{}
+            ,accept:'file'
+            ,size:0
+            ,multiple:false
+            ,done:function (res) {
+                $('#head_img').attr('src',res['path']);
+                $('input[name="head_img"]').val(res['path']);
+            }
+        })
+
+
+        //日期选择器
+        laydate.render({
+            elem: '#starttime',
+            type: 'datetime',
+            format: 'yyyy-M-d HH:mm:ss'
+        });
+        //日期选择器
+        laydate.render({
+            elem: '#endtime',
+            type: 'datetime',
+            format: 'yyyy-M-d HH:mm:ss'
+        });
+
+
+        // 回调函数
+        callback(form,upload,laydate)
+    });
+
+</script>

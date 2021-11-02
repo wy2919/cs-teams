@@ -1,0 +1,18 @@
+<div class="head">
+  <div class="wrap clearfix">
+    <a href="<{:url('index/index')}>" class="logo fl"><img src="__INDEX__/images/logo_03.png"/></a>
+    <div class="fr hdr clearfix">
+      <{if !session('account','',SESSIONINDEX)}>
+      <input type="hidden" id="supname" value="">
+      <a href="<{:url('index/login')}>" class="fl hdra">登录</a>
+      <a href="<{:url('index/register')}>" class="fl hdra layui-hide-xs">注册</a>
+      <{else /}>
+      <a href="<{:url('User/userinfo')}>" class="fl hdra">
+        <input type="hidden" id="supname" value="<{:session('account','','index')}>"><{:session('account','','index')}>
+      </a>
+      <{/if}>
+      <a href="<{:url('index/signout')}>" class="fl layui-hide-xs"><img src="__INDEX__/images/lgout_03.png"/>退出系统</a>
+    </div>
+  </div>
+</div>
+<div class="head_height"></div>

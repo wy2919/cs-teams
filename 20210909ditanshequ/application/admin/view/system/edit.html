@@ -1,0 +1,120 @@
+﻿<!doctype html>
+<html class="x-admin-sm">
+<head>
+	<meta charset="UTF-8">
+	<title><<{$config.cfg_webname}></title>
+	<meta name="keywords" content="<<{$config.cfg_keywords}>">
+	<meta name="description" content="<<{$config.cfg_description}>">
+	<{include file="public/header" /}>
+	<style>
+		.c-red{
+			color: red;
+		}
+		.layui-form-label{
+			width: 90px;
+		}
+		.layui-input-block{
+			margin-left: 130px;
+		}
+	</style>
+
+</head>
+<body>
+
+<div class="layui-fluid">
+	<div class="layui-row">
+		<form class="layui-form" lay-filter="formTest"  action="" method="post">
+			<input type="hidden" name="idd" value="<{$info.idd}>">
+
+
+
+			<div class="layui-form-item" style="z-index:50; position: relative;">
+				<label class="layui-form-label">状态：</label>
+				<div class="layui-input-block">
+					<input type="radio" name="user_status" value="2" <{if $info.user_status == 2}>checked<{/if}> title="限制登录">
+					<input type="radio" name="user_status" value="1" <{if $info.user_status == 1}>checked<{/if}> title="正常">
+				</div>
+			</div>
+
+			<{:make_input('昵称', 'nick_name', $info.nick_name ?? '')}>
+			<{:make_input('姓名', 'real_name', $info.real_name ?? '')}>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="c-red">*</span>手机号：</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input"  value="<{$info.user_tel}>"autocomplete="off" lay-verify="phone"  placeholder="手机号" name="user_tel">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">头像：</label>
+				<div class="layui-input-inline">
+					<input type="hidden" name="user_headimg" value="<{$info.user_headimg}>">
+					<button type="button" class="layui-btn user_headimg">
+						<i class="layui-icon">&#xe67c;</i>上传头像
+					</button>
+					<br>
+					<img height="100px" id="user_headimg" src="<{$info.user_headimg}>" alt="">
+				</div>
+			</div>
+			<{:make_input('性别', 'user_sex', $info.user_sex ?? '')}>
+			<{:make_input('生日', 'user_birthday', $info.user_birthday ?? '')}>
+			<{:make_input('等级', 'degnji', $info.degnji ?? '')}>
+			<{:make_input('积分', 'jifen', $info.jifen ?? '')}>
+<!--			<{:make_input('粉丝', 'fensi', $info.fensi ?? '')}>-->
+
+
+			<div class="layui-form-item layui-form-text">
+				<label for="desc" class="layui-form-label">介绍</label>
+				<div class="layui-input-block">
+					<textarea placeholder="请输入内容" name="des" class="layui-textarea"><{$info.des}></textarea>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label for="L_repass" class="layui-form-label"></label>
+				<button type="button" lay-submit lay-filter="go" class="layui-btn" >提交</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+
+    layui.config({
+        base: '__LIB__/layui/lay/'
+    }).extend({
+        treeSelect: 'treeSelect/treeSelect'
+    }).use(['layer','table','form','treeSelect','upload'], function(){
+        var form = layui.form,
+            upload = layui.upload;
+
+        upload.render({
+            elem:'.user_headimg'
+            ,url:"<{:url('upload')}>"
+            ,data:{}
+            ,accept:'file'
+            ,size:0
+            ,multiple:false
+            ,done:function (res) {
+                $('#user_headimg').attr('src',res['path']);
+                $('input[name="user_headimg"]').val(res['path']);
+            }
+        })
+
+
+		//监听提交
+		form.on('submit(go)', function(data){
+			url_post("<{:url('Edit')}>",data.field,function (res) {
+				layer.msg(res.message,{ icon:1,time:1000, end:function () {
+						parent.location.reload();
+					} });
+			});
+			return false;
+		});
+    });
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

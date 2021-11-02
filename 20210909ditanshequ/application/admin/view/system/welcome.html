@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>欢迎页面-X-admin2.2</title>
+        <meta name="keywords" content="keywords"/>
+        <meta name="description" content="description"/>
+        <{include file="public/header" /}>
+    </head>
+    <body>
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body ">
+                            <blockquote class="layui-elem-quote">欢迎管理员：
+                                <span class="x-red"><{$info.userName}></span>！当前时间: <span id="time">2018-04-25 20:50:53</span>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">数据统计</div>
+                        <div class="layui-card-body ">
+                            <ul class="layui-row layui-col-space10 layui-this x-admin-carousel x-admin-backlog">
+                                <li class="layui-col-md2 layui-col-xs6">
+                                    <a href="javascript:;" class="x-admin-backlog-body">
+                                        <h3>会员数</h3>
+                                        <p>
+                                            <cite><{$info.userNum}></cite></p>
+                                    </a>
+                                </li>
+<!--                                <li class="layui-col-md2 layui-col-xs6">-->
+<!--                                    <a href="javascript:;" class="x-admin-backlog-body">-->
+<!--                                        <h3>项目数量</h3>-->
+<!--                                        <p> <cite><{$info.projectNum}></cite></p>-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                                <li class="layui-col-md2 layui-col-xs6">-->
+<!--                                    <a href="javascript:;" class="x-admin-backlog-body">-->
+<!--                                        <h3>单体工程数量</h3>-->
+<!--                                        <p> <cite><{$info.buildNum}></cite></p>-->
+<!--                                    </a>-->
+<!--                                </li>-->
+                                <!--<li class="layui-col-md2 layui-col-xs6">-->
+                                <!--    <a href="javascript:;" class="x-admin-backlog-body">-->
+                                <!--        <h3>文章数</h3>-->
+                                <!--        <p> <cite>加载中...</cite></p>-->
+                                <!--    </a>-->
+                                <!--</li>-->
+                                <!--<li class="layui-col-md2 layui-col-xs6 ">-->
+                                <!--    <a href="javascript:;" class="x-admin-backlog-body">-->
+                                <!--        <h3>文章数</h3>-->
+                                <!--        <p> <cite>加载中...</cite></p>-->
+                                <!--    </a>-->
+                                <!--</li>-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="layui-col-sm6 layui-col-md3">-->
+                <!--    <div class="layui-card">-->
+                <!--        <div class="layui-card-header">下载-->
+                <!--            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>-->
+                <!--        <div class="layui-card-body  ">-->
+                <!--            <p class="layuiadmin-big-font">33,555</p>-->
+                <!--            <p>新下载-->
+                <!--                <span class="layuiadmin-span-color">10%-->
+                <!--                    <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>-->
+                <!--            </p>-->
+                <!--        </div>-->
+                <!--    </div>-->
+                <!--</div>-->
+                <!--<div class="layui-col-sm6 layui-col-md3">-->
+                <!--    <div class="layui-card">-->
+                <!--        <div class="layui-card-header">下载-->
+                <!--            <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span></div>-->
+                <!--        <div class="layui-card-body ">-->
+                <!--            <p class="layuiadmin-big-font">33,555</p>-->
+                <!--            <p>新下载-->
+                <!--                <span class="layuiadmin-span-color">10%-->
+                <!--                    <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>-->
+                <!--            </p>-->
+                <!--        </div>-->
+                <!--    </div>-->
+                <!--</div>-->
+
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">开发团队</div>
+                        <div class="layui-card-body ">
+                            <table class="layui-table">
+                                <tbody>
+                                    <tr>
+                                        <th>开发团队</th>
+                                        <td>骐翔网络
+                                            <a href="https://www.navs.net/" target="_blank">访问官网</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <style id="welcome_style"></style>
+                <div class="layui-col-md12">
+                    <blockquote class="layui-elem-quote layui-quote-nm">底部信息：感谢layui,百度Echarts,jquery,本系统使用x-admin后台模版。</blockquote></div>
+            </div>
+        </div>
+        </div>
+    </body>
+</html>
+
+<script>
+    $('#time').html(getnow());
+
+    setInterval(function () {
+        $('#time').html(getnow());
+    },1000)
+
+    function getnow() {
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = (+date.getMonth() + 1)>9 ? (+date.getMonth() + 1) : '0'+(+date.getMonth() + 1);
+        var day = +date.getDate() >9 ? date.getDate() : '0'+ date.getDate();
+        var Hours = +date.getHours()>9 ? date.getHours() : '0'+ date.getHours();
+        var Minutes = +date.getMinutes()>9 ? date.getMinutes() : '0'+ date.getMinutes();
+        var Seconds = +date.getSeconds()>9 ? date.getSeconds() : '0'+ date.getSeconds();
+
+        return year + '-' + month + '-' + day + ' '+Hours+':'+Minutes+':'+Seconds;
+    }
+</script>
+

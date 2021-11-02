@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--包含头部文件-->
+<{include file="public/header" /}>
+
+<title><{$config.cfg_webname}></title>
+<meta name="keywords" content="<{$config.cfg_keywords}>">
+<meta name="description" content="<{$config.cfg_description}>">
+	</head>
+	<body>
+	
+	<div class="lgbg">
+		<div class="distab w100 h100">
+			<div class="tab_cell w100">
+				<div class="lgbox">
+					<i class="lgi lgil"></i><i class="lgi lgir"></i>
+					<div class="lgtop">
+						<h4 class="lgtit textcenter"><{$config.cfg_webname}></h4>
+						<div class="lgipt posrelative">
+							<i><img src="__INDEX__/images/lgico1_03.png"/></i>
+							<input type="text" placeholder="请输入手机号或邮箱" name="" id="account" value="" autocomplete="off" />
+						</div>
+						<div class="lgipt posrelative">
+							<i><img src="__INDEX__/images/lgico2_03.png"/></i>
+							<input type="password" placeholder="请输入密码" name="" id="pwd" value="" autocomplete="off" />
+						</div>
+						<a class="sbmipt hoverop" onclick="checkval()">立即登录</a>
+					</div>
+					<div class="clearfix lgbot">
+						<a href="<{:url('register')}>" class="fl active">免费注册</a>
+						<a href="<{:url('index')}>" class="fr">返回首页>></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	</body>
+</html>
+
+<script>
+	var yzm = '';
+	$(function () {
+        randomPassword();
+        $('#yzm').click(function () { //验证码
+            randomPassword();
+        })
+    })
+    function randomPassword(){
+        var num = ['2','3','4','5','6','7','8','9'];
+        var numsize = 4;
+
+        //数组
+        numlength = num.length;//数组长度
+        var createPassword = '';
+
+        for (i=0;i<numsize;i++) {
+            j = Math.floor(Math.random()*numlength);
+            createPassword += num[j];
+        }
+        yzm = createPassword;
+        $('#yzm').html(yzm);
+    }
+
+
+	function checkval() {
+        if($('#account').val() == ""){
+            layer.alert('账号不能为空!',{icon:1});
+            return;
+        }
+        if($('#pwd').val() == ""){
+            layer.alert('密码不能为空!',{icon:1});
+			  return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: "<{:url('login')}>",
+            data:{
+                account:$('#account').val().replace(/(^\s*)|(\s*$)/g, ""),
+                password:$('#pwd').val().replace(/(^\s*)|(\s*$)/g, ""),
+            },
+            dataType: 'text',
+            success: function(data){
+				if(data == '登录成功'){
+				    location.href="<{:url('index')}>"
+				}else{
+                    layer.alert('账号密码错误!',{icon:1});
+				}
+                randomPassword();
+            }
+        });
+
+
+    }
+</script>

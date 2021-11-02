@@ -1,0 +1,157 @@
+<!--包含头部文件-->
+<{include file="public/header" /}>
+
+<title><{$config.cfg_webname}></title>
+<meta name="keywords" content="<{$config.cfg_keywords}>">
+<meta name="description" content="<{$config.cfg_description}>">
+</head>
+<body>
+
+<{include file="public/headinfo" /}>
+<div class="idxpd">
+    <div class="wrap clearfix">
+        <{include file="public/usermenu" /}>
+        <div class="fr usr">
+            <div class="us1">
+                <h4 class="us1tt">亲爱的用户，您可以在这修改手机号哦。</h4>
+                <div class="us3top posrelative clearfix">
+                    <span class="fl active">
+                        <i>1</i>验证原手机
+                    </span>
+                    <span class="fl active">
+							<i>2</i>绑定新手机
+						</span>
+                    <span class="fl">
+							<i>3</i>完成绑定
+						</span>
+                    <i class="line"></i>
+                </div>
+                <div class="us2">
+                    <div class="clearfix usclr">
+                        <span class="fl usclrl usclrl1">原手机号：</span>
+                        <div class="fr usclrr usclrr1">
+                            <div class="usript">
+                                <p><{$user.account}></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix usclr">
+                        <span class="fl usclrl usclrl1">新手机号：</span>
+                        <div class="fr usclrr usclrr1">
+                            <div class="usript">
+                                <input type="text" name="" id="tel" value="" onblur="checkTel('getTel')"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix usclr">
+                        <span class="fl usclrl usclrl1">验证码：</span>
+                        <div class="fr usclrr usclrr1">
+                            <div class="usript posrelative">
+                                <input type="text" name="" id="userCode" value=""/>
+                                <i class="codebtn" id="codebtn" onclick="checkTel('getCode')">获取验证码</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix usclr mt_10">
+                        <span class="fl usclrl usclrl1">&nbsp;</span>
+                        <a class="nexta" onclick="modTel()">修改</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<{include file="public/footer" /}>
+
+</body>
+</html>
+
+<script>
+    var captch = 0;
+    var num = 60;
+    var flag = true;
+    function checkTel(type) { //检查手机号并发送验证码
+        var phone = $('#tel').val();
+        if(!(/^1[3456789]\d{9}$/.test(phone))){
+            layer.msg('手机号码有误，请重填!',{icon:1,time:2000});
+            return ;
+        }
+
+        if(type == 'getCode'){
+            if($('#codebtn').html() != "获取验证码"){
+                layer.msg('请稍后继续操作!',{icon:1,time:2000});
+            }else{
+                djs();
+                if(flag){ //不重复就可以发送验证码
+                    $.ajax({
+                        type: 'POST',
+                        url: "<{:url('sendMsg')}>",
+                        data:{phone:phone},
+                        dataType: 'json',
+                        success: function(data){
+                            captch = data['msg'];
+
+                        }
+                    });
+                }
+
+            }
+        }else{
+            $.ajax({
+                type: 'POST',
+                url: "<{:url('checkAccount')}>",
+                data:{phone:phone},
+                dataType: 'json',
+                success: function(data){
+                    if(data['msg'] == 'success'){
+                        flag = false;//标记是否重复
+                        layer.msg('手机号重复,请重新填写!',{icon:1,time:2000});
+                    }else{
+                        flag = true;//标记是否重复
+                    }
+                }
+            });
+        }
+    }
+/*倒计时*/
+    function djs() {
+        $('#codebtn').html("已发送("+num+")");
+        var obj = setInterval(function () {
+            num--;
+            if(num<0){
+                num = 60;
+                clearInterval(obj);
+                $('#codebtn').html("获取验证码");
+            }
+            $('#codebtn').html("已发送("+num+")");
+        },1000)
+    }
+    
+    function modTel() {
+        if($('#userCode').val() == captch){
+            $.ajax({
+                type: 'POST',
+                url: "<{:url('userphone')}>",
+                data:{
+                    phone:$('#tel').val()
+                },
+                dataType: 'json',
+                success: function(data){
+                    layer.msg('修改成功!',{
+                        icon:1,
+                        time:2000,
+                        end:function () {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+        }else{
+            layer.msg('验证码输入错误!',{icon:1,time:2000});
+        }
+    }
+
+
+</script>

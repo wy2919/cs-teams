@@ -1,0 +1,206 @@
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<link rel="stylesheet" href="__ADMIN__/css/font.css">
+<link rel="stylesheet" href="__ADMIN__/css/login.css">
+<link rel="stylesheet" href="__ADMIN__/css/theme5.css">
+<link rel="stylesheet" href="__ADMIN__/css/xadmin.css">
+<!--<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>-->
+<script src="__LIB__/jquery-3.2.1.min.js" charset="utf-8"></script>
+<script src="__LIB__/layui/layui.js" charset="utf-8"></script>
+<script src="__LIB__/layer/2.4/layer.js" charset="utf-8"></script>
+<script src="__LIB__/public.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="__ADMIN__/js/xadmin.js"></script>
+<!--[if lt IE 9]>
+<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<style>
+    #file_name{
+        margin-top: 10px;
+        font-size: 14px;
+    }
+    .layui-table-cell{height:auto !important;}    /*头像放大*/
+</style>
+
+<script>
+    
+    
+    function verifier(data) {
+        if (data){
+            return data.replace(/(^\s*)|(\s*$)/g, "")
+        }else {
+            return ''
+        }
+    }
+
+    // 放大图片
+    function bigimg(img, w = "600px", h = "600px") {
+        layer.open({
+            type: 1
+            , area: [w, h]
+            , title: false
+            , closeBtn: 0
+            , skin: 'layui-layer-nobg'
+            , shadeClose: true
+            , content: '<img src="' + img + '" width="100%"/>'
+            , scrollbar: false
+        })
+    }
+
+
+    //点击多图上传的X,删除当前的图片
+    function toclose(obj) {
+        layer.confirm('确认要删除吗？', function (index) {
+            var path = $(obj).data('path');
+            $(obj).closest("li").remove();
+            // url_post("{:url('delImg')}", {'path': path}, function (res) { })
+            layer.msg('删除成功!', {icon: 1, time: 2000});
+        });
+    }
+
+    //多图上传点击<>左右移动图片
+    function toleft(obj) {
+        var li_index = $(obj).closest("li").index();
+        if (li_index >= 1) {
+            $(obj).closest("li").insertBefore($(obj).closest("ul").find("li").eq(Number(li_index) - 1));
+        }
+    }
+
+    function toright(obj) {
+        var li_index = $(obj).closest("li").index();
+        $(obj).closest("li").insertAfter($(obj).closest("ul").find("li").eq(Number(li_index) + 1));
+    }
+
+
+
+    // 根据相对路径获取绝对路径
+    function  getPath(relativePath,absolutePath){
+        var  reg = new  RegExp( "\\.\\./" , "g" );
+        var  uplayCount = 0;     // 相对路径中返回上层的次数。
+        var  m = relativePath.match(reg);
+        if (m) uplayCount = m.length;
+
+        var  lastIndex = absolutePath.length-1;
+        for ( var  i=0;i<=uplayCount;i++){
+            lastIndex = absolutePath.lastIndexOf( "/" ,lastIndex);
+        }
+        return  absolutePath.substr(0,lastIndex+1) + relativePath.replace(reg, "" );
+    }
+
+    function  include(jssrc){
+        // 先获取当前a.js的src。a.js中调用include,直接获取最后1个script标签就是a.js的引用。
+        var  scripts = document.getElementsByTagName( "script" );
+        var  lastScript = scripts[scripts.length-1];
+        var  src = lastScript.src;
+        if (src.indexOf( "http://" )!=0 && src.indexOf( "/" ) !=0){
+            // a.js使用相对路径,先替换成绝对路径
+            var  url = location.href;
+            var  index = url.indexOf( "?" );
+            if (index != -1){
+                url = url.substring(0, index-1);
+            }
+
+            src = getPath(src,url);
+        }
+        var  jssrcs = jssrc.split( "|" );  // 可以include多个js，用|隔开
+        for ( var  i=0;i<jssrcs.length;i++){
+            // 使用juqery的同步ajax加载js.
+            // 使用document.write 动态添加的js会在当前js的后面，可能会有js引用问题
+            // 动态创建script脚本，是非阻塞下载，也会出现引用问题
+            $.ajax({type: 'GET' ,url:'/static/common/common.js',async: false ,dataType: 'script' });
+        }
+    }
+
+
+
+</script>
+
+
+<!--多图上传样式-->
+<style>
+    .layui-upload-img {
+        width: 110px;
+        height: 150px;
+        margin: 0;
+    }
+
+    .pic-more {
+        width: 100%;
+        left;
+        margin: 10px 0px 0px 0px;
+    }
+
+    .pic-more li {
+        width: 90px;
+        float: left;
+        margin-right: 15px;
+    }
+
+    .pic-more li .layui-input {
+        display: initial;
+    }
+
+    .pic-more li a {
+        position: absolute;
+        top: 0;
+        display: block;
+    }
+
+    .pic-more li a i {
+        font-size: 24px;
+        background-color: #008800;
+    }
+
+    #slide-pc-priview .item_img img {
+        width: 90px;
+        height: 90px;
+    }
+
+    #slide-pc-priview li {
+        position: relative;
+    }
+
+    #slide-pc-priview li .operate {
+        color: #000;
+        display: none;
+    }
+
+    #slide-pc-priview li .toleft {
+        position: absolute;
+        top: 40px;
+        left: 1px;
+        cursor: pointer;
+        color: #333333;
+        font-size: 20px;
+    }
+
+    #slide-pc-priview li .toright {
+        position: absolute;
+        top: 40px;
+        right: 1px;
+        cursor: pointer;
+        font-size: 20px;
+
+    }
+
+    #slide-pc-priview li .close {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+        font-size: 20px;
+
+    }
+
+    #slide-pc-priview li:hover .operate {
+        display: block;
+    }
+</style>
+
+
+

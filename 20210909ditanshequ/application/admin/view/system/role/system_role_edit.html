@@ -1,0 +1,180 @@
+﻿<!doctype html>
+<html class="x-admin-sm">
+<head>
+	<meta charset="UTF-8">
+	<title><<{$config.cfg_webname}></title>
+	<meta name="keywords" content="<<{$config.cfg_keywords}>">
+	<meta name="description" content="<<{$config.cfg_description}>">
+	<{include file="public/header" /}>
+	<style>
+		.layui-table td, .layui-table th{
+			padding: 0px;
+		}
+	</style>
+</head>
+<body>
+
+<div class="layui-fluid">
+	<div class="layui-row">
+		<form action="" method="post" class="layui-form layui-form-pane">
+			<input type="hidden" name="id" value="<{$role.id}>">
+			<div class="layui-form-item">
+				<label for="name" class="layui-form-label">
+					<span class="x-red">*</span>角色名
+				</label>
+				<div class="layui-input-inline">
+					<input type="text" name="role_name" value="<{$role.role_name}>"lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label layui-form-text">是否启用：</label>
+				<div class="layui-input-block">
+					<input type="radio" name="role_status" value="1" title="是" <{if $role.role_status == 1 }> checked <{/if}>>
+					<input type="radio" name="role_status" value="0" title="不是" <{if $role.role_status === 0 }> checked <{/if}>>
+				</div>
+			</div>
+			
+
+
+			<div class="layui-form-item layui-form-text">
+				<label class="layui-form-label"> 权限列表 </label>
+				<table  class="layui-table layui-input-block">
+					<tbody>
+					<{volist name="methods" id="vo"}>
+					<tr>
+						<td>
+							<input type="checkbox" name="method[]" lay-skin="primary" value="<{$vo.id}>"  lay-filter="father" title="<{$vo.module_name}>" <{if in_array($vo.id,$role_method) }>checked <{/if}>>
+						</td>
+						<td>
+							<div class="layui-input-block">
+								<{if isset($vo._child)}>
+								<table  class="layui-table layui-input-block">
+									<tbody>
+									<{volist name="$vo._child" id="vo1"}>
+									<tr>
+										<td>
+											<input type="checkbox" name="method[]" lay-skin="primary" value="<{$vo1.id}>" lay-filter="father" title="<{$vo1.module_name}>" <{if in_array($vo1.id,$role_method) }>checked<{/if}>>
+										</td>
+										<td>
+											<div class="layui-input-block">
+												<{if isset($vo1._child)}>
+												<table  class="layui-table layui-input-block">
+													<tbody>
+													<{volist name="$vo1._child" id="vo2"}>
+													<tr>
+														<td>
+															<input type="checkbox" name="method[]" lay-skin="primary" value="<{$vo2.id}>" lay-filter="father" title="<{$vo2.module_name}>" <{if in_array($vo2.id,$role_method) }>checked<{/if}>>
+														</td>
+														<td>
+															<div class="layui-input-block">
+																<{if isset($vo2._child)}>
+																<{volist name="$vo2._child" id="vo3"}>
+																<input type="checkbox" name="method[]" lay-skin="primary" lay-filter="father_a" value="<{$vo3.id}>" title="<{$vo3.module_name}>" <{if in_array($vo3.id,$role_method) }>checked<{/if}>>
+																<{/volist}>
+																<{/if}>
+															</div>
+														</td>
+													</tr>
+													<{/volist}>
+													</tbody>
+												</table>
+												<{/if}>
+											</div>
+										</td>
+									</tr>
+									<{/volist}>
+									</tbody>
+								</table>
+								<{/if}>
+							</div>
+						</td>
+					</tr>
+					<{/volist}>
+					</tbody>
+				</table>
+			</div>
+
+
+
+			<div class="layui-form-item layui-form-text">
+				<label for="desc" class="layui-form-label">
+					描述
+				</label>
+				<div class="layui-input-block">
+					<textarea placeholder="请输入内容" name="des" class="layui-textarea"><{$role.des}></textarea>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<button class="layui-btn" lay-submit="" lay-filter="add">提交</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+
+        //自定义验证规则
+        // form.verify({
+        //     nikename: function(value){
+        //         if(value.length < 5){
+        //             return '昵称至少得5个字符啊';
+        //         }
+        //     }
+        //     ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+        //     ,repass: function(value){
+        //         if($('#L_pass').val()!=$('#L_repass').val()){
+        //             return '两次密码不一致';
+        //         }
+        //     }
+        // });
+
+        //监听提交
+        form.on('submit(add)', function(data){
+            url_post("<{:url('systemRoleEdit')}>",data.field,function (res) {
+                layer.msg(res.message,{ icon:1,time:1000, end:function () {
+                        parent.location.reload();
+                    } });
+            })
+            return false;
+        });
+
+
+        form.on('checkbox(father)', function(data){
+            if(data.elem.checked){
+                $(data.elem).parent().siblings('td').find('input').prop("checked", true);
+                form.render();
+            }else{
+                $(data.elem).parent().siblings('td').find('input').prop("checked", false);
+                form.render();
+            }
+        });
+
+        // form.on('checkbox(father_a)', function(data){
+        //     console.log(data.elem.checked);
+        //     if(data.elem.checked){
+        //         $(data.elem).parent().parent().prev('td').find('input').prop("checked", true);
+        //         form.render();
+        //     }else{
+        //         var flag = true;
+        //         $(data.elem).siblings('input').each(function () {
+        //             if($(this).prop("checked")){
+        //                 flag = false;
+        //             }
+        //         })
+        //         if(flag){
+        //             $(data.elem).parent().parent().prev('td').find('input').prop("checked", false);
+        //         }
+        //         form.render();
+        //     }
+        // });
+
+    });
+</script>
+
+</body>
+</html>

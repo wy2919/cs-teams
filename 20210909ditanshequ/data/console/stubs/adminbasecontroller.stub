@@ -1,0 +1,17 @@
+<?php
+
+namespace {%namespace%};
+
+use app\admin\controller\Base;
+use Request;
+
+class {%className%} extends Base
+{
+    /**
+     * 其他控制器的初始化方法
+     */
+    protected function init()
+    {
+
+    }
+}

@@ -1,0 +1,157 @@
+<!doctype html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title><{$config.cfg_webname}></title>
+        <meta name="keywords" content="<{$config.cfg_keywords}>">
+        <meta name="description" content="<{$config.cfg_description}>">
+        <{include file="public/header" /}>
+
+        <script>
+            // 是否开启刷新记忆tab功能
+            var is_remember = false;
+        </script>
+    </head>
+    <body class="index">
+        <!-- 顶部开始 -->
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><{$config.cfg_webname}></a></div>
+            <div class="left_open">
+                <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
+            </div>
+            <ul class="layui-nav left fast-add" lay-filter="" style="display: none">
+                <li class="layui-nav-item">
+                    <a href="javascript:;">+新增</a>
+                    <dl class="layui-nav-child">
+                        <!-- 二级菜单 -->
+                        <dd>
+                            <a onclick="xadmin.open('最大化','http://www.baidu.com','','',true)">
+                                <i class="iconfont">&#xe6a2;</i>弹出最大化</a></dd>
+                        <dd>
+                            <a onclick="xadmin.open('弹出自动宽高','http://www.baidu.com')">
+                                <i class="iconfont">&#xe6a8;</i>弹出自动宽高</a></dd>
+                        <dd>
+                            <a onclick="xadmin.open('弹出指定宽高','http://www.baidu.com',500,300)">
+                                <i class="iconfont">&#xe6a8;</i>弹出指定宽高</a></dd>
+                        <dd>
+                            <a onclick="xadmin.add_tab('在tab打开','member-list.html')">
+                                <i class="iconfont">&#xe6b8;</i>在tab打开</a></dd>
+                        <dd>
+                            <a onclick="xadmin.add_tab('在tab打开刷新','member-del.html',true)">
+                                <i class="iconfont">&#xe6b8;</i>在tab打开刷新</a></dd>
+                    </dl>
+                </li>
+            </ul>
+            <ul class="layui-nav right" lay-filter="">
+                <li class="layui-nav-item to-index"> <a href="<{$config.cfg_indexurl}>" target="_blank">首页</a></li>
+                <!--<li class="layui-nav-item to-index">-->
+                    <!--<a onclick="showMessage(this)">-->
+                        <!--<i class="layui-icon layui-icon-notice" style="font-size: 16px; "></i>-->
+                        <!--<span class="layui-badge" style="margin:0px;position: relative;top: -13px;left: -5px">123</span>-->
+                    <!--</a>-->
+                <!--</li>-->
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><{$uname}></a>
+                    <dl class="layui-nav-child">
+                        <!-- 二级菜单 -->
+                        <dd> <a onclick="xadmin.open('个人信息','<{:url(\'admin/System/systemUserEdit\')}>')">个人信息</a></dd>
+                        <dd> <a onclick="modifyPwd()">修改密码</a></dd>
+                        <!--<dd> <a onclick="bindWx()">绑定微信号</a></dd>-->
+                        <dd> <a href="<{:url('logout')}>">退出</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+        <!-- 顶部结束 -->
+        <!-- 中部开始 -->
+        <!-- 左侧菜单开始 -->
+        <{include file="public/menu" /}>
+        <!-- 左侧菜单结束 -->
+        <!-- 右侧主体开始 -->
+        <div class="page-content">
+            <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+                <ul class="layui-tab-title">
+                    <li class="home">
+                        <i class="layui-icon">&#xe68e;</i>我的桌面</li></ul>
+                <div class="layui-unselect layui-form-select layui-form-selected" id="tab_right">
+                    <dl>
+                        <dd data-type="this">关闭当前</dd>
+                        <dd data-type="other">关闭其它</dd>
+                        <dd data-type="all">关闭全部</dd></dl>
+                </div>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show" id="aa">
+                        <iframe src="<{:url('welcome')}>" frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+                    </div>
+                </div>
+                <div id="tab_show"></div>
+            </div>
+        </div>
+        <div class="page-content-bg"></div>
+        <style id="theme_style"></style>
+        <!-- 右侧主体结束 -->
+        <!-- 中部结束 -->
+    </body>
+</html>
+
+<script>
+
+    function showMessage(obj){
+        $(obj).find('span').remove();
+        xadmin.add_tab('消息提醒','<{:url(\'/admin/Oasystem/messageList\')}>',true)
+    }
+
+    function modifyPwd(){
+        layer.open({
+            content: '密码：<input class="layui-input" id="pwd1" type="text"> <br>\n' +
+                '重复密码：<input class="layui-input" id="pwd2" type="text">'
+            , title : '修改密码'
+            , btn: ['确定', '取消']
+            , yes: function (index, layero) {
+                //按钮【按钮一】的回调
+                if ($('#pwd1').val() != '' && $('#pwd1').val() != $('#pwd2').val()) {
+                    layer.msg('密码不一致!', {icon: 1, time: 1000});
+                    return;
+                }
+                url_post("<{:url('changepwd')}>",{id: 'myid',password: $('#pwd1').val()},function (res) {
+                    layer.msg(res.message,{ icon:1,time:1000, end:function () {
+                            layer.close(index);
+                        }});
+                });
+            }
+            , btn2: function (index, layero) {
+                //按钮【按钮二】的回调
+                layer.closeAll();
+
+            }
+        })
+    }
+
+    function bindWx(){
+        xadmin.open('绑定微信号','<{:url(\'admin/Base/bindWx\')}>','500','500')
+        scan_ins = setInterval(function () {
+            url_get({  action: 'users_lists.check_wx', bind_str: u_id + '-' + site_num }, function (res) {
+                if (res.error == 0) {
+                    clearInterval(scan_ins)
+                    setTimeout(function () {
+                        location.reload();
+                    }, 3000);
+                }
+            });
+        }, 1500);
+    }
+
+
+    /*保持登录*/
+    setInterval(function () {
+        $.ajax({
+            type: 'POST',
+            url: "<{:url('keepLogin')}>",
+            dataType: 'json',
+            success: function(data){}
+        });
+    },300000);
+
+
+</script>
